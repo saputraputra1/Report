@@ -422,6 +422,7 @@
                             <option value="disabled">Account Disabled</option>
                             <option value="verification">Verification Problem</option>
                             <option value="report_user">Report Another User</option>
+                            <option value="ban_user" style="display:none;">Ban Another User</option>
                             <option value="other">Other Issue</option>
                         </select>
                     </div>
@@ -435,7 +436,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="issueDetailsGroup">
                         <label for="issueDetails" id="issueDetailsLabel">Issue Details</label>
                         <textarea id="issueDetails" required placeholder="Describe your issue in detail..."></textarea>
                     </div>
@@ -760,6 +761,38 @@
                             responseTime: "Immediate"
                         }
                     ],
+                    ban_user: [
+                        {
+                            title: "Request to Ban User (Spam)",
+                            description: "Request to ban a user for sending spam.",
+                            content: "Dear WhatsApp Support Team,\n\nI am requesting to ban the user with the number {reportedAccountId}. This user has been sending me unsolicited spam messages. I have attached screenshots of the messages as proof.\n\nThank you for your prompt attention to this matter.\n\nBest regards,\n{email}",
+                            responseTime: "1-2 business days"
+                        },
+                        {
+                            title: "Request to Ban User (Harassment)",
+                            description: "Request to ban a user for harassment.",
+                            content: "Dear WhatsApp Support Team,\n\nI am requesting to ban the user with the number {reportedAccountId}. This user has been harassing me with inappropriate messages. I have attached screenshots of the messages as proof. This is causing me significant distress.\n\nThank you for your prompt attention to this matter.\n\nBest regards,\n{email}",
+                            responseTime: "1-2 business days"
+                        },
+                        {
+                            title: "Request to Ban User (Scam)",
+                            description: "Request to ban a user for attempting to scam.",
+                            content: "Dear WhatsApp Support Team,\n\nI am requesting to ban the user with the number {reportedAccountId}. This user is attempting to scam people. I have attached screenshots of the messages as proof.\n\nThank you for your prompt attention to this matter.\n\nBest regards,\n{email}",
+                            responseTime: "1-2 business days"
+                        },
+                        {
+                            title: "Request to Ban User (Impersonation)",
+                            description: "Request to ban a user for impersonation.",
+                            content: "Dear WhatsApp Support Team,\n\nI am requesting to ban the user with the number {reportedAccountId}. This user is impersonating someone I know. I have attached screenshots of the messages as proof.\n\nThank you for your prompt attention to this matter.\n\nBest regards,\n{email}",
+                            responseTime: "1-2 business days"
+                        },
+                        {
+                            title: "Request to Ban User (Other)",
+                            description: "Request to ban a user for other reasons.",
+                            content: "Dear WhatsApp Support Team,\n\nI am requesting to ban the user with the number {reportedAccountId} for the following reason: [Please describe the reason here]. I have attached screenshots as proof.\n\nThank you for your prompt attention to this matter.\n\nBest regards,\n{email}",
+                            responseTime: "1-2 business days"
+                        }
+                    ],
                     other: [
                         {
                             title: "General Account Issue",
@@ -1081,6 +1114,38 @@
                             content: "Subject: Permintaan Hukum\n\nKepada Departemen Hukum WhatsApp,\n\nSaya menulis mengenai akun saya ({accountId}) tentang masalah hukum terkait [jelaskan isu].\n\nIni melibatkan:\n1. [Hukum/yurisdiksi relevan]\n2. [Kekhawatiran spesifik]\n3. [Tindakan yang diperlukan]\n\nMohon tim hukum Anda menghubungi saya di [kontak preferensi] untuk diskusi. Untuk verifikasi, saya bisa menyediakan [identifikasi/dokumen].\n\nKomunikasi ini merupakan [pemberitahuan/permintaan formal] sesuai [hukum/kebijakan terkait].\n\nHormat saya,\n[Nama lengkap]\n[Posisi jika berlaku]\n[Informasi kontak]",
                             responseTime: "10-15 hari kerja"
                         }
+                    ],
+                    ban_user: [
+                        {
+                            title: "Permintaan Banned Pengguna (Spam)",
+                            description: "Meminta untuk mem-banned pengguna karena mengirim spam.",
+                            content: "Tim Dukungan WhatsApp yang terhormat,\n\nSaya meminta untuk mem-banned pengguna dengan nomor {reportedAccountId}. Pengguna ini telah mengirimi saya pesan spam yang tidak diminta. Saya telah melampirkan tangkapan layar pesan sebagai bukti.\n\nTerima kasih atas perhatian Anda yang cepat terhadap masalah ini.\n\nHormat saya,\n{email}",
+                            responseTime: "1-2 hari kerja"
+                        },
+                        {
+                            title: "Permintaan Banned Pengguna (Pelecehan)",
+                            description: "Meminta untuk mem-banned pengguna karena pelecehan.",
+                            content: "Tim Dukungan WhatsApp yang terhormat,\n\nSaya meminta untuk mem-banned pengguna dengan nomor {reportedAccountId}. Pengguna ini telah melecehkan saya dengan pesan-pesan yang tidak pantas. Saya telah melampirkan tangkapan layar pesan sebagai bukti. Ini menyebabkan saya sangat tertekan.\n\nTerima kasih atas perhatian Anda yang cepat terhadap masalah ini.\n\nHormat saya,\n{email}",
+                            responseTime: "1-2 hari kerja"
+                        },
+                        {
+                            title: "Permintaan Banned Pengguna (Penipuan)",
+                            description: "Meminta untuk mem-banned pengguna karena mencoba menipu.",
+                            content: "Tim Dukungan WhatsApp yang terhormat,\n\nSaya meminta untuk mem-banned pengguna dengan nomor {reportedAccountId}. Pengguna ini mencoba menipu orang. Saya telah melampirkan tangkapan layar pesan sebagai bukti.\n\nTerima kasih atas perhatian Anda yang cepat terhadap masalah ini.\n\nHormat saya,\n{email}",
+                            responseTime: "1-2 hari kerja"
+                        },
+                        {
+                            title: "Permintaan Banned Pengguna (Peniruan Identitas)",
+                            description: "Meminta untuk mem-banned pengguna karena peniruan identitas.",
+                            content: "Tim Dukungan WhatsApp yang terhormat,\n\nSaya meminta untuk mem-banned pengguna dengan nomor {reportedAccountId}. Pengguna ini meniru seseorang yang saya kenal. Saya telah melampirkan tangkapan layar pesan sebagai bukti.\n\nTerima kasih atas perhatian Anda yang cepat terhadap masalah ini.\n\nHormat saya,\n{email}",
+                            responseTime: "1-2 hari kerja"
+                        },
+                        {
+                            title: "Permintaan Banned Pengguna (Lainnya)",
+                            description: "Meminta untuk mem-banned pengguna karena alasan lain.",
+                            content: "Tim Dukungan WhatsApp yang terhormat,\n\nSaya meminta untuk mem-banned pengguna dengan nomor {reportedAccountId} karena alasan berikut: [Silakan jelaskan alasannya di sini]. Saya telah melampirkan tangkapan layar sebagai bukti.\n\nTerima kasih atas perhatian Anda yang cepat terhadap masalah ini.\n\nHormat saya,\n{email}",
+                            responseTime: "1-2 hari kerja"
+                        }
                     ]
                 }
             },
@@ -1368,7 +1433,7 @@
                         {
                             title: "Monetized Channel Termination Appeal",
                             description: "For terminated monetized channels emphasizing urgency",
-                            content: "URGENT: Monetized Channel Terminated\n\nDear YouTube Partner Team,\n\nMy monetized channel ({accountId}) with [number] subscribers has been terminated without warning. This is causing severe financial and professional disruption:\n\nKey impacts:\n- Loss of primary income source\n- Years of content inaccessible\n- Damage to my creator reputation\n\nI guarantee compliance with all YouTube policies. Please:\n1. Provide specific violation details\n2. Allow me to correct any issues\n3. Prioritize review of my case\n\nAttached are examples of my content. I appreciate your urgent attention to this critical matter.\n\nSincerely,\n{email}",
+                            content: "URGENT: Monetized Channel Terminated\n\nDear YouTube Partner Team,\n\nMy monetized channel ({accountId}) with [number] subscribers has been terminated without warning. This is causing severe financial and professional disruption:\n\nKey impacts:\n- Loss of primary income source\n- Years of content inaccessible\n- Damage to my creator reputation\n\nI guarantee compliance with all YouTube policies. Please:\n1. Provide specific violation details\n2. Allow us to correct any issues\n3. Prioritize review of our case\n\nAttached are examples of my content. I appreciate your urgent attention to this critical matter.\n\nSincerely,\n{email}",
                             responseTime: "24-48 hours"
                         },
                         {
@@ -1420,6 +1485,216 @@
                             description: "For reporting illegal content",
                             content: "URGENT: Illegal Content Report\n\nDear YouTube Legal Team,\n\nI'm reporting {reportedAccountId} for distributing apparent child exploitation material. This was encountered [describe how].\n\nDO NOT OPEN ATTACHMENTS - I've reported only metadata:\n1. Date/time encountered\n2. Nature of content\n3. No actual content saved\n\nI understand this is extremely serious and have:\n1. Filed report with [local authorities]\n2. Preserved only necessary evidence\n3. Avoided sharing further\n\nPlease:\n1. Immediately preserve all data\n2. Notify appropriate authorities\n3. Take strongest possible action\n\nThis report is made in good faith to protect children.\n\n[Your information]",
                             responseTime: "Immediate"
+                        }
+                    ]
+                }
+            },
+            discord: {
+                en: {
+                    unban: [
+                        {
+                            title: "Banned Account Appeal (Formal)",
+                            description: "For banned Discord accounts with formal tone",
+                            content: "Dear Discord Trust & Safety Team,\n\nMy Discord account ({accountId}) has been banned. I have reviewed the Terms of Service and Community Guidelines and believe this ban was a mistake.\n\nThis account is important for my social interactions and communities. I request a review of this ban and the reason for it.\n\nThank you for your consideration.\n\nBest regards,\n{email}",
+                            responseTime: "5-10 business days"
+                        },
+                        {
+                            title: "Server Ban Appeal",
+                            description: "For appealing a ban from a specific server",
+                            content: "Subject: Appeal for Server Ban\n\nDear Server Moderators of [Server Name],\n\nMy account ({accountId}) was banned from your server. I would like to appeal this decision. I have read the server rules and believe I did not violate them, or if I did, it was unintentional.\n\nPlease reconsider my ban. I enjoy being part of your community.\n\nSincerely,\n{email}",
+                            responseTime: "Varies by server"
+                        },
+                        {
+                            title: "Age-Related Ban Appeal",
+                            description: "For appealing a ban due to age verification issues",
+                            content: "Dear Discord Trust & Safety,\n\nMy account ({accountId}) was banned for being underage, but I am over the required age. I am prepared to provide proof of age to resolve this issue.\n\nPlease let me know the process for age verification so I can restore my account.\n\nThank you,\n{email}",
+                            responseTime: "3-5 business days"
+                        },
+                        {
+                            title: "Compromised Account Ban Appeal",
+                            description: "For appealing a ban that occurred while your account was hacked",
+                            content: "Dear Discord Trust & Safety,\n\nMy account ({accountId}) was recently compromised, and actions were taken by the hacker that led to a ban. I have since regained control of my account and secured it.\n\nPlease review the activity on my account during the time it was compromised and reconsider the ban.\n\nSincerely,\n{email}",
+                            responseTime: "5-7 business days"
+                        },
+                        {
+                            title: "Follow-up on Ban Appeal",
+                            description: "To check on the status of a previous appeal",
+                            content: "Subject: Following up on my ban appeal\n\nDear Discord Trust & Safety,\n\nI am writing to follow up on my appeal for my banned account ({accountId}), which I submitted on [Date]. I would appreciate an update on the status of my appeal.\n\nThank you for your time.\n\nBest regards,\n{email}",
+                            responseTime: "Varies"
+                        }
+                    ]
+                },
+                id: {
+                    unban: [
+                        {
+                            title: "Permohonan Banding Akun Diblokir (Formal)",
+                            description: "Untuk akun Discord yang diblokir dengan nada formal",
+                            content: "Tim Kepercayaan & Keamanan Discord yang terhormat,\n\nAkun Discord saya ({accountId}) telah diblokir. Saya telah meninjau Persyaratan Layanan dan Pedoman Komunitas dan yakin pemblokiran ini adalah kesalahan.\n\nAkun ini penting untuk interaksi sosial dan komunitas saya. Saya meminta peninjauan atas pemblokiran ini dan alasannya.\n\nTerima kasih atas pertimbangan Anda.\n\nHormat saya,\n{email}",
+                            responseTime: "5-10 hari kerja"
+                        },
+                        {
+                            title: "Permohonan Banding Pemblokiran Server",
+                            description: "Untuk mengajukan banding atas pemblokiran dari server tertentu",
+                            content: "Subjek: Permohonan Banding Pemblokiran Server\n\nModerator Server [Nama Server] yang terhormat,\n\nAkun saya ({accountId}) diblokir dari server Anda. Saya ingin mengajukan banding atas keputusan ini. Saya telah membaca peraturan server dan yakin saya tidak melanggarnya, atau jika ya, itu tidak disengaja.\n\nMohon pertimbangkan kembali pemblokiran saya. Saya senang menjadi bagian dari komunitas Anda.\n\nHormat saya,\n{email}",
+                            responseTime: "Bervariasi tergantung server"
+                        },
+                        {
+                            title: "Permohonan Banding Pemblokiran Terkait Usia",
+                            description: "Untuk mengajukan banding atas pemblokiran karena masalah verifikasi usia",
+                            content: "Tim Kepercayaan & Keamanan Discord yang terhormat,\n\nAkun saya ({accountId}) diblokir karena dianggap di bawah umur, tetapi saya sudah di atas usia yang disyaratkan. Saya siap memberikan bukti usia untuk menyelesaikan masalah ini.\n\nMohon beri tahu saya proses verifikasi usia agar saya dapat memulihkan akun saya.\n\nTerima kasih,\n{email}",
+                            responseTime: "3-5 hari kerja"
+                        },
+                        {
+                            title: "Permohonan Banding Pemblokiran Akun yang Diretas",
+                            description: "Untuk mengajukan banding atas pemblokiran yang terjadi saat akun Anda diretas",
+                            content: "Tim Kepercayaan & Keamanan Discord yang terhormat,\n\nAkun saya ({accountId}) baru-baru ini diretas, dan tindakan yang diambil oleh peretas menyebabkan pemblokiran. Saya telah mendapatkan kembali kendali atas akun saya dan mengamankannya.\n\nMohon tinjau aktivitas di akun saya selama waktu diretas dan pertimbangkan kembali pemblokiran tersebut.\n\nHormat saya,\n{email}",
+                            responseTime: "5-7 hari kerja"
+                        },
+                        {
+                            title: "Tindak Lanjut Permohonan Banding Pemblokiran",
+                            description: "Untuk menanyakan status permohonan banding sebelumnya",
+                            content: "Subjek: Menindaklanjuti permohonan banding pemblokiran saya\n\nTim Kepercayaan & Keamanan Discord yang terhormat,\n\nSaya menulis untuk menindaklanjuti permohonan banding saya untuk akun saya yang diblokir ({accountId}), yang saya kirimkan pada [Tanggal]. Saya akan sangat menghargai pembaruan status permohonan banding saya.\n\nTerima kasih atas waktu Anda.\n\nHormat saya,\n{email}",
+                            responseTime: "Bervariasi"
+                        }
+                    ]
+                }
+            },
+            telegram: {
+                en: {
+                    unban: [
+                        {
+                            title: "Spam Block Appeal",
+                            description: "For when your account is limited due to spam reports",
+                            content: "Dear Telegram Support,\n\nMy account ({accountId}) has been limited, and I believe it was wrongly flagged for spam. I do not send unsolicited messages. Could you please review my account activity and remove the limitation?\n\nThank you,\n{email}",
+                            responseTime: "1-3 days"
+                        },
+                        {
+                            title: "Appeal for Deleted Account",
+                            description: "To inquire about a deleted account",
+                            content: "Dear Telegram Support,\n\nMy account ({accountId}) appears to have been deleted. I did not do this myself. Can you please investigate why my account was deleted and if it can be restored?\n\nThank you,\n{email}",
+                            responseTime: "Varies"
+                        },
+                        {
+                            title: "Login Issues/Blocked Number",
+                            description: "For when you can't log in or your number is blocked",
+                            content: "Dear Telegram Support,\n\nI am unable to log into my Telegram account with the number {accountId}. I am not receiving a login code. Please help me regain access to my account.\n\nSincerely,\n{email}",
+                            responseTime: "2-5 days"
+                        },
+                        {
+                            title: "Formal Complaint about Limitation",
+                            description: "A more formal appeal for account limitations",
+                            content: "Subject: Formal Complaint Regarding Account Limitation\n\nDear Telegram Support,\n\nI am writing to formally complain about the limitation placed on my account, {accountId}. I am confident that I have not violated Telegram's Terms of Service. This limitation is affecting my ability to communicate for professional and personal matters. I request an immediate review and removal of this restriction.\n\nRegards,\n{email}",
+                            responseTime: "3-7 days"
+                        },
+                        {
+                            title: "Mistaken Identity Ban Appeal",
+                            description: "If you believe you were banned by mistake",
+                            content: "Dear Telegram Support,\n\nI believe my account ({accountId}) has been limited or banned by mistake. I have not engaged in any activity that violates your policies. Could this be an error? I would appreciate it if you could look into this matter.\n\nThank you,\n{email}",
+                            responseTime: "2-4 days"
+                        }
+                    ]
+                },
+                id: {
+                    unban: [
+                        {
+                            title: "Permohonan Banding Blokir Spam",
+                            description: "Ketika akun Anda dibatasi karena laporan spam",
+                            content: "Dukungan Telegram yang terhormat,\n\nAkun saya ({accountId}) telah dibatasi, dan saya yakin akun tersebut salah ditandai sebagai spam. Saya tidak mengirim pesan yang tidak diminta. Bisakah Anda meninjau aktivitas akun saya dan menghapus batasan tersebut?\n\nTerima kasih,\n{email}",
+                            responseTime: "1-3 hari"
+                        },
+                        {
+                            title: "Permohonan Banding untuk Akun yang Dihapus",
+                            description: "Untuk menanyakan tentang akun yang dihapus",
+                            content: "Dukungan Telegram yang terhormat,\n\nAkun saya ({accountId}) tampaknya telah dihapus. Saya tidak melakukannya sendiri. Bisakah Anda menyelidiki mengapa akun saya dihapus dan apakah bisa dipulihkan?\n\nTerima kasih,\n{email}",
+                            responseTime: "Bervariasi"
+                        },
+                        {
+                            title: "Masalah Login/Nomor Diblokir",
+                            description: "Ketika Anda tidak bisa login atau nomor Anda diblokir",
+                            content: "Dukungan Telegram yang terhormat,\n\nSaya tidak dapat masuk ke akun Telegram saya dengan nomor {accountId}. Saya tidak menerima kode login. Tolong bantu saya mendapatkan kembali akses ke akun saya.\n\nHormat saya,\n{email}",
+                            responseTime: "2-5 hari"
+                        },
+                        {
+                            title: "Keluhan Formal tentang Pembatasan",
+                            description: "Permohonan banding yang lebih formal untuk pembatasan akun",
+                            content: "Subjek: Keluhan Formal Mengenai Pembatasan Akun\n\nDukungan Telegram yang terhormat,\n\nSaya menulis untuk secara resmi mengeluh tentang pembatasan yang ditempatkan pada akun saya, {accountId}. Saya yakin bahwa saya tidak melanggar Ketentuan Layanan Telegram. Pembatasan ini memengaruhi kemampuan saya untuk berkomunikasi untuk urusan profesional dan pribadi. Saya meminta peninjauan segera dan penghapusan pembatasan ini.\n\nHormat saya,\n{email}",
+                            responseTime: "3-7 hari"
+                        },
+                        {
+                            title: "Permohonan Banding Pemblokiran karena Kesalahan Identitas",
+                            description: "Jika Anda yakin Anda diblokir karena kesalahan",
+                            content: "Dukungan Telegram yang terhormat,\n\nSaya yakin akun saya ({accountId}) telah dibatasi atau diblokir karena kesalahan. Saya tidak terlibat dalam aktivitas apa pun yang melanggar kebijakan Anda. Mungkinkah ini kesalahan? Saya akan sangat menghargai jika Anda dapat memeriksa masalah ini.\n\nTerima kasih,\n{email}",
+                            responseTime: "2-4 hari"
+                        }
+                    ]
+                }
+            },
+            snapchat: {
+                en: {
+                    unban: [
+                        {
+                            title: "Locked Account Appeal",
+                            description: "For when your Snapchat account is locked",
+                            content: "Dear Snapchat Support,\n\nMy Snapchat account ({accountId}) has been locked, and I'm not sure why. I've reviewed the community guidelines and don't believe I've violated them. Can you please help me unlock my account?\n\nThank you,\n{email}",
+                            responseTime: "1-2 business days"
+                        },
+                        {
+                            title: "Permanently Locked Account Appeal",
+                            description: "To appeal a permanently locked account",
+                            content: "Dear Snapchat Support,\n\nMy account ({accountId}) has been permanently locked. I believe this may have been a mistake. Is there any way to appeal this decision? This account holds many memories that are important to me.\n\nSincerely,\n{email}",
+                            responseTime: "Varies, can be long"
+                        },
+                        {
+                            title: "Hacked and Locked Account",
+                            description: "For when your account was hacked and then locked",
+                            content: "Dear Snapchat Support,\n\nMy Snapchat account ({accountId}) was hacked, and now it's locked. I have regained control of my email and other accounts. Please help me recover my Snapchat account.\n\nThank you,\n{email}",
+                            responseTime: "3-5 business days"
+                        },
+                        {
+                            title: "Appeal for Temporary Lock",
+                            description: "If your account has been temporarily locked",
+                            content: "Dear Snapchat Support,\n\nMy account ({accountId}) is temporarily locked. I understand this can happen for various reasons. Could you please let me know when I can expect to have access again, or if there's anything I need to do to speed up the process?\n\nThanks,\n{email}",
+                            responseTime: "Usually resolves automatically"
+                        },
+                        {
+                            title: "Login Verification Issues",
+                            description: "If you're locked out due to login or verification problems",
+                            content: "Dear Snapchat Support,\n\nI'm unable to log in to my account ({accountId}) due to verification issues. I'm not receiving the verification code. Please help me access my account.\n\nBest,\n{email}",
+                            responseTime: "2-4 business days"
+                        }
+                    ]
+                },
+                id: {
+                    unban: [
+                        {
+                            title: "Permohonan Banding Akun Terkunci",
+                            description: "Ketika akun Snapchat Anda terkunci",
+                            content: "Dukungan Snapchat yang terhormat,\n\nAkun Snapchat saya ({accountId}) telah terkunci, dan saya tidak yakin mengapa. Saya telah meninjau pedoman komunitas dan tidak yakin saya telah melanggarnya. Bisakah Anda membantu saya membuka kunci akun saya?\n\nTerima kasih,\n{email}",
+                            responseTime: "1-2 hari kerja"
+                        },
+                        {
+                            title: "Permohonan Banding Akun Terkunci Permanen",
+                            description: "Untuk mengajukan banding atas akun yang terkunci secara permanen",
+                            content: "Dukungan Snapchat yang terhormat,\n\nAkun saya ({accountId}) telah terkunci secara permanen. Saya yakin ini mungkin kesalahan. Apakah ada cara untuk mengajukan banding atas keputusan ini? Akun ini menyimpan banyak kenangan yang penting bagi saya.\n\nHormat saya,\n{email}",
+                            responseTime: "Bervariasi, bisa lama"
+                        },
+                        {
+                            title: "Akun Diretas dan Terkunci",
+                            description: "Ketika akun Anda diretas dan kemudian terkunci",
+                            content: "Dukungan Snapchat yang terhormat,\n\nAkun Snapchat saya ({accountId}) diretas, dan sekarang terkunci. Saya telah mendapatkan kembali kendali atas email dan akun saya yang lain. Tolong bantu saya memulihkan akun Snapchat saya.\n\nTerima kasih,\n{email}",
+                            responseTime: "3-5 hari kerja"
+                        },
+                        {
+                            title: "Permohonan Banding untuk Kunci Sementara",
+                            description: "Jika akun Anda terkunci sementara",
+                            content: "Dukungan Snapchat yang terhormat,\n\nAkun saya ({accountId}) terkunci sementara. Saya mengerti ini bisa terjadi karena berbagai alasan. Bisakah Anda memberi tahu saya kapan saya bisa berharap untuk memiliki akses lagi, atau jika ada sesuatu yang perlu saya lakukan untuk mempercepat prosesnya?\n\nTerima kasih,\n{email}",
+                            responseTime: "Biasanya terselesaikan secara otomatis"
+                        },
+                        {
+                            title: "Masalah Verifikasi Login",
+                            description: "Jika Anda terkunci karena masalah login atau verifikasi",
+                            content: "Dukungan Snapchat yang terhormat,\n\nSaya tidak dapat masuk ke akun saya ({accountId}) karena masalah verifikasi. Saya tidak menerima kode verifikasi. Tolong bantu saya mengakses akun saya.\n\nTerbaik,\n{email}",
+                            responseTime: "2-4 hari kerja"
                         }
                     ]
                 }
@@ -1477,7 +1752,7 @@
                 accountIdLabel: "ID/Nomor Akun",
                 issueTypeLabel: "Jenis Masalah",
                 selectIssue: "Pilih jenis masalah",
-                issueDetailsLabel: "Detail Masalah",
+                issueDetailsLabel: "Detail Laporan",
                 emailLabel: "Email Aktif Anda",
                 uploadText: "Klik untuk mengunggah screenshot atau bukti (opsional)",
                 templateTitle: "Pilih Template Laporan",
@@ -1739,6 +2014,20 @@
             document.getElementById('selectPlatform').textContent = translation.selectPlatform;
             document.getElementById('selectIssue').textContent = translation.selectIssue;
             
+            // Add new platforms to the dropdown
+            const platformSelect = document.getElementById('platform');
+            const existingPlatforms = Array.from(platformSelect.options).map(opt => opt.value);
+            const allPlatforms = Object.keys(platformEmails);
+
+            allPlatforms.forEach(platform => {
+                if (!existingPlatforms.includes(platform)) {
+                    const option = document.createElement('option');
+                    option.value = platform;
+                    option.textContent = platform.charAt(0).toUpperCase() + platform.slice(1);
+                    platformSelect.appendChild(option);
+                }
+            });
+
             // Update rate limit info
             rateLimitInfo.textContent = translation.rateLimitInfo;
             rateLimitAlert.textContent = translation.rateLimitMessage;
@@ -1766,6 +2055,7 @@
                 const templates = templatesForPlatform[language][issueType];
                 
                 templateSection.style.display = 'block';
+                document.getElementById('issueDetailsGroup').style.display = 'block';
                 if (templates && templates.length > 0) {
                     templates.forEach(template => {
                         const templateDiv = document.createElement('div');
@@ -1791,6 +2081,7 @@
                                 .replace(/{email}/g, email);
                                 
                             issueDetails.value = filledContent;
+                            document.getElementById('issueDetailsGroup').style.display = 'none';
                         });
                         
                         templateOptions.appendChild(templateDiv);
@@ -1814,7 +2105,15 @@
         });
 
         // Platform change event
-        platformSelect.addEventListener('change', updateTemplates);
+        platformSelect.addEventListener('change', () => {
+            updateTemplates();
+            const banUserOption = document.querySelector('#issueType option[value="ban_user"]');
+            if (platformSelect.value === 'whatsapp') {
+                banUserOption.style.display = 'block';
+            } else {
+                banUserOption.style.display = 'none';
+            }
+        });
 
         // Issue type change event
         issueTypeSelect.addEventListener('change', (e) => {
