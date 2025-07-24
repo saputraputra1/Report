@@ -503,108 +503,104 @@
         // Template database for each platform and language
         const platformTemplates = {
             whatsapp: {
-                en: [
-                    {
+                en: {
+                    unban: {
                         title: "Wrongful Ban Appeal",
                         description: "For accounts banned by mistake",
-                        content: "Dear WhatsApp Support Team,\n\nMy WhatsApp account with number {accountId} has been banned unexpectedly. I believe this was done in error as I have not violated any of WhatsApp's Terms of Service.\n\nI primarily use WhatsApp for personal communication with family and friends. Could you please review my case and restore my account access?\n\nThank you for your assistance.\n\nBest regards,\n{email}",
+                        content: "Dear WhatsApp Support Team,\n\nMy WhatsApp account with number {accountId} has been banned, and I strongly believe this was a mistake. I have carefully reviewed the Terms of Service and I am confident that I have not violated any policies.\n\nThis account is crucial for my daily communication. I kindly request a formal review of this ban and the reinstatement of my account.\n\nThank you for your time and consideration.\n\nBest regards,\n{email}",
                         responseTime: "Usually 1-3 business days"
                     },
-                    {
-                        title: "Verification Code Issue",
-                        description: "When not receiving verification codes",
-                        content: "Hello WhatsApp Support,\n\nI'm unable to verify my phone number {accountId} on WhatsApp. I've tried multiple times but haven't received the verification code via SMS or call.\n\nI've confirmed with my mobile carrier that there are no issues with my number or SMS reception. Please advise how I can resolve this verification issue.\n\nThank you,\n{email}",
-                        responseTime: "Typically 24-48 hours"
-                    },
-                    {
-                        title: "Account Hacked Report",
+                    hacked: {
+                        title: "Hacked Account Report",
                         description: "For compromised accounts",
-                        content: "Urgent: Hacked Account Report\n\nDear WhatsApp Team,\n\nMy WhatsApp account with number {accountId} has been compromised. The hacker has changed my account information and I've lost access.\n\nPlease help me recover my account. I can provide any necessary verification details to prove my ownership.\n\nSincerely,\n{email}",
+                        content: "URGENT: Hacked Account Report\n\nDear WhatsApp Security Team,\n\nMy WhatsApp account ({accountId}) has been compromised. I have lost access, and I suspect unauthorized activity is being conducted. Please take immediate action to secure the account and help me regain control.\n\nI can provide any necessary information to verify my identity. Please guide me through the recovery process.\n\nSincerely,\n{email}",
                         responseTime: "Priority response within 24 hours"
+                    },
+                    report_user: {
+                        title: "Report User for Violation",
+                        description: "Report another user for spam, harassment, or other violations.",
+                        content: "Dear WhatsApp Moderation Team,\n\nI am writing to report the user with the number {reportedAccountId} for violating WhatsApp's policies. \n\n[Please describe the violation here, e.g., spamming, harassment, sharing inappropriate content, etc.]\n\nI have attached screenshots as evidence. I trust you will take appropriate action to maintain the safety of the platform.\n\nThank you for your attention to this matter.\n\nRegards,\n{email}",
+                        responseTime: "1-2 business days"
                     }
-                ],
-                id: [
-                    {
-                        title: "Permohonan Unban",
-                        description: "Untuk akun yang diblokir secara tidak adil",
-                        content: "Kepada Tim Support WhatsApp,\n\nAkun WhatsApp saya dengan nomor {accountId} telah diblokir tanpa alasan yang jelas. Saya yakin ini adalah kesalahan karena saya tidak melanggar Ketentuan Layanan WhatsApp.\n\nSaya hanya menggunakan WhatsApp untuk komunikasi pribadi dengan keluarga dan teman. Mohon tinjau kembali kasus saya dan pulihkan akses akun saya.\n\nTerima kasih atas bantuannya.\n\nHormat saya,\n{email}",
+                },
+                id: {
+                    unban: {
+                        title: "Permohonan Pembukaan Blokir",
+                        description: "Untuk akun yang diblokir karena kesalahan",
+                        content: "Kepada Tim Dukungan WhatsApp,\n\nAkun WhatsApp saya dengan nomor {accountId} telah diblokir, dan saya yakin ini adalah sebuah kesalahan. Saya telah meninjau Ketentuan Layanan dan yakin tidak ada kebijakan yang saya langgar.\n\nAkun ini sangat penting untuk komunikasi saya. Mohon tinjau kembali pemblokiran ini dan aktifkan kembali akun saya.\n\nTerima kasih atas perhatian Anda.\n\nHormat saya,\n{email}",
                         responseTime: "Biasanya 1-3 hari kerja"
                     },
-                    {
-                        title: "Masalah Kode Verifikasi",
-                        description: "Ketika tidak menerima kode verifikasi",
-                        content: "Halo Support WhatsApp,\n\nSaya tidak bisa memverifikasi nomor telepon {accountId} di WhatsApp. Sudah beberapa kali mencoba tetapi tidak menerima kode verifikasi via SMS atau telepon.\n\nSaya sudah konfirmasi dengan operator bahwa tidak ada masalah dengan nomor atau penerimaan SMS. Tolong beri tahu cara mengatasi masalah verifikasi ini.\n\nTerima kasih,\n{email}",
-                        responseTime: "Biasanya 24-48 jam"
+                    report_user: {
+                        title: "Laporan Pelanggaran Pengguna",
+                        description: "Laporkan pengguna lain karena spam, pelecehan, atau pelanggaran lainnya.",
+                        content: "Kepada Tim Moderasi WhatsApp,\n\nSaya ingin melaporkan pengguna dengan nomor {reportedAccountId} karena telah melanggar kebijakan WhatsApp.\n\n[Silakan jelaskan pelanggarannya di sini, contoh: spam, pelecehan, konten tidak pantas, dll.]\n\nSaya telah melampirkan bukti tangkapan layar. Saya percaya Anda akan mengambil tindakan yang sesuai untuk menjaga keamanan platform.\n\nTerima kasih.\n\nHormat saya,\n{email}",
+                        responseTime: "1-2 hari kerja"
                     }
-                ],
-                es: [
-                    {
-                        title: "Apelación de Bloqueo Injusto",
-                        description: "Para cuentas bloqueadas por error",
-                        content: "Estimado equipo de soporte de WhatsApp,\n\nMi cuenta de WhatsApp con el número {accountId} ha sido bloqueada inesperadamente. Creo que esto fue un error ya que no he violado ninguno de los Términos de Servicio de WhatsApp.\n\nPrincipalmente uso WhatsApp para comunicación personal con familiares y amigos. ¿Podrían por favor revisar mi caso y restaurar mi cuenta?\n\nGracias por su ayuda.\n\nAtentamente,\n{email}",
-                        responseTime: "Normalmente 1-3 días hábiles"
-                    }
-                ]
+                }
             },
             instagram: {
-                en: [
-                    {
+                en: {
+                    unban: {
                         title: "Disabled Account Appeal",
                         description: "For deactivated Instagram accounts",
-                        content: "Dear Instagram Support,\n\nMy Instagram account @{accountId} has been disabled unexpectedly. I believe this was done in error as I haven't violated any community guidelines.\n\nThis account is very important to me as it contains years of memories and connections. Please review my case and restore my access. I'm happy to provide any additional verification needed.\n\nThank you,\n{email}",
+                        content: "Dear Instagram Support,\n\nMy Instagram account @{accountId} has been disabled, and I am certain this was an error. I have not violated any community guidelines.\n\nThis account is vital for my personal and professional life. Please conduct a thorough review and restore my account. I am prepared to provide any verification necessary.\n\nThank you,\n{email}",
                         responseTime: "3-5 business days"
                     },
-                    {
-                        title: "Hacked Account Recovery",
-                        description: "When account is compromised",
-                        content: "Urgent: Hacked Account Report\n\nInstagram Support Team,\n\nMy Instagram account @{accountId} has been hacked. The hacker changed my email and password, and I can no longer access my account.\n\nPlease help me recover my account. I can provide proof of ownership including previous emails, connected accounts, and identification if needed.\n\nSincerely,\n{email}",
-                        responseTime: "Priority response within 48 hours"
+                    report_user: {
+                        title: "Report User for Violation",
+                        description: "Report another user for policy violations.",
+                        content: "Dear Instagram Moderation Team,\n\nI am reporting the user @{reportedAccountId} for violating Instagram's community guidelines. \n\n[Please describe the violation, e.g., harassment, hate speech, impersonation, etc.]\n\nThis behavior is harmful to the community. I have attached evidence for your review. Please take swift action.\n\nRegards,\n{email}",
+                        responseTime: "1-3 business days"
                     }
-                ],
-                id: [
-                    {
-                        title: "Permohonan Akun Dinonaktifkan",
-                        description: "Untuk akun Instagram yang dinonaktifkan",
-                        content: "Kepada Tim Support Instagram,\n\nAkun Instagram saya @{accountId} telah dinonaktifkan secara tiba-tiba. Saya yakin ini adalah kesalahan karena saya tidak melanggar pedoman komunitas.\n\nAkun ini sangat penting bagi saya karena berisi kenangan dan koneksi bertahun-tahun. Mohon tinjau kasus saya dan pulihkan akses saya. Saya bersedia memberikan verifikasi tambahan jika diperlukan.\n\nTerima kasih,\n{email}",
-                        responseTime: "3-5 hari kerja"
-                    }
-                ]
-            },
-            tiktok: {
-                en: [
-                    {
-                        title: "Content Removal Appeal",
-                        description: "For wrongly removed videos",
-                        content: "Dear TikTok Team,\n\nMy video (ID: {accountId}) was removed for allegedly violating community guidelines, but I believe this was a mistake. The content was original and complied with all platform rules.\n\nPlease review this decision and restore my video. I'd appreciate clarification on what specific policy was violated if the removal stands.\n\nThank you,\n{email}",
-                        responseTime: "2-4 business days"
-                    },
-                    {
-                        title: "Account Ban Appeal",
-                        description: "For banned TikTok accounts",
-                        content: "TikTok Support Team,\n\nMy TikTok account @{accountId} has been banned unexpectedly. I've reviewed the Community Guidelines and believe this action was taken in error.\n\nMy content follows all platform rules and I've never received prior warnings. Please reconsider this decision and restore my account.\n\nBest regards,\n{email}",
-                        responseTime: "3-5 business days"
-                    }
-                ]
+                }
             },
             facebook: {
-                en: [
-                    {
+                en: {
+                    unban: {
                         title: "Disabled Account Appeal",
                         description: "For deactivated Facebook accounts",
-                        content: "Facebook Support,\n\nMy Facebook account ({accountId}) has been disabled without explanation. I believe this was done in error as I haven't violated any community standards.\n\nThis account contains important connections and memories spanning many years. Please review my case and restore my access. I'm happy to provide any additional verification needed.\n\nSincerely,\n{email}",
+                        content: "Dear Facebook Support,\n\nMy Facebook account ({accountId}) has been disabled. I believe this was a mistake as I have always adhered to the Community Standards.\n\nThis account is my primary way of connecting with family and friends. I request an urgent review of this decision to restore my access.\n\nSincerely,\n{email}",
                         responseTime: "3-7 business days"
+                    },
+                    report_user: {
+                        title: "Report User for Violation",
+                        description: "Report another user for policy violations.",
+                        content: "Dear Facebook Moderation Team,\n\nI need to report a user with the profile URL/ID: {reportedAccountId} for violating Facebook's Community Standards.\n\n[Please specify the violation, e.g., bullying, fake account, inappropriate content.]\n\nI have gathered evidence (screenshots) and request that you investigate this matter to ensure platform safety.\n\nThank you,\n{email}",
+                        responseTime: "2-4 business days"
                     }
-                ]
+                }
             },
             twitter: {
-                en: [
-                    {
+                en: {
+                    unban: {
                         title: "Suspended Account Appeal",
                         description: "For suspended Twitter accounts",
-                        content: "Twitter Support,\n\nMy Twitter account @{accountId} has been suspended unexpectedly. I've reviewed Twitter's rules and believe this action was taken in error.\n\nPlease review my case and restore my account access. If I've violated any policies unintentionally, I'd appreciate knowing which ones so I can avoid future issues.\n\nThank you,\n{email}",
+                        content: "Dear Twitter Support,\n\nMy Twitter account @{accountId} has been suspended, and I believe this was an error. I have reviewed Twitter's rules and am confident I have not violated them.\n\nPlease review my case and reinstate my account. If I have made an unintentional mistake, I would appreciate clarification.\n\nThank you,\n{email}",
                         responseTime: "2-5 business days"
+                    },
+                    report_user: {
+                        title: "Report User for Violation",
+                        description: "Report another user for rule violations.",
+                        content: "To Twitter Safety Team,\n\nI am reporting the user @{reportedAccountId} for violating Twitter's rules.\n\n[Please specify the violation, e.g., spam, targeted harassment, hateful conduct.]\n\nThis user's behavior is negatively impacting the platform. Please investigate and take appropriate action.\n\nThank you,\n{email}",
+                        responseTime: "1-3 business days"
                     }
-                ]
+                }
+            },
+            tiktok: {
+                en: {
+                    unban: {
+                        title: "Account Ban Appeal",
+                        description: "For banned TikTok accounts",
+                        content: "Dear TikTok Support Team,\n\nMy TikTok account @{accountId} has been banned. I have reviewed the Community Guidelines and believe this action was taken in error, as my content complies with all rules.\n\nPlease reconsider this decision and restore my account.\n\nBest regards,\n{email}",
+                        responseTime: "3-5 business days"
+                    },
+                    report_user: {
+                        title: "Report User for Violation",
+                        description: "Report another user for guideline violations.",
+                        content: "Dear TikTok Moderation Team,\n\nI am reporting user @{reportedAccountId} for violating Community Guidelines.\n\n[Please describe the violation, e.g., dangerous acts, harassment, hateful content.]\n\nI am concerned about this user's impact on the community and request a review of their account.\n\nThank you,\n{email}",
+                        responseTime: "2-4 business days"
+                    }
+                }
             },
             youtube: {
                 en: [
@@ -885,17 +881,21 @@
 
         // Filter sensitive information from text
         function filterSensitiveInfo(text) {
-            // Filter phone numbers (international format)
-            text = text.replace(/(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\b/g, '[PHONE NUMBER REDACTED]');
-            
+            // Filter phone numbers (more comprehensive)
+            text = text.replace(/(?:\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/g, '[PHONE NUMBER REDACTED]');
+
             // Filter email addresses
-            text = text.replace(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g, '[EMAIL REDACTED]');
-            
+            text = text.replace(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g, '[EMAIL REDACTED]');
+
             // Filter credit card numbers
             text = text.replace(/\b(?:\d[ -]*?){13,16}\b/g, '[CREDIT CARD REDACTED]');
-            
-            // Filter other sensitive patterns as needed
-            
+
+            // Filter usernames (if they look like @username)
+            text = text.replace(/@([a-zA-Z0-9_]+)/g, '[@USERNAME REDACTED]');
+
+            // Filter common password-like strings (example: "password: mypass123")
+            text = text.replace(/(password|sandi|kata sandi)\s*:\s*\S+/gi, '[PASSWORD REDACTED]');
+
             return text;
         }
 
@@ -940,18 +940,21 @@
             checkSubmissionLimit();
         }
 
-        // Update templates based on selected platform and language
+        // Update templates based on selected platform, issue type, and language
         function updateTemplates() {
             templateOptions.innerHTML = '';
             selectedTemplate = null;
             
             const platform = platformSelect.value;
+            const issueType = issueTypeSelect.value;
             const language = currentLanguage;
             
-            if (platform && platformTemplates[platform] && platformTemplates[platform][language]) {
-                templateSection.style.display = 'block';
+            const templatesForPlatform = platformTemplates[platform];
+            if (templatesForPlatform && templatesForPlatform[language]) {
+                const template = templatesForPlatform[language][issueType];
                 
-                platformTemplates[platform][language].forEach((template, index) => {
+                if (template) {
+                    templateSection.style.display = 'block';
                     const templateDiv = document.createElement('div');
                     templateDiv.className = 'template-option';
                     templateDiv.innerHTML = `
@@ -961,28 +964,26 @@
                     `;
                     
                     templateDiv.addEventListener('click', () => {
-                        // Remove selection from all templates
-                        document.querySelectorAll('.template-option').forEach(opt => {
-                            opt.classList.remove('selected-template');
-                        });
-                        
-                        // Add selection to clicked template
+                        document.querySelectorAll('.template-option').forEach(opt => opt.classList.remove('selected-template'));
                         templateDiv.classList.add('selected-template');
                         selectedTemplate = template;
                         
-                        // Fill the form with template content
                         const accountId = document.getElementById('accountId').value || '{accountId}';
+                        const reportedAccountId = document.getElementById('reportedAccountId')?.value || '{reportedAccountId}';
                         const email = document.getElementById('email').value || '{email}';
                         
                         let filledContent = template.content
                             .replace(/{accountId}/g, accountId)
+                            .replace(/{reportedAccountId}/g, reportedAccountId)
                             .replace(/{email}/g, email);
                             
                         issueDetails.value = filledContent;
                     });
                     
                     templateOptions.appendChild(templateDiv);
-                });
+                } else {
+                    templateSection.style.display = 'none';
+                }
             } else {
                 templateSection.style.display = 'none';
             }
@@ -1003,15 +1004,15 @@
 
         // Issue type change event
         issueTypeSelect.addEventListener('change', (e) => {
+            updateTemplates();
             const accountIdGroup = document.getElementById('accountId').parentElement;
-            const accountIdLabel = document.getElementById('accountIdLabel');
             let reportedUserGroup = document.getElementById('reportedUserGroup');
 
             if (e.target.value === 'report_user') {
-                // Change label for user's own account
-                accountIdLabel.textContent = "Your Account ID/Number";
+                // Hide user's own account ID field and show reported user's ID field
+                accountIdGroup.style.display = 'none';
+                document.getElementById('accountId').required = false;
 
-                // Add new field for reported user's ID if it doesn't exist
                 if (!reportedUserGroup) {
                     reportedUserGroup = document.createElement('div');
                     reportedUserGroup.className = 'form-group';
@@ -1020,15 +1021,20 @@
                         <label for="reportedAccountId" id="reportedAccountIdLabel">Reported User's ID/Number</label>
                         <input type="text" id="reportedAccountId" required placeholder="e.g., offending_user or +628987654321">
                     `;
-                    accountIdGroup.insertAdjacentElement('afterend', reportedUserGroup);
+                    // Insert after the issue type dropdown
+                    issueTypeSelect.parentElement.insertAdjacentElement('afterend', reportedUserGroup);
                 }
-            } else {
-                // Revert label
-                accountIdLabel.textContent = "Account ID/Number";
+                reportedUserGroup.style.display = 'block';
+                document.getElementById('reportedAccountId').required = true;
 
-                // Remove reported user field if it exists
+            } else {
+                // Show user's own account ID field and hide reported user's ID field
+                accountIdGroup.style.display = 'block';
+                document.getElementById('accountId').required = true;
+
                 if (reportedUserGroup) {
-                    reportedUserGroup.remove();
+                    reportedUserGroup.style.display = 'none';
+                    document.getElementById('reportedAccountId').required = false;
                 }
             }
         });
