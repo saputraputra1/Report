@@ -524,16 +524,16 @@
                 ],
                 id: [
                     {
-                        title: "Permohonan Unban",
-                        description: "Untuk akun yang diblokir secara tidak adil",
-                        content: "Kepada Tim Support WhatsApp,\n\nAkun WhatsApp saya dengan nomor {accountId} telah diblokir tanpa alasan yang jelas. Saya yakin ini adalah kesalahan karena saya tidak melanggar Ketentuan Layanan WhatsApp.\n\nSaya hanya menggunakan WhatsApp untuk komunikasi pribadi dengan keluarga dan teman. Mohon tinjau kembali kasus saya dan pulihkan akses akun saya.\n\nTerima kasih atas bantuannya.\n\nHormat saya,\n{email}",
-                        responseTime: "Biasanya 1-3 hari kerja"
+                        title: "Permohonan Peninjauan Ulang Pemblokiran Akun",
+                        description: "Template formal untuk pengajuan banding pemblokiran.",
+                        content: "Yth. Tim Dukungan WhatsApp,\n\nDengan hormat,\n\nSaya menulis surat ini untuk mengajukan permohonan peninjauan kembali atas pemblokiran akun WhatsApp saya dengan nomor {accountId}. Pemblokiran ini terjadi secara tak terduga dan saya yakin bahwa saya tidak pernah melanggar Ketentuan Layanan yang ditetapkan oleh WhatsApp.\n\nAkun ini sangat penting bagi saya untuk berkomunikasi dengan keluarga, rekan kerja, dan untuk keperluan penting lainnya. Saya selalu berusaha untuk mematuhi semua pedoman komunitas.\n\nSaya mohon kesediaan Anda untuk meninjau kembali kasus saya dan memberikan kesempatan untuk memulihkan akun saya. Saya bersedia memberikan informasi tambahan yang mungkin diperlukan untuk proses verifikasi.\n\nAtas perhatian dan kerja sama Anda, saya ucapkan terima kasih.\n\nHormat saya,\n{email}",
+                        responseTime: "Estimasi 1-3 hari kerja"
                     },
                     {
-                        title: "Masalah Kode Verifikasi",
-                        description: "Ketika tidak menerima kode verifikasi",
-                        content: "Halo Support WhatsApp,\n\nSaya tidak bisa memverifikasi nomor telepon {accountId} di WhatsApp. Sudah beberapa kali mencoba tetapi tidak menerima kode verifikasi via SMS atau telepon.\n\nSaya sudah konfirmasi dengan operator bahwa tidak ada masalah dengan nomor atau penerimaan SMS. Tolong beri tahu cara mengatasi masalah verifikasi ini.\n\nTerima kasih,\n{email}",
-                        responseTime: "Biasanya 24-48 jam"
+                        title: "Laporan Masalah Kode Verifikasi",
+                        description: "Ketika tidak menerima kode verifikasi SMS atau panggilan.",
+                        content: "Yth. Tim Dukungan Teknis WhatsApp,\n\nSaya mengalami kendala saat proses verifikasi nomor telepon saya, {accountId}, di aplikasi WhatsApp. Saya telah mencoba beberapa kali untuk meminta kode verifikasi, namun saya tidak menerimanya baik melalui SMS maupun panggilan telepon.\n\nSaya sudah memastikan bahwa sinyal seluler saya stabil dan tidak ada pemblokiran SMS dari operator saya. Mohon bantuannya untuk memeriksa masalah ini dari sisi sistem Anda dan memberikan solusi agar saya dapat segera menyelesaikan proses verifikasi.\n\nTerima kasih atas perhatian Anda.\n\nHormat saya,\n{email}",
+                        responseTime: "Estimasi 24-48 jam"
                     }
                 ],
                 es: [
@@ -562,10 +562,10 @@
                 ],
                 id: [
                     {
-                        title: "Permohonan Akun Dinonaktifkan",
-                        description: "Untuk akun Instagram yang dinonaktifkan",
-                        content: "Kepada Tim Support Instagram,\n\nAkun Instagram saya @{accountId} telah dinonaktifkan secara tiba-tiba. Saya yakin ini adalah kesalahan karena saya tidak melanggar pedoman komunitas.\n\nAkun ini sangat penting bagi saya karena berisi kenangan dan koneksi bertahun-tahun. Mohon tinjau kasus saya dan pulihkan akses saya. Saya bersedia memberikan verifikasi tambahan jika diperlukan.\n\nTerima kasih,\n{email}",
-                        responseTime: "3-5 hari kerja"
+                        title: "Banding Penangguhan Akun Instagram",
+                        description: "Template formal untuk banding akun yang ditangguhkan.",
+                        content: "Yth. Tim Peninjau Komunitas Instagram,\n\nDengan hormat,\n\nSaya mengajukan banding atas penangguhan akun Instagram saya dengan nama pengguna @{accountId}. Saya sangat terkejut saat mengetahui bahwa akun saya dinonaktifkan, dan saya percaya bahwa tidak ada pelanggaran Pedoman Komunitas yang saya lakukan.\n\nAkun ini saya gunakan untuk berbagi momen, terhubung dengan komunitas, dan merupakan bagian penting dari identitas digital saya. Saya selalu berhati-hati dalam mengunggah konten dan berinteraksi dengan pengguna lain.\n\nSaya mohon Anda dapat meninjau kembali keputusan ini dengan saksama. Saya siap memberikan informasi apa pun yang diperlukan untuk memverifikasi kepemilikan dan kepatuhan saya terhadap aturan.\n\nTerima kasih atas waktu dan perhatian Anda.\n\nHormat saya,\n{email}",
+                        responseTime: "Estimasi 3-5 hari kerja"
                     }
                 ]
             },
@@ -884,16 +884,24 @@
 
         // Filter sensitive information from text
         function filterSensitiveInfo(text) {
-            // Filter phone numbers (international format)
-            text = text.replace(/(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\b/g, '[PHONE NUMBER REDACTED]');
-            
-            // Filter email addresses
-            text = text.replace(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g, '[EMAIL REDACTED]');
-            
+            // Stronger phone number filter
+            text = text.replace(/(?:\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/g, '[PHONE NUMBER REDACTED]');
+
+            // Stronger email filter
+            text = text.replace(/[\w\.-]+@[\w\.-]+\.\w+/g, '[EMAIL REDACTED]');
+
             // Filter credit card numbers
             text = text.replace(/\b(?:\d[ -]*?){13,16}\b/g, '[CREDIT CARD REDACTED]');
-            
-            // Filter other sensitive patterns as needed
+
+            // Filter common keywords for passwords or credentials
+            text = text.replace(/\b(password|sandi|kata sandi|passcode|credential|secret)\b:?\s*[\w\d\S]+/gi, '[CREDENTIALS REDACTED]');
+
+            // Filter for IP addresses (IPv4 and IPv6)
+            text = text.replace(/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/g, '[IP ADDRESS REDACTED]');
+            text = text.replace(/(?:[A-F0-9]{1,4}:){7}[A-F0-9]{1,4}/gi, '[IP ADDRESS REDACTED]');
+
+            // Filter for full names (simple version, might have false positives)
+            text = text.replace(/\b([A-Z][a-z]+)\s([A-Z][a-z]+)\b/g, '[NAME REDACTED]');
             
             return text;
         }
