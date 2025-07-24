@@ -364,6 +364,8 @@
                     <i class="fab fa-facebook platform-icon" title="Facebook"></i>
                     <i class="fab fa-twitter platform-icon" title="Twitter"></i>
                     <i class="fab fa-youtube platform-icon" title="YouTube"></i>
+                    <i class="fab fa-discord platform-icon" title="Discord"></i>
+                    <i class="fab fa-snapchat platform-icon" title="Snapchat"></i>
                 </div>
 
                 <h3 id="quickTitle">Quick Solutions</h3>
@@ -422,6 +424,7 @@
                             <option value="disabled">Account Disabled</option>
                             <option value="verification">Verification Problem</option>
                             <option value="report_user">Report Another User</option>
+                            <option value="ban_user">Ban Another User (WhatsApp Only)</option>
                             <option value="other">Other Issue</option>
                         </select>
                     </div>
@@ -435,7 +438,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" style="display: none;">
                         <label for="issueDetails" id="issueDetailsLabel">Issue Details</label>
                         <textarea id="issueDetails" required placeholder="Describe your issue in detail..."></textarea>
                     </div>
@@ -1423,6 +1426,114 @@
                         }
                     ]
                 }
+            },
+            telegram: {
+                en: {
+                    unban: [
+                        {
+                            title: "Banned Account Appeal",
+                            description: "For banned Telegram accounts",
+                            content: "Dear Telegram Support,\n\nMy account with number {accountId} has been banned. I believe this is a mistake as I haven't violated any terms. Please review my account and restore access.\n\nThank you,\n{email}",
+                            responseTime: "1-3 business days"
+                        },
+                        {
+                            title: "Spam Block Appeal",
+                            description: "For accounts blocked for spamming",
+                            content: "Dear Telegram Support,\n\nMy account {accountId} is blocked from sending messages to non-contacts due to spam allegations. This was unintentional. Please remove the restriction.\n\nThank you,\n{email}",
+                            responseTime: "1-2 days"
+                        },
+                        {
+                            title: "Hacked Account Recovery",
+                            description: "For recovering a hacked account",
+                            content: "Dear Telegram Support,\n\nMy account {accountId} has been hacked. I've lost access and need to recover it urgently. Please help me regain control.\n\nThank you,\n{email}",
+                            responseTime: "24-48 hours"
+                        },
+                        {
+                            title: "Deactivated Account Inquiry",
+                            description: "For accounts that were deactivated",
+                            content: "Dear Telegram Support,\n\nMy account {accountId} seems to have been deactivated. I would like to know the reason and if it can be reactivated.\n\nThank you,\n{email}",
+                            responseTime: "3-5 business days"
+                        },
+                        {
+                            title: "Login Issues",
+                            description: "For problems logging into an account",
+                            content: "Dear Telegram Support,\n\nI'm unable to log into my account {accountId}. I'm not receiving the verification code. Please assist.\n\nThank you,\n{email}",
+                            responseTime: "1-2 days"
+                        }
+                    ]
+                }
+            },
+            discord: {
+                en: {
+                    unban: [
+                        {
+                            title: "Disabled Account Appeal",
+                            description: "For disabled Discord accounts",
+                            content: "Dear Discord Trust & Safety,\n\nMy account {accountId} has been disabled. I have read the Community Guidelines and believe this was an error. Please review and reinstate my account.\n\nThank you,\n{email}",
+                            responseTime: "5-10 business days"
+                        },
+                        {
+                            title: "Hacked Account Appeal",
+                            description: "For recovering a hacked Discord account",
+                            content: "Dear Discord Support,\n\nMy account {accountId} was hacked and I've lost access. Please help me recover my account and secure it from the unauthorized user.\n\nThank you,\n{email}",
+                            responseTime: "3-5 business days"
+                        },
+                        {
+                            title: "Server Ban Appeal",
+                            description: "To appeal a ban from a specific server",
+                            content: "Subject: Ban Appeal for Server [Server Name]\n\nDear [Moderator/Admin Name],\n\nI am writing to appeal my ban from the [Server Name] server. My username is {accountId}. I believe my ban was a misunderstanding. I would appreciate it if you would reconsider.\n\nThank you,\n{email}",
+                            responseTime: "Varies by server"
+                        },
+                        {
+                            title: "Age Verification Issue",
+                            description: "For accounts disabled due to age issues",
+                            content: "Dear Discord Support,\n\nMy account {accountId} was disabled for being underage, but I am over 13. I can provide proof of age to get my account back. Please let me know the process.\n\nThank you,\n{email}",
+                            responseTime: "3-7 business days"
+                        },
+                        {
+                            title: "General Account Inquiry",
+                            description: "For other account-related issues",
+                            content: "Dear Discord Support,\n\nI'm having an issue with my account {accountId} regarding [briefly describe issue]. Can you please assist me with this?\n\nThank you,\n{email}",
+                            responseTime: "5-7 business days"
+                        }
+                    ]
+                }
+            },
+            snapchat: {
+                en: {
+                    unban: [
+                        {
+                            title: "Locked Account Appeal",
+                            description: "For temporarily locked Snapchat accounts",
+                            content: "Dear Snapchat Support,\n\nMy account {accountId} has been locked. I have reviewed the Community Guidelines and I am unsure why this has happened. Please help me unlock my account.\n\nThank you,\n{email}",
+                            responseTime: "24-72 hours"
+                        },
+                        {
+                            title: "Permanently Locked Account Appeal",
+                            description: "For permanently locked accounts",
+                            content: "Dear Snapchat Support,\n\nMy account {accountId} is permanently locked. I believe this was a mistake. Can you please review my case and reconsider this decision?\n\nThank you,\n{email}",
+                            responseTime: "7-14 business days"
+                        },
+                        {
+                            title: "Hacked Account Recovery",
+                            description: "For recovering a hacked Snapchat account",
+                            content: "Dear Snapchat Support,\n\nMy account {accountId} has been hacked. I can no longer access it. Please help me recover my account as soon as possible.\n\nThank you,\n{email}",
+                            responseTime: "1-3 business days"
+                        },
+                        {
+                            title: "Login Problems",
+                            description: "For issues with logging in",
+                            content: "Dear Snapchat Support,\n\nI'm having trouble logging into my account {accountId}. I've tried resetting my password but it's not working. Please assist.\n\nThank you,\n{email}",
+                            responseTime: "1-2 business days"
+                        },
+                        {
+                            title: "Content Violation Appeal",
+                            description: "To appeal a content violation warning",
+                            content: "Dear Snapchat Support,\n\nI received a warning for a content violation on my account {accountId}. I believe my content did not violate the guidelines. Please review this.\n\nThank you,\n{email}",
+                            responseTime: "3-5 business days"
+                        }
+                    ]
+                }
             }
         };
 
@@ -1452,7 +1563,7 @@
                 templateTitle: "Select Report Template",
                 templateDesc: "Choose a pre-written template for your issue:",
                 submitText: "Submit Report",
-                footerText: "© 2023 AccountHelp Center. All rights reserved.",
+                footerText: "© 2025 AccountHelp Center. All rights reserved.",
                 successMessage: "Your report has been submitted successfully! We'll contact you soon.",
                 errorMessage: "There was an error submitting your report. Please try again.",
                 rateLimitMessage: "You've reached the daily submission limit (3 reports per day). Please try again tomorrow.",
@@ -1483,7 +1594,7 @@
                 templateTitle: "Pilih Template Laporan",
                 templateDesc: "Pilih template yang sudah dibuat untuk masalah Anda:",
                 submitText: "Kirim Laporan",
-                footerText: "© 2023 Pusat Bantuan Akun. Semua hak dilindungi.",
+                footerText: "© 2025 Pusat Bantuan Akun. Semua hak dilindungi.",
                 successMessage: "Laporan Anda berhasil dikirim! Kami akan segera menghubungi Anda.",
                 errorMessage: "Terjadi kesalahan saat mengirim laporan. Silakan coba lagi.",
                 rateLimitMessage: "Anda telah mencapai batas pengiriman harian (3 laporan per hari). Silakan coba lagi besok.",
@@ -1514,7 +1625,7 @@
                 templateTitle: "Seleccionar plantilla de reporte",
                 templateDesc: "Elige una plantilla preescrita para tu problema:",
                 submitText: "Enviar reporte",
-                footerText: "© 2023 Centro de Ayuda para Cuentas. Todos los derechos reservados.",
+                footerText: "© 2025 Centro de Ayuda para Cuentas. Todos los derechos reservados.",
                 successMessage: "¡Tu reporte ha sido enviado con éxito! Nos pondremos en contacto contigo pronto.",
                 errorMessage: "Hubo un error al enviar tu reporte. Por favor inténtalo de nuevo.",
                 rateLimitMessage: "Has alcanzado el límite diario de envíos (3 reportes por día). Por favor inténtalo de nuevo mañana.",
@@ -1545,7 +1656,7 @@
                 templateTitle: "Sélectionner un modèle de rapport",
                 templateDesc: "Choisissez un modèle pré-écrit pour votre problème:",
                 submitText: "Envoyer le rapport",
-                footerText: "© 2023 Centre d'Aide aux Comptes. Tous droits réservés.",
+                footerText: "© 2025 Centre d'Aide aux Comptes. Tous droits réservés.",
                 successMessage: "Votre rapport a été envoyé avec succès! Nous vous contacterons bientôt.",
                 errorMessage: "Une erreur s'est produite lors de l'envoi de votre rapport. Veuillez réessayer.",
                 rateLimitMessage: "Vous avez atteint la limite d'envoi quotidienne (3 rapports par jour). Veuillez réessayer demain.",
@@ -1576,7 +1687,7 @@
                 templateTitle: "Selecionar modelo de relatório",
                 templateDesc: "Escolha um modelo pré-escrito para o seu problema:",
                 submitText: "Enviar relatório",
-                footerText: "© 2023 Centro de Ajuda para Contas. Todos os direitos reservados.",
+                footerText: "© 2025 Centro de Ajuda para Contas. Todos os direitos reservados.",
                 successMessage: "Seu relatório foi enviado com sucesso! Entraremos em contato em breve.",
                 errorMessage: "Ocorreu um erro ao enviar seu relatório. Por favor, tente novamente.",
                 rateLimitMessage: "Você atingiu o limite diário de envios (3 relatórios por dia). Por favor, tente novamente amanhã.",
@@ -1821,8 +1932,10 @@
             updateTemplates();
             const accountIdGroup = document.getElementById('accountId').parentElement;
             let reportedUserGroup = document.getElementById('reportedUserGroup');
+            const platform = platformSelect.value;
+            const issueType = e.target.value;
 
-            if (e.target.value === 'report_user') {
+            if (issueType === 'report_user' || (issueType === 'ban_user' && platform === 'whatsapp')) {
                 // Hide user's own account ID field and show reported user's ID field
                 accountIdGroup.style.display = 'none';
                 document.getElementById('accountId').required = false;
