@@ -421,6 +421,7 @@
                             <option value="hacked">Account Hacked</option>
                             <option value="disabled">Account Disabled</option>
                             <option value="verification">Verification Problem</option>
+                            <option value="report_user">Report Another User</option>
                             <option value="other">Other Issue</option>
                         </select>
                     </div>
@@ -1000,6 +1001,38 @@
         // Platform change event
         platformSelect.addEventListener('change', updateTemplates);
 
+        // Issue type change event
+        issueTypeSelect.addEventListener('change', (e) => {
+            const accountIdGroup = document.getElementById('accountId').parentElement;
+            const accountIdLabel = document.getElementById('accountIdLabel');
+            let reportedUserGroup = document.getElementById('reportedUserGroup');
+
+            if (e.target.value === 'report_user') {
+                // Change label for user's own account
+                accountIdLabel.textContent = "Your Account ID/Number";
+
+                // Add new field for reported user's ID if it doesn't exist
+                if (!reportedUserGroup) {
+                    reportedUserGroup = document.createElement('div');
+                    reportedUserGroup.className = 'form-group';
+                    reportedUserGroup.id = 'reportedUserGroup';
+                    reportedUserGroup.innerHTML = `
+                        <label for="reportedAccountId" id="reportedAccountIdLabel">Reported User's ID/Number</label>
+                        <input type="text" id="reportedAccountId" required placeholder="e.g., offending_user or +628987654321">
+                    `;
+                    accountIdGroup.insertAdjacentElement('afterend', reportedUserGroup);
+                }
+            } else {
+                // Revert label
+                accountIdLabel.textContent = "Account ID/Number";
+
+                // Remove reported user field if it exists
+                if (reportedUserGroup) {
+                    reportedUserGroup.remove();
+                }
+            }
+        });
+
         // Account ID or email change event (to update template placeholders)
         document.getElementById('accountId').addEventListener('input', () => {
             if (selectedTemplate) {
@@ -1060,6 +1093,10 @@
                 deviceId: generateDeviceId(),
                 timestamp: new Date().toISOString()
             };
+
+            if (formData.issueType === 'report_user') {
+                formData.reportedAccountId = document.getElementById('reportedAccountId').value;
+            }
             
             // Show loading
             submitBtn.disabled = true;
@@ -1070,11 +1107,8 @@
                 await db.collection('reports').add(formData);
                 
                 // Then send email using EmailJS
-                await emailjs.send('service_neq331o', 'template_bmjyull', {
-                    to_email: platformEmails[formData.platform],
-                    from_email: formData.email,
-                    subject: `${formData.issueType} Request for ${formData.platform} Account (${formData.language})`,
-                    message: `
+                let emailSubject = `${formData.issueType} Request for ${formData.platform} Account (${formData.language})`;
+                let emailMessage = `
                         Platform: ${formData.platform}
                         Account ID: [REDACTED]
                         Issue Type: ${formData.issueType}
@@ -1085,7 +1119,29 @@
                         ${formData.issueDetails}
                         
                         User Email: [REDACTED]
-                    `,
+                    `;
+
+                if (formData.issueType === 'report_user') {
+                    emailSubject = `User Report on ${formData.platform} (${formData.language})`;
+                    emailMessage = `
+                        Platform: ${formData.platform}
+                        Reporter's Account ID: [REDACTED]
+                        Reported User's Account ID: ${formData.reportedAccountId}
+                        Issue Type: ${formData.issueType}
+                        Language: ${formData.language}
+
+                        Details:
+                        ${formData.issueDetails}
+
+                        Reporter's Email: [REDACTED]
+                    `;
+                }
+
+                await emailjs.send('service_neq331o', 'template_bmjyull', {
+                    to_email: platformEmails[formData.platform],
+                    from_email: formData.email,
+                    subject: emailSubject,
+                    message: emailMessage,
                     reply_to: formData.email
                 });
                 
