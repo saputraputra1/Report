@@ -358,12 +358,9 @@
                 
                 <div class="platform-icons">
                     <i class="fab fa-whatsapp platform-icon" title="WhatsApp"></i>
-                    <i class="fab fa-tiktok platform-icon" title="TikTok"></i>
                     <i class="fab fa-telegram platform-icon" title="Telegram"></i>
                     <i class="fab fa-instagram platform-icon" title="Instagram"></i>
                     <i class="fab fa-facebook platform-icon" title="Facebook"></i>
-                    <i class="fab fa-twitter platform-icon" title="Twitter"></i>
-                    <i class="fab fa-youtube platform-icon" title="YouTube"></i>
                 </div>
 
                 <h3 id="quickTitle">Quick Solutions</h3>
@@ -394,14 +391,9 @@
                         <select id="platform" required>
                             <option value="" selected disabled id="selectPlatform">Select a platform</option>
                             <option value="whatsapp">WhatsApp</option>
-                            <option value="tiktok">TikTok</option>
                             <option value="telegram">Telegram</option>
                             <option value="instagram">Instagram</option>
                             <option value="facebook">Facebook</option>
-                            <option value="twitter">Twitter (X)</option>
-                            <option value="youtube">YouTube</option>
-                            <option value="discord">Discord</option>
-                            <option value="snapchat">Snapchat</option>
                         </select>
                     </div>
 
@@ -460,12 +452,31 @@
                     </button>
                     <p class="rate-limit-info" id="rateLimitInfo">Daily submission limit: 3 reports per device</p>
                 </form>
+                <button class="btn" id="premiumBtn" style="margin-top: 20px;">Premium User</button>
             </section>
         </div>
 
         <footer>
             <p id="footerText">© 2025 AccountHelp Center. All rights reserved.</p>
         </footer>
+    </div>
+
+    <div class="container" id="premiumSection" style="display: none;">
+        <section class="form-section">
+            <h2 id="premiumTitle">Premium User</h2>
+            <div id="premiumMenu">
+                <h3>WhatsApp Banned Method</h3>
+                <div class="form-group">
+                    <label for="banNumber">Enter WhatsApp Number to Ban</label>
+                    <input type="text" id="banNumber" placeholder="+1234567890">
+                </div>
+                <div class="form-group">
+                    <label for="banReason">Reason for Banning</label>
+                    <textarea id="banReason" placeholder="Enter the reason for banning the user..."></textarea>
+                </div>
+                <button class="btn" id="banBtn">Ban User</button>
+            </div>
+        </section>
     </div>
 
     <script>
@@ -491,14 +502,9 @@
         // Platform email mapping
         const platformEmails = {
             whatsapp: "support@whatsapp.com",
-            tiktok: "legal@tiktok.com",
             telegram: "support@telegram.org",
             instagram: "support@instagram.com",
             facebook: "support@facebook.com",
-            twitter: "support@twitter.com",
-            youtube: "support@youtube.com",
-            discord: "support@discord.com",
-            snapchat: "support@snapchat.com"
         };
 
         // Template database for each platform and language
@@ -1285,280 +1291,6 @@
                     ]
                 }
             },
-            twitter: {
-                en: {
-                    unban: [
-                        {
-                            title: "Suspended Account Appeal (Formal)",
-                            description: "For suspended Twitter accounts with formal tone",
-                            content: "Dear Twitter Support Team,\n\nMy Twitter account @{accountId} has been suspended unexpectedly. I have carefully reviewed the Twitter Rules and am confident I haven't violated any policies.\n\nThis account is vital for my [professional work/personal brand/activism] with [number] followers. The suspension is causing significant impact:\n1. Loss of audience engagement\n2. Disruption to my work/activities\n3. Damage to my online presence\n\nI kindly request:\n1. Specific reason for the suspension\n2. Opportunity to appeal\n3. Expedited review process\n\nI'm prepared to provide any verification needed. This is extremely urgent for my [livelihood/important cause].\n\nThank you for your prompt attention.\n\nBest regards,\n{email}",
-                            responseTime: "2-5 business days"
-                        },
-                        {
-                            title: "Business Account Suspension Appeal",
-                            description: "For suspended business accounts emphasizing urgency",
-                            content: "URGENT: Business Account Suspended\n\nDear Twitter Business Team,\n\nOur verified business account @{accountId} serving [number] customers has been suspended without warning. This is causing severe business disruption:\n\nKey impacts:\n- Inability to communicate with customers\n- Loss of sales and revenue\n- Damage to brand reputation\n\nWe guarantee compliance with all Twitter policies. Please:\n1. Provide specific violation details\n2. Allow us to correct any issues\n3. Prioritize review of our case\n\nAttached are our business documents. We appreciate your urgent attention to this critical matter.\n\nSincerely,\n{email}",
-                            responseTime: "24-48 hours"
-                        },
-                        {
-                            title: "Second Appeal (Polite Follow-up)",
-                            description: "For following up on previous appeals",
-                            content: "Subject: Follow-up on Account Suspension Appeal\n\nDear Twitter Appeals Team,\n\nI'm following up on my previous request regarding my suspended account @{accountId}. I understand you receive many appeals but would appreciate an update.\n\nTo reiterate:\n- I believe this suspension was in error\n- I comply with all Twitter Rules\n- This account is crucial for my [purpose]\n\nIf additional information would help, please let me know. I'm happy to comply with any verification processes.\n\nThank you for your time and assistance.\n\nBest regards,\n{email}",
-                            responseTime: "2-3 business days"
-                        },
-                        {
-                            title: "Appeal with Evidence",
-                            description: "When you have evidence to support your case",
-                            content: "Dear Twitter Trust & Safety,\n\nI'm appealing the suspension of @{accountId} with evidence showing compliance with rules.\n\nEvidence summary:\n1. Screenshots of compliant tweets\n2. Engagement analytics\n3. Documentation\n\nI suspect my account may have been reported maliciously or mistaken for policy violations. I've taken corrective steps:\n1. Reviewed all tweets\n2. Deleted anything questionable\n3. etc.\n\nPlease review my case and evidence. I'm available to provide any additional information.\n\nThank you,\n{email}",
-                            responseTime: "3-5 business days"
-                        },
-                        {
-                            title: "Final Appeal (Urgent Request)",
-                            description: "For last attempt with strong justification",
-                            content: "URGENT FINAL APPEAL: Wrongful Account Suspension\n\nDear Twitter Appeals Team,\n\nThis is my final appeal regarding my suspended account @{accountId}. The loss of this account is causing severe hardship because [explain impacts].\n\nKey points:\n1. I've never violated Twitter's rules\n2. I've submitted [number] previous appeals\n3. This account represents [years] of work\n4. It's my primary [income/news source/etc.]\n\nI respectfully request:\n1. Detailed explanation if suspension stands\n2. One final review of my account\n3. Temporary access to retrieve critical data if needed\n\nI'm willing to undergo any verification. This appeal represents my last hope.\n\nSincerely,\n{email}",
-                            responseTime: "24-48 hours"
-                        }
-                    ],
-                    report_user: [
-                        {
-                            title: "Standard User Violation Report",
-                            description: "General template for reporting users",
-                            content: "Dear Twitter Safety Team,\n\nI'm reporting user @{reportedAccountId} for violating Twitter Rules through [describe behavior: harassment, spam, scams, etc.].\n\nIncident details:\n1. Date/time: [details]\n2. Nature of violation: [description]\n3. Impact: [how it affected you]\n\nEvidence:\n1. Screenshots attached\n2. Tweet history\n3. Other documentation\n\nThis behavior harms the Twitter community. Please investigate and take appropriate action.\n\nThank you,\n{email}",
-                            responseTime: "2-4 business days"
-                        },
-                        {
-                            title: "Impersonation Account Report",
-                            description: "For reporting fake accounts pretending to be someone",
-                            content: "URGENT: Impersonation Account Report\n\nDear Twitter,\n\nThe account @{reportedAccountId} is impersonating [real person/organization/me]. This is causing confusion and potential harm.\n\nEvidence of impersonation:\n1. Fake profile using [real name/images]\n2. Misleading followers\n3. Attempts to deceive\n\nThe real [person/entity] is:\n1. [Provide real contact info if available]\n2. [How to verify authenticity]\n\nPlease remove this impersonation account immediately to prevent further deception.\n\nSincerely,\n{email}",
-                            responseTime: "24-48 hours"
-                        },
-                        {
-                            title: "Harassment/Bullying Report",
-                            description: "For reporting abusive behavior",
-                            content: "Subject: Harassment/Bullying Report\n\nDear Twitter Safety Team,\n\nI'm reporting @{reportedAccountId} for ongoing harassment/bullying. This has caused me significant distress.\n\nIncident timeline:\n1. [Date]: First incident\n2. [Date]: Escalation\n3. [Date]: Recent occurrence\n\nNature of harassment:\n1. [Describe tweets/DMs]\n2. Impact on me\n3. My responses (if any)\n\nI've attached evidence and request:\n1. Immediate action against this user\n2. Restrictions on their account\n3. Protection for my account\n\nThis is extremely serious to me. Thank you for your prompt attention.\n\nRegards,\n{email}",
-                            responseTime: "1-3 business days"
-                        },
-                        {
-                            title: "Scam Account Report",
-                            description: "For reporting scam/fraud accounts",
-                            content: "URGENT: Fraudulent Account Report\n\nDear Twitter Fraud Prevention,\n\nI'm reporting @{reportedAccountId} as a scam account engaging in [describe scam: financial fraud, impersonation, etc.].\n\nScam details:\n1. Method: [how it works]\n2. Evidence: [what proves it's a scam]\n3. Known victims: [if any]\n\nThis account is actively harming users. Please:\n1. Immediately suspend the account\n2. Preserve evidence\n3. Notify law enforcement if appropriate\n\nI'm available to provide additional information.\n\nSincerely,\n{email}",
-                            responseTime: "24-48 hours"
-                        },
-                        {
-                            title: "Child Exploitation Report (Extremely Sensitive)",
-                            description: "For reporting illegal content",
-                            content: "URGENT: Illegal Content Report\n\nDear Twitter Legal Team,\n\nI'm reporting @{reportedAccountId} for distributing apparent child exploitation material. This was encountered [describe how].\n\nDO NOT OPEN ATTACHMENTS - I've reported only metadata:\n1. Date/time encountered\n2. Nature of content\n3. No actual content saved\n\nI understand this is extremely serious and have:\n1. Filed report with [local authorities]\n2. Preserved only necessary evidence\n3. Avoided sharing further\n\nPlease:\n1. Immediately preserve all data\n2. Notify appropriate authorities\n3. Take strongest possible action\n\nThis report is made in good faith to protect children.\n\n[Your information]",
-                            responseTime: "Immediate"
-                        }
-                    ]
-                }
-            },
-            tiktok: {
-                en: {
-                    unban: [
-                        {
-                            title: "Banned Account Appeal (Formal)",
-                            description: "For banned TikTok accounts with formal tone",
-                            content: "Dear TikTok Support Team,\n\nMy TikTok account @{accountId} has been banned unexpectedly. I have carefully reviewed the Community Guidelines and am confident I haven't violated any policies.\n\nThis account is vital for my [creative work/business/community] with [number] followers. The ban is causing significant impact:\n1. Loss of audience engagement\n2. Disruption to my creative/business activities\n3. Damage to my online presence\n\nI kindly request:\n1. Specific reason for the ban\n2. Opportunity to appeal\n3. Expedited review process\n\nI'm prepared to provide any verification needed. This is extremely urgent for my [livelihood/passion].\n\nThank you for your prompt attention.\n\nBest regards,\n{email}",
-                            responseTime: "3-5 business days"
-                        },
-                        {
-                            title: "Creator Account Ban Appeal",
-                            description: "For banned creator accounts emphasizing urgency",
-                            content: "URGENT: Creator Account Banned\n\nDear TikTok Creator Team,\n\nMy creator account @{accountId} with [number] followers has been banned without warning. This is causing severe disruption to my creative work:\n\nKey impacts:\n- Loss of income from content\n- Broken connections with audience\n- Damage to my creator reputation\n\nI guarantee compliance with all TikTok guidelines. Please:\n1. Provide specific violation details\n2. Allow me to correct any issues\n3. Prioritize review of my case\n\nAttached are examples of my content. I appreciate your urgent attention to this critical matter.\n\nSincerely,\n{email}",
-                            responseTime: "24-48 hours"
-                        },
-                        {
-                            title: "Second Appeal (Polite Follow-up)",
-                            description: "For following up on previous appeals",
-                            content: "Subject: Follow-up on Account Ban Appeal\n\nDear TikTok Appeals Team,\n\nI'm following up on my previous request regarding my banned account @{accountId}. I understand you receive many appeals but would appreciate an update.\n\nTo reiterate:\n- I believe this ban was in error\n- I comply with all Community Guidelines\n- This account is crucial for my [purpose]\n\nIf additional information would help, please let me know. I'm happy to comply with any verification processes.\n\nThank you for your time and assistance.\n\nBest regards,\n{email}",
-                            responseTime: "2-3 business days"
-                        },
-                        {
-                            title: "Appeal with Evidence",
-                            description: "When you have evidence to support your case",
-                            content: "Dear TikTok Trust & Safety,\n\nI'm appealing the ban of @{accountId} with evidence showing compliance with guidelines.\n\nEvidence summary:\n1. Screenshots of compliant videos\n2. Engagement analytics\n3. Documentation\n\nI suspect my account may have been reported maliciously or mistaken for policy violations. I've taken corrective steps:\n1. Reviewed all content\n2. Removed anything questionable\n3. etc.\n\nPlease review my case and evidence. I'm available to provide any additional information.\n\nThank you,\n{email}",
-                            responseTime: "3-5 business days"
-                        },
-                        {
-                            title: "Final Appeal (Urgent Request)",
-                            description: "For last attempt with strong justification",
-                            content: "URGENT FINAL APPEAL: Wrongful Account Ban\n\nDear TikTok Appeals Team,\n\nThis is my final appeal regarding my banned account @{accountId}. The loss of this account is causing severe hardship because [explain impacts].\n\nKey points:\n1. I've never violated TikTok's guidelines\n2. I've submitted [number] previous appeals\n3. This account represents [years] of work\n4. It's my primary [income/creative outlet/etc.]\n\nI respectfully request:\n1. Detailed explanation if ban stands\n2. One final review of my account\n3. Temporary access to retrieve critical content if needed\n\nI'm willing to undergo any verification. This appeal represents my last hope.\n\nSincerely,\n{email}",
-                            responseTime: "24-48 hours"
-                        }
-                    ],
-                    report_user: [
-                        {
-                            title: "Standard User Violation Report",
-                            description: "General template for reporting users",
-                            content: "Dear TikTok Safety Team,\n\nI'm reporting user @{reportedAccountId} for violating TikTok's Community Guidelines through [describe behavior: harassment, spam, scams, etc.].\n\nIncident details:\n1. Date/time: [details]\n2. Nature of violation: [description]\n3. Impact: [how it affected you]\n\nEvidence:\n1. Screenshots attached\n2. Video examples\n3. Other documentation\n\nThis behavior harms the TikTok community. Please investigate and take appropriate action.\n\nThank you,\n{email}",
-                            responseTime: "3-5 business days"
-                        },
-                        {
-                            title: "Impersonation Account Report",
-                            description: "For reporting fake accounts pretending to be someone",
-                            content: "URGENT: Impersonation Account Report\n\nDear TikTok,\n\nThe account @{reportedAccountId} is impersonating [real person/organization/me]. This is causing confusion and potential harm.\n\nEvidence of impersonation:\n1. Fake profile using [real name/images]\n2. Misleading followers\n3. Attempts to deceive\n\nThe real [person/entity] is:\n1. [Provide real contact info if available]\n2. [How to verify authenticity]\n\nPlease remove this impersonation account immediately to prevent further deception.\n\nSincerely,\n{email}",
-                            responseTime: "24-48 hours"
-                        },
-                        {
-                            title: "Harassment/Bullying Report",
-                            description: "For reporting abusive behavior",
-                            content: "Subject: Harassment/Bullying Report\n\nDear TikTok Safety Team,\n\nI'm reporting @{reportedAccountId} for ongoing harassment/bullying. This has caused me significant distress.\n\nIncident timeline:\n1. [Date]: First incident\n2. [Date]: Escalation\n3. [Date]: Recent occurrence\n\nNature of harassment:\n1. [Describe videos/comments]\n2. Impact on me\n3. My responses (if any)\n\nI've attached evidence and request:\n1. Immediate action against this user\n2. Restrictions on their account\n3. Protection for my account\n\nThis is extremely serious to me. Thank you for your prompt attention.\n\nRegards,\n{email}",
-                            responseTime: "1-3 business days"
-                        },
-                        {
-                            title: "Scam Account Report",
-                            description: "For reporting scam/fraud accounts",
-                            content: "URGENT: Fraudulent Account Report\n\nDear TikTok Fraud Prevention,\n\nI'm reporting @{reportedAccountId} as a scam account engaging in [describe scam: financial fraud, impersonation, etc.].\n\nScam details:\n1. Method: [how it works]\n2. Evidence: [what proves it's a scam]\n3. Known victims: [if any]\n\nThis account is actively harming users. Please:\n1. Immediately suspend the account\n2. Preserve evidence\n3. Notify law enforcement if appropriate\n\nI'm available to provide additional information.\n\nSincerely,\n{email}",
-                            responseTime: "24-48 hours"
-                        },
-                        {
-                            title: "Child Exploitation Report (Extremely Sensitive)",
-                            description: "For reporting illegal content",
-                            content: "URGENT: Illegal Content Report\n\nDear TikTok Legal Team,\n\nI'm reporting @{reportedAccountId} for distributing apparent child exploitation material. This was encountered [describe how].\n\nDO NOT OPEN ATTACHMENTS - I've reported only metadata:\n1. Date/time encountered\n2. Nature of content\n3. No actual content saved\n\nI understand this is extremely serious and have:\n1. Filed report with [local authorities]\n2. Preserved only necessary evidence\n3. Avoided sharing further\n\nPlease:\n1. Immediately preserve all data\n2. Notify appropriate authorities\n3. Take strongest possible action\n\nThis report is made in good faith to protect children.\n\n[Your information]",
-                            responseTime: "Immediate"
-                        }
-                    ]
-                }
-            },
-            youtube: {
-                en: {
-                    unban: [
-                        {
-                            title: "Terminated Channel Appeal (Formal)",
-                            description: "For terminated YouTube channels with formal tone",
-                            content: "Dear YouTube Support Team,\n\nMy YouTube channel ({accountId}) has been terminated unexpectedly. I have carefully reviewed the Community Guidelines and am confident I haven't violated any policies.\n\nThis channel is vital for my [creative work/business/education] with [number] subscribers. The termination is causing significant impact:\n1. Loss of years of content\n2. Disruption to my livelihood/activities\n3. Damage to my online presence\n\nI kindly request:\n1. Specific reason for the termination\n2. Opportunity to appeal\n3. Expedited review process\n\nI'm prepared to provide any verification needed. This is extremely urgent for my [livelihood/passion].\n\nThank you for your prompt attention.\n\nBest regards,\n{email}",
-                            responseTime: "3-7 business days"
-                        },
-                        {
-                            title: "Monetized Channel Termination Appeal",
-                            description: "For terminated monetized channels emphasizing urgency",
-                            content: "URGENT: Monetized Channel Terminated\n\nDear YouTube Partner Team,\n\nMy monetized channel ({accountId}) with [number] subscribers has been terminated without warning. This is causing severe financial and professional disruption:\n\nKey impacts:\n- Loss of primary income source\n- Years of content inaccessible\n- Damage to my creator reputation\n\nI guarantee compliance with all YouTube policies. Please:\n1. Provide specific violation details\n2. Allow us to correct any issues\n3. Prioritize review of our case\n\nAttached are examples of my content. I appreciate your urgent attention to this critical matter.\n\nSincerely,\n{email}",
-                            responseTime: "24-48 hours"
-                        },
-                        {
-                            title: "Second Appeal (Polite Follow-up)",
-                            description: "For following up on previous appeals",
-                            content: "Subject: Follow-up on Channel Termination Appeal\n\nDear YouTube Appeals Team,\n\nI'm following up on my previous request regarding my terminated channel ({accountId}). I understand you receive many appeals but would appreciate an update.\n\nTo reiterate:\n- I believe this termination was in error\n- I comply with all Community Guidelines\n- This channel is crucial for my [purpose]\n\nIf additional information would help, please let me know. I'm happy to comply with any verification processes.\n\nThank you for your time and assistance.\n\nBest regards,\n{email}",
-                            responseTime: "3-5 business days"
-                        },
-                        {
-                            title: "Appeal with Evidence",
-                            description: "When you have evidence to support your case",
-                            content: "Dear YouTube Trust & Safety,\n\nI'm appealing the termination of {accountId} with evidence showing compliance with guidelines.\n\nEvidence summary:\n1. Screenshots of compliant videos\n2. Analytics data\n3. Documentation\n\nI suspect my channel may have been reported maliciously or mistaken for policy violations. I've taken corrective steps:\n1. Reviewed all content\n2. Removed anything questionable\n3. etc.\n\nPlease review my case and evidence. I'm available to provide any additional information.\n\nThank you,\n{email}",
-                            responseTime: "5-7 business days"
-                        },
-                        {
-                            title: "Final Appeal (Urgent Request)",
-                            description: "For last attempt with strong justification",
-                            content: "URGENT FINAL APPEAL: Wrongful Channel Termination\n\nDear YouTube Appeals Team,\n\nThis is my final appeal regarding my terminated channel ({accountId}). The loss of this channel is causing severe hardship because [explain impacts].\n\nKey points:\n1. I've never violated YouTube's guidelines\n2. I've submitted [number] previous appeals\n3. This channel represents [years] of work\n4. It's my primary [income/educational resource/etc.]\n\nI respectfully request:\n1. Detailed explanation if termination stands\n2. One final review of my channel\n3. Temporary access to retrieve critical content if needed\n\nI'm willing to undergo any verification. This appeal represents my last hope.\n\nSincerely,\n{email}",
-                            responseTime: "24-48 hours"
-                        }
-                    ],
-                    report_user: [
-                        {
-                            title: "Standard User Violation Report",
-                            description: "General template for reporting users",
-                            content: "Dear YouTube Safety Team,\n\nI'm reporting user/channel {reportedAccountId} for violating YouTube's Community Guidelines through [describe behavior: harassment, spam, scams, etc.].\n\nIncident details:\n1. Date/time: [details]\n2. Nature of violation: [description]\n3. Impact: [how it affected you]\n\nEvidence:\n1. Screenshots attached\n2. Video examples\n3. Other documentation\n\nThis behavior harms the YouTube community. Please investigate and take appropriate action.\n\nThank you,\n{email}",
-                            responseTime: "3-7 business days"
-                        },
-                        {
-                            title: "Impersonation Channel Report",
-                            description: "For reporting fake channels pretending to be someone",
-                            content: "URGENT: Impersonation Channel Report\n\nDear YouTube,\n\nThe channel {reportedAccountId} is impersonating [real person/organization/me]. This is causing confusion and potential harm.\n\nEvidence of impersonation:\n1. Fake channel using [real name/images]\n2. Misleading subscribers\n3. Attempts to deceive\n\nThe real [person/entity] is:\n1. [Provide real channel if available]\n2. [How to verify authenticity]\n\nPlease remove this impersonation channel immediately to prevent further deception.\n\nSincerely,\n{email}",
-                            responseTime: "24-48 hours"
-                        },
-                        {
-                            title: "Harassment/Bullying Report",
-                            description: "For reporting abusive behavior",
-                            content: "Subject: Harassment/Bullying Report\n\nDear YouTube Safety Team,\n\nI'm reporting {reportedAccountId} for ongoing harassment/bullying. This has caused me significant distress.\n\nIncident timeline:\n1. [Date]: First incident\n2. [Date]: Escalation\n3. [Date]: Recent occurrence\n\nNature of harassment:\n1. [Describe videos/comments]\n2. Impact on me\n3. My responses (if any)\n\nI've attached evidence and request:\n1. Immediate action against this channel\n2. Restrictions on their account\n3. Protection for my channel\n\nThis is extremely serious to me. Thank you for your prompt attention.\n\nRegards,\n{email}",
-                            responseTime: "1-3 business days"
-                        },
-                        {
-                            title: "Scam Channel Report",
-                            description: "For reporting scam/fraud channels",
-                            content: "URGENT: Fraudulent Channel Report\n\nDear YouTube Fraud Prevention,\n\nI'm reporting {reportedAccountId} as a scam channel engaging in [describe scam: financial fraud, impersonation, etc.].\n\nScam details:\n1. Method: [how it works]\n2. Evidence: [what proves it's a scam]\n3. Known victims: [if any]\n\nThis channel is actively harming users. Please:\n1. Immediately suspend the channel\n2. Preserve evidence\n3. Notify law enforcement if appropriate\n\nI'm available to provide additional information.\n\nSincerely,\n{email}",
-                            responseTime: "24-48 hours"
-                        },
-                        {
-                            title: "Child Exploitation Report (Extremely Sensitive)",
-                            description: "For reporting illegal content",
-                            content: "URGENT: Illegal Content Report\n\nDear YouTube Legal Team,\n\nI'm reporting {reportedAccountId} for distributing apparent child exploitation material. This was encountered [describe how].\n\nDO NOT OPEN ATTACHMENTS - I've reported only metadata:\n1. Date/time encountered\n2. Nature of content\n3. No actual content saved\n\nI understand this is extremely serious and have:\n1. Filed report with [local authorities]\n2. Preserved only necessary evidence\n3. Avoided sharing further\n\nPlease:\n1. Immediately preserve all data\n2. Notify appropriate authorities\n3. Take strongest possible action\n\nThis report is made in good faith to protect children.\n\n[Your information]",
-                            responseTime: "Immediate"
-                        }
-                    ]
-                }
-            },
-            discord: {
-                en: {
-                    unban: [
-                        {
-                            title: "Banned Account Appeal (Formal)",
-                            description: "For banned Discord accounts with formal tone",
-                            content: "Dear Discord Trust & Safety Team,\n\nMy Discord account ({accountId}) has been banned. I have reviewed the Terms of Service and Community Guidelines and believe this ban was a mistake.\n\nThis account is important for my social interactions and communities. I request a review of this ban and the reason for it.\n\nThank you for your consideration.\n\nBest regards,\n{email}",
-                            responseTime: "5-10 business days"
-                        },
-                        {
-                            title: "Server Ban Appeal",
-                            description: "For appealing a ban from a specific server",
-                            content: "Subject: Appeal for Server Ban\n\nDear Server Moderators of [Server Name],\n\nMy account ({accountId}) was banned from your server. I would like to appeal this decision. I have read the server rules and believe I did not violate them, or if I did, it was unintentional.\n\nPlease reconsider my ban. I enjoy being part of your community.\n\nSincerely,\n{email}",
-                            responseTime: "Varies by server"
-                        },
-                        {
-                            title: "Age-Related Ban Appeal",
-                            description: "For appealing a ban due to age verification issues",
-                            content: "Dear Discord Trust & Safety,\n\nMy account ({accountId}) was banned for being underage, but I am over the required age. I am prepared to provide proof of age to resolve this issue.\n\nPlease let me know the process for age verification so I can restore my account.\n\nThank you,\n{email}",
-                            responseTime: "3-5 business days"
-                        },
-                        {
-                            title: "Compromised Account Ban Appeal",
-                            description: "For appealing a ban that occurred while your account was hacked",
-                            content: "Dear Discord Trust & Safety,\n\nMy account ({accountId}) was recently compromised, and actions were taken by the hacker that led to a ban. I have since regained control of my account and secured it.\n\nPlease review the activity on my account during the time it was compromised and reconsider the ban.\n\nSincerely,\n{email}",
-                            responseTime: "5-7 business days"
-                        },
-                        {
-                            title: "Follow-up on Ban Appeal",
-                            description: "To check on the status of a previous appeal",
-                            content: "Subject: Following up on my ban appeal\n\nDear Discord Trust & Safety,\n\nI am writing to follow up on my appeal for my banned account ({accountId}), which I submitted on [Date]. I would appreciate an update on the status of my appeal.\n\nThank you for your time.\n\nBest regards,\n{email}",
-                            responseTime: "Varies"
-                        }
-                    ]
-                },
-                id: {
-                    unban: [
-                        {
-                            title: "Permohonan Banding Akun Diblokir (Formal)",
-                            description: "Untuk akun Discord yang diblokir dengan nada formal",
-                            content: "Tim Kepercayaan & Keamanan Discord yang terhormat,\n\nAkun Discord saya ({accountId}) telah diblokir. Saya telah meninjau Persyaratan Layanan dan Pedoman Komunitas dan yakin pemblokiran ini adalah kesalahan.\n\nAkun ini penting untuk interaksi sosial dan komunitas saya. Saya meminta peninjauan atas pemblokiran ini dan alasannya.\n\nTerima kasih atas pertimbangan Anda.\n\nHormat saya,\n{email}",
-                            responseTime: "5-10 hari kerja"
-                        },
-                        {
-                            title: "Permohonan Banding Pemblokiran Server",
-                            description: "Untuk mengajukan banding atas pemblokiran dari server tertentu",
-                            content: "Subjek: Permohonan Banding Pemblokiran Server\n\nModerator Server [Nama Server] yang terhormat,\n\nAkun saya ({accountId}) diblokir dari server Anda. Saya ingin mengajukan banding atas keputusan ini. Saya telah membaca peraturan server dan yakin saya tidak melanggarnya, atau jika ya, itu tidak disengaja.\n\nMohon pertimbangkan kembali pemblokiran saya. Saya senang menjadi bagian dari komunitas Anda.\n\nHormat saya,\n{email}",
-                            responseTime: "Bervariasi tergantung server"
-                        },
-                        {
-                            title: "Permohonan Banding Pemblokiran Terkait Usia",
-                            description: "Untuk mengajukan banding atas pemblokiran karena masalah verifikasi usia",
-                            content: "Tim Kepercayaan & Keamanan Discord yang terhormat,\n\nAkun saya ({accountId}) diblokir karena dianggap di bawah umur, tetapi saya sudah di atas usia yang disyaratkan. Saya siap memberikan bukti usia untuk menyelesaikan masalah ini.\n\nMohon beri tahu saya proses verifikasi usia agar saya dapat memulihkan akun saya.\n\nTerima kasih,\n{email}",
-                            responseTime: "3-5 hari kerja"
-                        },
-                        {
-                            title: "Permohonan Banding Pemblokiran Akun yang Diretas",
-                            description: "Untuk mengajukan banding atas pemblokiran yang terjadi saat akun Anda diretas",
-                            content: "Tim Kepercayaan & Keamanan Discord yang terhormat,\n\nAkun saya ({accountId}) baru-baru ini diretas, dan tindakan yang diambil oleh peretas menyebabkan pemblokiran. Saya telah mendapatkan kembali kendali atas akun saya dan mengamankannya.\n\nMohon tinjau aktivitas di akun saya selama waktu diretas dan pertimbangkan kembali pemblokiran tersebut.\n\nHormat saya,\n{email}",
-                            responseTime: "5-7 hari kerja"
-                        },
-                        {
-                            title: "Tindak Lanjut Permohonan Banding Pemblokiran",
-                            description: "Untuk menanyakan status permohonan banding sebelumnya",
-                            content: "Subjek: Menindaklanjuti permohonan banding pemblokiran saya\n\nTim Kepercayaan & Keamanan Discord yang terhormat,\n\nSaya menulis untuk menindaklanjuti permohonan banding saya untuk akun saya yang diblokir ({accountId}), yang saya kirimkan pada [Tanggal]. Saya akan sangat menghargai pembaruan status permohonan banding saya.\n\nTerima kasih atas waktu Anda.\n\nHormat saya,\n{email}",
-                            responseTime: "Bervariasi"
-                        }
-                    ]
-                }
-            },
             telegram: {
                 en: {
                     unban: [
@@ -1628,76 +1360,6 @@
                         }
                     ]
                 }
-            },
-            snapchat: {
-                en: {
-                    unban: [
-                        {
-                            title: "Locked Account Appeal",
-                            description: "For when your Snapchat account is locked",
-                            content: "Dear Snapchat Support,\n\nMy Snapchat account ({accountId}) has been locked, and I'm not sure why. I've reviewed the community guidelines and don't believe I've violated them. Can you please help me unlock my account?\n\nThank you,\n{email}",
-                            responseTime: "1-2 business days"
-                        },
-                        {
-                            title: "Permanently Locked Account Appeal",
-                            description: "To appeal a permanently locked account",
-                            content: "Dear Snapchat Support,\n\nMy account ({accountId}) has been permanently locked. I believe this may have been a mistake. Is there any way to appeal this decision? This account holds many memories that are important to me.\n\nSincerely,\n{email}",
-                            responseTime: "Varies, can be long"
-                        },
-                        {
-                            title: "Hacked and Locked Account",
-                            description: "For when your account was hacked and then locked",
-                            content: "Dear Snapchat Support,\n\nMy Snapchat account ({accountId}) was hacked, and now it's locked. I have regained control of my email and other accounts. Please help me recover my Snapchat account.\n\nThank you,\n{email}",
-                            responseTime: "3-5 business days"
-                        },
-                        {
-                            title: "Appeal for Temporary Lock",
-                            description: "If your account has been temporarily locked",
-                            content: "Dear Snapchat Support,\n\nMy account ({accountId}) is temporarily locked. I understand this can happen for various reasons. Could you please let me know when I can expect to have access again, or if there's anything I need to do to speed up the process?\n\nThanks,\n{email}",
-                            responseTime: "Usually resolves automatically"
-                        },
-                        {
-                            title: "Login Verification Issues",
-                            description: "If you're locked out due to login or verification problems",
-                            content: "Dear Snapchat Support,\n\nI'm unable to log in to my account ({accountId}) due to verification issues. I'm not receiving the verification code. Please help me access my account.\n\nBest,\n{email}",
-                            responseTime: "2-4 business days"
-                        }
-                    ]
-                },
-                id: {
-                    unban: [
-                        {
-                            title: "Permohonan Banding Akun Terkunci",
-                            description: "Ketika akun Snapchat Anda terkunci",
-                            content: "Dukungan Snapchat yang terhormat,\n\nAkun Snapchat saya ({accountId}) telah terkunci, dan saya tidak yakin mengapa. Saya telah meninjau pedoman komunitas dan tidak yakin saya telah melanggarnya. Bisakah Anda membantu saya membuka kunci akun saya?\n\nTerima kasih,\n{email}",
-                            responseTime: "1-2 hari kerja"
-                        },
-                        {
-                            title: "Permohonan Banding Akun Terkunci Permanen",
-                            description: "Untuk mengajukan banding atas akun yang terkunci secara permanen",
-                            content: "Dukungan Snapchat yang terhormat,\n\nAkun saya ({accountId}) telah terkunci secara permanen. Saya yakin ini mungkin kesalahan. Apakah ada cara untuk mengajukan banding atas keputusan ini? Akun ini menyimpan banyak kenangan yang penting bagi saya.\n\nHormat saya,\n{email}",
-                            responseTime: "Bervariasi, bisa lama"
-                        },
-                        {
-                            title: "Akun Diretas dan Terkunci",
-                            description: "Ketika akun Anda diretas dan kemudian terkunci",
-                            content: "Dukungan Snapchat yang terhormat,\n\nAkun Snapchat saya ({accountId}) diretas, dan sekarang terkunci. Saya telah mendapatkan kembali kendali atas email dan akun saya yang lain. Tolong bantu saya memulihkan akun Snapchat saya.\n\nTerima kasih,\n{email}",
-                            responseTime: "3-5 hari kerja"
-                        },
-                        {
-                            title: "Permohonan Banding untuk Kunci Sementara",
-                            description: "Jika akun Anda terkunci sementara",
-                            content: "Dukungan Snapchat yang terhormat,\n\nAkun saya ({accountId}) terkunci sementara. Saya mengerti ini bisa terjadi karena berbagai alasan. Bisakah Anda memberi tahu saya kapan saya bisa berharap untuk memiliki akses lagi, atau jika ada sesuatu yang perlu saya lakukan untuk mempercepat prosesnya?\n\nTerima kasih,\n{email}",
-                            responseTime: "Biasanya terselesaikan secara otomatis"
-                        },
-                        {
-                            title: "Masalah Verifikasi Login",
-                            description: "Jika Anda terkunci karena masalah login atau verifikasi",
-                            content: "Dukungan Snapchat yang terhormat,\n\nSaya tidak dapat masuk ke akun saya ({accountId}) karena masalah verifikasi. Saya tidak menerima kode verifikasi. Tolong bantu saya mengakses akun saya.\n\nTerbaik,\n{email}",
-                            responseTime: "2-4 hari kerja"
-                        }
-                    ]
-                }
             }
         };
 
@@ -1763,7 +1425,11 @@
                 errorMessage: "Terjadi kesalahan saat mengirim laporan. Silakan coba lagi.",
                 rateLimitMessage: "Anda telah mencapai batas pengiriman harian (3 laporan per hari). Silakan coba lagi besok.",
                 loadingText: "Mengirim...",
-                rateLimitInfo: "Batas pengiriman harian: 3 laporan per perangkat"
+                rateLimitInfo: "Batas pengiriman harian: 3 laporan per perangkat",
+                premiumTitle: "Pengguna Premium",
+                banNumberLabel: "Masukkan Nomor WhatsApp untuk Diblokir",
+                banReasonLabel: "Alasan Pemblokiran",
+                banBtnText: "Blokir Pengguna"
             },
             es: {
                 taglineText: "Centro de soporte para cuentas multi-plataforma",
@@ -2033,6 +1699,12 @@
             rateLimitAlert.textContent = translation.rateLimitMessage;
             successAlert.textContent = translation.successMessage;
             errorAlert.textContent = translation.errorMessage;
+
+            // Update premium section text
+            document.getElementById('premiumTitle').textContent = translation.premiumTitle;
+            document.querySelector('label[for="banNumber"]').textContent = translation.banNumberLabel;
+            document.querySelector('label[for="banReason"]').textContent = translation.banReasonLabel;
+            document.getElementById('banBtn').textContent = translation.banBtnText;
             
             // Update templates when platform changes
             updateTemplates();
@@ -2299,6 +1971,93 @@
         generateDeviceId();
         setLanguage(currentLanguage);
         checkSubmissionLimit();
+
+        const premiumBtn = document.getElementById('premiumBtn');
+        const premiumSection = document.getElementById('premiumSection');
+        const mainContent = document.querySelector('.main-content');
+
+        premiumBtn.addEventListener('click', async () => {
+            const deviceId = generateDeviceId();
+            const today = new Date().toISOString().split('T')[0];
+
+            try {
+                const bannedDocRef = db.collection('bannedUsers').doc(deviceId);
+                const bannedDoc = await bannedDocRef.get();
+
+                if (bannedDoc.exists) {
+                    alert('You have been banned from this website.');
+                    return;
+                }
+
+                const docRef = db.collection('premiumAccess').doc(deviceId);
+                const doc = await docRef.get();
+
+                if (doc.exists) {
+                    const data = doc.data();
+                    if (data.lastAccess === today) {
+                        alert('You have already accessed the premium section today.');
+                        return;
+                    }
+                    if (data.browser !== navigator.userAgent) {
+                        db.collection('bannedUsers').doc(deviceId).set({
+                            banned: true,
+                            reason: 'Accessed from a different browser'
+                        });
+                        alert('You have been banned from this website.');
+                        return;
+                    }
+                }
+
+                await docRef.set({
+                    lastAccess: today,
+                    browser: navigator.userAgent
+                }, { merge: true });
+
+                mainContent.style.display = 'none';
+                premiumSection.style.display = 'block';
+            } catch (error) {
+                console.error("Error checking premium access:", error);
+                alert('An error occurred. Please try again later.');
+            }
+        });
+
+        const banBtn = document.getElementById('banBtn');
+        banBtn.addEventListener('click', async () => {
+            const banNumber = document.getElementById('banNumber').value;
+            const banReason = document.getElementById('banReason').value;
+
+            if (!banNumber || !banReason) {
+                alert('Please enter a number and a reason for banning.');
+                return;
+            }
+
+            const emailSubject = `Request to Ban User: ${banNumber}`;
+            const emailMessage = `
+                Dear WhatsApp Support Team,
+
+                I am requesting to ban the user with the number ${banNumber}.
+                Reason: ${banReason}
+
+                Thank you for your prompt attention to this matter.
+
+                Best regards,
+                A concerned user
+            `;
+
+            try {
+                await emailjs.send('service_neq331o', 'template_bmjyull', {
+                    to_email: 'support@whatsapp.com',
+                    from_email: 'noreply@example.com',
+                    subject: emailSubject,
+                    message: emailMessage,
+                    reply_to: 'noreply@example.com'
+                });
+                alert('Ban request sent successfully.');
+            } catch (error) {
+                console.error('Error sending ban request:', error);
+                alert('An error occurred while sending the ban request. Please try again later.');
+            }
+        });
     </script>
 </body>
 </html>
