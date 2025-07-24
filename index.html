@@ -953,8 +953,8 @@
             if (templatesForPlatform && templatesForPlatform[language]) {
                 const template = templatesForPlatform[language][issueType];
                 
+                templateSection.style.display = 'block';
                 if (template) {
-                    templateSection.style.display = 'block';
                     const templateDiv = document.createElement('div');
                     templateDiv.className = 'template-option';
                     templateDiv.innerHTML = `
@@ -982,7 +982,7 @@
                     
                     templateOptions.appendChild(templateDiv);
                 } else {
-                    templateSection.style.display = 'none';
+                    templateOptions.innerHTML = '<p>No template available for this selection.</p>';
                 }
             } else {
                 templateSection.style.display = 'none';
