@@ -466,6 +466,9 @@
             <h2 id="premiumTitle">Premium User</h2>
             <div id="premiumMenu">
                 <h3>WhatsApp Banned Method</h3>
+                <p style="font-size: 0.9rem; color: var(--light-text); margin-bottom: 15px;">
+                    <b>Disclaimer:</b> This feature sends a ban request to WhatsApp. We do not guarantee that the user will be banned. This process can take several hours or days, and the final decision is up to WhatsApp.
+                </p>
                 <div class="form-group">
                     <label for="banNumber">Enter WhatsApp Number to Ban</label>
                     <input type="text" id="banNumber" placeholder="+1234567890">
@@ -1717,6 +1720,8 @@
         function updateTemplates() {
             templateOptions.innerHTML = '';
             selectedTemplate = null;
+            issueDetails.value = '';
+            document.getElementById('issueDetailsGroup').style.display = 'block';
             
             const platform = platformSelect.value;
             const issueType = issueTypeSelect.value;
@@ -1726,9 +1731,8 @@
             if (templatesForPlatform && templatesForPlatform[language]) {
                 const templates = templatesForPlatform[language][issueType];
                 
-                templateSection.style.display = 'block';
-                document.getElementById('issueDetailsGroup').style.display = 'block';
                 if (templates && templates.length > 0) {
+                    templateSection.style.display = 'block';
                     templates.forEach(template => {
                         const templateDiv = document.createElement('div');
                         templateDiv.className = 'template-option';
@@ -1759,6 +1763,7 @@
                         templateOptions.appendChild(templateDiv);
                     });
                 } else {
+                    templateSection.style.display = 'none';
                     templateOptions.innerHTML = '<p>No template available for this selection.</p>';
                 }
             } else {
