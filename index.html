@@ -1,0 +1,2068 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Platform Account Help Center</title>
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4285f4;
+            --secondary-color: #f1f8fe;
+            --accent-color: #34a853;
+            --error-color: #ea4335;
+            --text-color: #333;
+            --light-text: #777;
+            --border-color: #ddd;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f9f9f9;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: var(--white);
+            box-shadow: var(--shadow);
+            padding: 20px 0;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .tagline {
+            color: var(--light-text);
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .language-selector {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .language-selector select {
+            padding: 8px 12px;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            background-color: var(--white);
+            color: var(--text-color);
+            cursor: pointer;
+        }
+
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .info-section {
+            flex: 1;
+            min-width: 300px;
+            background-color: var(--white);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .form-section {
+            flex: 2;
+            min-width: 300px;
+            background-color: var(--white);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        h1, h2, h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .platform-icons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+
+        .platform-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            transition: transform 0.3s;
+        }
+
+        .platform-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        select, input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+
+        select:focus, input:focus, textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background-color: #3367d6;
+        }
+
+        .btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: var(--white);
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 5px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-color);
+            background-color: var(--secondary-color);
+        }
+
+        .upload-area i {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .file-name {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+
+        /* Template Styles */
+        .template-section {
+            margin: 25px 0;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            padding: 15px;
+            background-color: var(--secondary-color);
+        }
+        
+        .template-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .template-option {
+            background-color: var(--white);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .template-option:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .template-option h4 {
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+        
+        .template-option p {
+            font-size: 0.9rem;
+            color: var(--light-text);
+            margin-bottom: 10px;
+        }
+        
+        .template-option small {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--accent-color);
+            margin-top: 5px;
+        }
+        
+        .selected-template {
+            background-color: var(--secondary-color);
+            border: 2px solid var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.3);
+        }
+
+        .rate-limit-info {
+            font-size: 0.9rem;
+            color: var(--light-text);
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .language-selector {
+                position: static;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+            
+            .template-options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="language-selector">
+                <select id="languageSelect">
+                    <option value="en">English</option>
+                    <option value="id">Bahasa Indonesia</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                    <option value="pt">Português</option>
+                </select>
+            </div>
+            <div class="logo">
+                <i class="fas fa-life-ring"></i> AccountHelp
+            </div>
+            <p class="tagline" id="taglineText">Multi-platform account support center</p>
+        </header>
+
+        <div class="main-content">
+            <section class="info-section">
+                <h2 id="infoTitle">How Can We Help?</h2>
+                <p id="infoDescription">Our team specializes in helping users recover access to their accounts across various platforms. Select your platform and issue type to get started.</p>
+                
+                <div class="platform-icons">
+                    <i class="fab fa-whatsapp platform-icon" title="WhatsApp"></i>
+                    <i class="fab fa-telegram platform-icon" title="Telegram"></i>
+                    <i class="fab fa-instagram platform-icon" title="Instagram"></i>
+                    <i class="fab fa-facebook platform-icon" title="Facebook"></i>
+                </div>
+
+                <h3 id="quickTitle">Quick Solutions</h3>
+                <ul id="quickSolutions">
+                    <li>Account recovery</li>
+                    <li>Unban requests</li>
+                    <li>Login issues</li>
+                    <li>Spam reports</li>
+                    <li>Security concerns</li>
+                </ul>
+            </section>
+
+            <section class="form-section">
+                <h2 id="formTitle">Report an Issue</h2>
+                <div class="alert alert-success" id="successAlert">
+                    Your report has been submitted successfully! We'll contact you soon.
+                </div>
+                <div class="alert alert-error" id="errorAlert">
+                    There was an error submitting your report. Please try again.
+                </div>
+                <div class="alert alert-warning" id="rateLimitAlert">
+                    You've reached the daily submission limit (3 reports per day). Please try again tomorrow.
+                </div>
+
+                <form id="reportForm">
+                    <div class="form-group">
+                        <label for="platform" id="platformLabel">Platform</label>
+                        <select id="platform" required>
+                            <option value="" selected disabled id="selectPlatform">Select a platform</option>
+                            <option value="whatsapp">WhatsApp</option>
+                            <option value="telegram">Telegram</option>
+                            <option value="instagram">Instagram</option>
+                            <option value="facebook">Facebook</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="accountId" id="accountIdLabel">Account ID/Number</label>
+                        <input type="text" id="accountId" required placeholder="e.g. +628123456789 or username@example.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="issueType" id="issueTypeLabel">Issue Type</label>
+                        <select id="issueType" required>
+                            <option value="" selected disabled id="selectIssue">Select an issue type</option>
+                            <option value="unban">Account Banned/Unban Request</option>
+                            <option value="blocked">Account Blocked</option>
+                            <option value="login">Can't Login</option>
+                            <option value="spam">Marked as Spam</option>
+                            <option value="hacked">Account Hacked</option>
+                            <option value="disabled">Account Disabled</option>
+                            <option value="verification">Verification Problem</option>
+                            <option value="report_user">Report Another User</option>
+                            <option value="ban_user" style="display:none;">Ban Another User</option>
+                            <option value="other">Other Issue</option>
+                        </select>
+                    </div>
+
+                    <!-- Template Section -->
+                    <div class="template-section" id="templateSection" style="display: none;">
+                        <h3 id="templateTitle">Select Report Template</h3>
+                        <p id="templateDesc">Choose a pre-written template for your issue:</p>
+                        <div class="template-options" id="templateOptions">
+                            <!-- Templates will be loaded here -->
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="issueDetailsGroup">
+                        <label for="issueDetails" id="issueDetailsLabel">Issue Details</label>
+                        <textarea id="issueDetails" required placeholder="Describe your issue in detail..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" id="emailLabel">Your Active Email</label>
+                        <input type="email" id="email" required placeholder="your@email.com">
+                    </div>
+
+                    <div class="form-group">
+                        <div class="upload-area" id="uploadArea">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p id="uploadText">Click to upload screenshots or proof (optional)</p>
+                            <input type="file" id="fileInput" class="hidden" accept="image/*">
+                            <p class="file-name" id="fileName"></p>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn" id="submitBtn">
+                        <span id="submitText">Submit Report</span>
+                    </button>
+                    <p class="rate-limit-info" id="rateLimitInfo">Daily submission limit: 3 reports per device</p>
+                </form>
+                <button class="btn" id="premiumBtn" style="margin-top: 20px;">Premium User</button>
+            </section>
+        </div>
+
+        <footer>
+            <p id="footerText">© 2025 AccountHelp Center. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <div class="container" id="premiumSection" style="display: none;">
+        <section class="form-section">
+            <h2 id="premiumTitle">Premium User</h2>
+            <div id="premiumMenu">
+                <h3>WhatsApp Banned Method</h3>
+                <p style="font-size: 0.9rem; color: var(--light-text); margin-bottom: 15px;">
+                    <b>Disclaimer:</b> This feature sends a ban request to WhatsApp. We do not guarantee that the user will be banned. This process can take several hours or days, and the final decision is up to WhatsApp.
+                </p>
+                <div class="form-group">
+                    <label for="banNumber">Enter WhatsApp Number to Ban</label>
+                    <input type="text" id="banNumber" placeholder="+1234567890">
+                </div>
+                <div class="form-group">
+                    <label for="banReason">Reason for Banning</label>
+                    <textarea id="banReason" placeholder="Enter the reason for banning the user..."></textarea>
+                </div>
+                <button class="btn" id="banBtn">Ban User</button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Initialize Firebase (replace with your config)
+        const firebaseConfig = {
+            apiKey: "AIzaSyAQVIvZvxmYdcriHR8j0ormGzNRjGD0_no",
+           authDomain: "online--suit.firebaseapp.com",
+          databaseURL: "https://online--suit-default-rtdb.firebaseio.com",
+          projectId: "online--suit",
+          storageBucket: "online--suit.firebasestorage.app",
+           messagingSenderId: "463840835705",
+          appId: "1:463840835705:web:f490fd49851c0afb8dfca8"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        // Initialize EmailJS (replace with your actual credentials)
+        emailjs.init('g_hW3EbcT_Z7Ec7Mg');
+
+        // Platform email mapping
+        const platformEmails = {
+            whatsapp: "support@whatsapp.com",
+            telegram: "support@telegram.org",
+            instagram: "support@instagram.com",
+            facebook: "support@facebook.com",
+        };
+
+        // Template database for each platform and language
+        const platformTemplates = {
+            whatsapp: {
+                en: {
+                    unban: [
+                        {
+                            title: "Wrongful Ban Appeal (Formal)",
+                            description: "For accounts banned by mistake with formal tone",
+                            content: "Dear WhatsApp Support Team,\n\nMy WhatsApp account with number {accountId} has been banned, and I strongly believe this was a mistake. I have carefully reviewed the Terms of Service and I am confident that I have not violated any policies.\n\nThis account is crucial for my daily communication with family, friends, and work colleagues. I kindly request:\n1. The specific reason for this ban\n2. An opportunity to appeal this decision\n3. An expedited review of my case\n\nI am willing to provide any additional verification needed to prove my identity and proper use of this account. Please consider this an urgent matter as it affects my daily life and work.\n\nThank you for your time and consideration.\n\nBest regards,\n{email}",
+                            responseTime: "1-3 business days"
+                        },
+                        {
+                            title: "Business Account Ban Appeal",
+                            description: "For banned business accounts emphasizing urgency",
+                            content: "URGENT: Business Account Suspension Appeal\n\nDear WhatsApp Business Support,\n\nOur verified business account ({accountId}) serving over 500 customers daily has been unexpectedly banned. This is causing significant disruption to our operations and customer service.\n\nKey impacts:\n- Inability to communicate with customers\n- Loss of business opportunities\n- Damage to our reputation\n\nWe guarantee compliance with all WhatsApp Business policies. Please:\n1. Provide specific violation details\n2. Allow us to rectify any unintentional mistakes\n3. Prioritize review of our case\n\nAttached are our business registration documents for verification. We appreciate your urgent attention to this critical matter.\n\nSincerely,\n{email}",
+                            responseTime: "24-48 hours"
+                        },
+                        {
+                            title: "Second Appeal (Polite Follow-up)",
+                            description: "For following up on previous unban requests",
+                            content: "Subject: Follow-up on Account Ban Appeal (Case Reference # if any)\n\nDear WhatsApp Support,\n\nI'm following up on my previous request regarding my banned account ({accountId}). I understand you receive many requests but would greatly appreciate an update on my case.\n\nTo reiterate:\n- I believe this ban was in error\n- I've reviewed and comply with all Terms of Service\n- This account is vital for my personal/professional communications\n\nIf there's any additional information I can provide to facilitate review, please let me know. I'm happy to comply with any verification processes.\n\nThank you again for your time and assistance.\n\nBest regards,\n{email}",
+                            responseTime: "1-2 business days"
+                        },
+                        {
+                            title: "Ban Appeal with Evidence",
+                            description: "When you have evidence to support your case",
+                            content: "Dear WhatsApp Trust & Safety Team,\n\nI'm writing to appeal the ban on my account ({accountId}) with supporting evidence that shows I haven't violated policies.\n\nEvidence summary:\n1. Screenshots showing normal, policy-compliant conversations\n2. Message history demonstrating proper use\n3. Any other relevant documentation\n\nI suspect my account may have been reported maliciously or mistaken for spam due to high message volume (explain circumstances if applicable). I've taken these steps to prevent future issues:\n1. Adjusted messaging frequency\n2. Verified all contacts\n3. etc.\n\nPlease review my case and the attached evidence. I'm available to provide any additional information needed.\n\nThank you,\n{email}",
+                            responseTime: "2-3 business days"
+                        },
+                        {
+                            title: "Final Appeal (Urgent Request)",
+                            description: "For last attempt with strong justification",
+                            content: "URGENT FINAL APPEAL: Wrongful Account Ban\n\nDear WhatsApp Appeals Team,\n\nThis is my final appeal regarding my banned account ({accountId}). The loss of this account is causing severe hardship because [explain personal/business impacts].\n\nKey points:\n1. I've never violated WhatsApp's terms\n2. I've submitted [number] previous appeals without response\n3. This account contains irreplaceable data\n4. It's my primary communication method for [important purpose]\n\nI respectfully request:\n1. A detailed explanation if the ban is upheld\n2. One final review of my account activity\n3. Temporary access to retrieve critical data if ban remains\n\nI'm willing to undergo any verification process. This appeal represents my last hope to recover this vital account.\n\nSincerely,\n{email}",
+                            responseTime: "24-48 hours"
+                        }
+                    ],
+                    blocked: [
+                        {
+                            title: "Standard Blocked Account Request",
+                            description: "General template for blocked accounts",
+                            content: "Dear WhatsApp Support,\n\nMy account ({accountId}) appears to be blocked as I'm unable to send or receive messages. I haven't received any notification about why this occurred.\n\nPlease:\n1. Confirm if my account is indeed blocked\n2. Provide the reason for blocking\n3. Explain how to restore service\n\nI believe this may be an error as I haven't violated any usage policies. If there was an unintentional violation, I'd appreciate guidance on how to correct it.\n\nThank you for your assistance.\n\nRegards,\n{email}",
+                            responseTime: "1-2 business days"
+                        },
+                        {
+                            title: "Emergency Unblock Request",
+                            description: "For urgent unblocking needs",
+                            content: "URGENT: Account Blockage Issue\n\nDear WhatsApp Team,\n\nMy account ({accountId}) has been unexpectedly blocked, preventing me from critical communications regarding [explain emergency situation - medical, family, business, etc.].\n\nThis is causing severe consequences:\n1. [Explain specific impacts]\n2. [Explain why alternatives aren't possible]\n\nI assure you I haven't violated any policies intentionally. If this was triggered automatically, please consider my special circumstances and expedite unblocking.\n\nI'm available immediately for any verification needed. Thank you for your urgent attention to this matter.\n\nSincerely,\n{email}",
+                            responseTime: "24 hours"
+                        },
+                        {
+                            title: "Blocked After Number Change",
+                            description: "When blocked after changing phone numbers",
+                            content: "Subject: Account Block After Number Change\n\nDear Support,\n\nAfter changing my phone number associated with WhatsApp ({accountId}), my account has been blocked. I followed the proper in-app process for number migration.\n\nDetails:\nOld number: [number]\nNew number: [number]\nDate of change: [date]\n\nI suspect this may be a system error during the transition. Please verify and correct this blockage. I've attached screenshots of the migration process for reference.\n\nThank you for helping resolve this inconvenience.\n\nBest regards,\n{email}",
+                            responseTime: "1-3 business days"
+                        },
+                        {
+                            title: "Business Account Block Appeal",
+                            description: "For blocked business accounts",
+                            content: "Dear WhatsApp Business Support,\n\nOur business account ({accountId}) has been blocked unexpectedly, disrupting our customer communications. We maintain strict compliance with WhatsApp Business policies.\n\nBusiness details:\nName: [name]\nType: [type]\nCustomer base: [number] users\n\nPossible reasons for misunderstanding:\n1. High but legitimate message volume\n2. Automated but approved business messages\n3. Customer-initiated conversations\n\nWe're willing to adjust our practices if needed. Please unblock our account and provide specific guidance to prevent future issues.\n\nSincerely,\n{email}",
+                            responseTime: "2-3 business days"
+                        },
+                        {
+                            title: "Blocked After Device Change",
+                            description: "When blocked after changing devices",
+                            content: "Subject: Account Block After Device Change\n\nDear WhatsApp,\n\nAfter transferring my WhatsApp account to a new device ([device model]), my account has been blocked. I used the official WhatsApp transfer process.\n\nDetails:\nPrevious device: [model]\nNew device: [model]\nTransfer date: [date]\n\nI suspect this block was an anti-theft precaution. Please verify my identity and restore access. I can provide:\n1. Proof of device ownership\n2. Previous chat backup\n3. Any other verification needed\n\nThank you for your help in resolving this matter.\n\nRegards,\n{email}",
+                            responseTime: "1-2 business days"
+                        }
+                    ],
+                    login: [
+                        {
+                            title: "Standard Login Issue Report",
+                            description: "For general login problems",
+                            content: "Dear WhatsApp Support,\n\nI'm unable to log in to my account ({accountId}). When attempting to log in, I encounter [describe problem: verification code not received, incorrect password error, etc.].\n\nTroubleshooting steps I've tried:\n1. Checking internet connection\n2. Requesting new verification code\n3. Verifying correct phone number\n4. Restarting device\n\nNone of these have resolved the issue. Please advise how to regain access to my account. I'm available to verify my identity if needed.\n\nThank you,\n{email}",
+                            responseTime: "1-2 business days"
+                        },
+                        {
+                            title: "Verification Code Not Received",
+                            description: "When not receiving SMS verification",
+                            content: "Subject: Not Receiving Verification Code\n\nDear WhatsApp Team,\n\nI cannot log in because I'm not receiving the SMS verification code for my number ({accountId}). This has persisted for [time period].\n\nDetails:\n- Phone number is active and can receive other SMS\n- Have tried multiple code requests\n- No issues with mobile carrier\n\nPossible solutions I've found but can't implement:\n1. Alternative verification methods\n2. Code via phone call\n3. Account recovery process\n\nPlease advise how to proceed. I can verify ownership of this number through alternative methods if needed.\n\nRegards,\n{email}",
+                            responseTime: "24-48 hours"
+                        },
+                        {
+                            title: "Login After SIM Loss",
+                            description: "When unable to login after losing SIM",
+                            content: "URGENT: Account Access After SIM Loss\n\nDear Support,\n\nI've lost my SIM card associated with my WhatsApp account ({accountId}) and cannot receive the verification code to log in. This account contains vital communications I cannot afford to lose.\n\nCurrent situation:\n- New SIM with same number being processed (ETA [time])\n- Need temporary access method\n- Have backup codes if available\n\nI can provide:\n1. Proof of identity\n2. Previous account details\n3. Alternative verification\n\nPlease advise the fastest way to restore access. This is extremely urgent.\n\nSincerely,\n{email}",
+                            responseTime: "24 hours"
+                        },
+                        {
+                            title: "Login Loop Issue",
+                            description: "When stuck in verification loop",
+                            content: "Subject: Stuck in Login Verification Loop\n\nDear WhatsApp Technical Support,\n\nWhen attempting to log in to my account ({accountId}), I enter the verification code but the app returns me to the code entry screen repeatedly. This persists across multiple devices and network connections.\n\nTechnical details:\n- App version: [version]\n- Device(s): [list]\n- OS version(s): [versions]\n- Error messages: [quote any]\n\nSteps tried:\n1. App reinstall\n2. Device restart\n3. Different networks\n\nPlease advise how to break this cycle and regain access. This appears to be a technical issue rather than account restriction.\n\nThank you,\n{email}",
+                            responseTime: "2-3 business days"
+                        },
+                        {
+                            title: "Two-Step Verification Issue",
+                            description: "When locked out by 2SV problems",
+                            content: "Subject: Two-Step Verification Recovery\n\nDear WhatsApp Security Team,\n\nI'm locked out of my account ({accountId}) due to two-step verification issues. I [forgot my PIN/have incorrect backup email/don't receive reset options].\n\nAccount details only I would know:\n1. Creation date: [approximate]\n2. Last backup: [date]\n3. Associated email: [email]\n\nI understand the security importance of 2SV but need help recovering access. I can provide any verification needed to prove I'm the legitimate account owner.\n\nPlease advise the recovery process. This account contains important personal and professional communications.\n\nBest regards,\n{email}",
+                            responseTime: "2-5 business days"
+                        }
+                    ],
+                    spam: [
+                        {
+                            title: "Wrongful Spam Marking Appeal",
+                            description: "When mistakenly marked as spam",
+                            content: "Dear WhatsApp Support,\n\nMy account ({accountId}) appears to have been incorrectly flagged as spam. I only send personal/professional messages to known contacts who expect my communications.\n\nPossible reasons for misunderstanding:\n1. High message volume to [explain legitimate reason]\n2. Similar messages to multiple contacts [explain context]\n3. Business use without proper indicators\n\nI've taken these corrective measures:\n1. Reduced message frequency\n2. Added clearer identification\n3. etc.\n\nPlease review my account status and remove any spam flags if justified. I'm committed to using WhatsApp appropriately.\n\nThank you,\n{email}",
+                            responseTime: "3-5 business days"
+                        },
+                        {
+                            title: "Spam Marking by Competitor",
+                            description: "When suspected competitor reporting",
+                            content: "Subject: Malicious Spam Reporting by Competitor\n\nDear WhatsApp Abuse Team,\n\nI suspect my business account ({accountId}) is being maliciously reported as spam by a competitor. Our legitimate business communications are being affected.\n\nEvidence:\n1. Sudden spam flags after [event]\n2. Messages are solicited by recipients\n3. Competitor [name] has motive to disrupt us\n\nWe strictly comply with WhatsApp policies. Please investigate these potentially false reports and remove any unwarranted restrictions on our account.\n\nSincerely,\n{email}",
+                            responseTime: "3-7 business days"
+                        },
+                        {
+                            title: "Spam Flag After Group Activity",
+                            description: "When marked after group participation",
+                            content: "Subject: Spam Flag from Group Activity\n\nDear Support,\n\nAfter active participation in [group name] WhatsApp group, my account ({accountId}) appears to have been flagged as spam. My messages were on-topic and compliant with group rules.\n\nDetails:\nGroup name: [name]\nGroup purpose: [purpose]\nMy role: [description]\n\nIf my activity was misinterpreted as spam, I'll adjust my participation style. Please review and remove any unwarranted spam designation.\n\nThank you,\n{email}",
+                            responseTime: "2-4 business days"
+                        },
+                        {
+                            title: "Spam Flag Removal Request",
+                            description: "General spam flag removal request",
+                            content: "Subject: Request for Spam Flag Review\n\nDear WhatsApp Team,\n\nPlease review the spam designation on my account ({accountId}). I believe this was applied in error as:\n1. I only message known contacts\n2. All communications are solicited\n3. I don't send bulk or promotional content\n\nTo prevent future issues, I will:\n1. Reduce message frequency\n2. Add clearer identification\n3. Avoid certain keywords if problematic\n\nPlease remove any spam restrictions on my account. I'm happy to provide additional information if needed.\n\nRegards,\n{email}",
+                            responseTime: "3-5 business days"
+                        },
+                        {
+                            title: "Spam Flag After Number Reuse",
+                            description: "When previous owner's activity affects you",
+                            content: "Subject: Inherited Spam Flag from Previous Number Owner\n\nDear Support,\n\nMy phone number ({accountId}) is new to me as of [date], but appears to carry spam flags from the previous owner. I'm facing restrictions despite proper personal use.\n\nProof of new ownership:\n1. Service activation date: [date]\n2. Account history shows only personal use\n\nPlease clear any inherited spam designations. I can provide carrier documentation proving recent number assignment if needed.\n\nThank you for helping resolve this inherited issue.\n\nSincerely,\n{email}",
+                            responseTime: "5-7 business days"
+                        }
+                    ],
+                    hacked: [
+                        {
+                            title: "Standard Hacked Account Report",
+                            description: "General hacked account template",
+                            content: "URGENT: Account Compromise Report\n\nDear WhatsApp Security Team,\n\nMy account ({accountId}) has been hacked. I've lost access and suspect unauthorized activity.\n\nEvidence of compromise:\n1. Unexpected password changes\n2. Messages I didn't send\n3. Settings I didn't modify\n\nI've taken these immediate actions:\n1. Attempted account recovery\n2. Notified contacts about potential scams\n3. Secured associated email\n\nPlease help me regain control and secure my account. I can provide any verification needed to prove ownership.\n\nSincerely,\n{email}",
+                            responseTime: "24 hours"
+                        },
+                        {
+                            title: "Hacked Account with Financial Loss",
+                            description: "When hack led to financial consequences",
+                            content: "URGENT: Hacked Account Causing Financial Harm\n\nDear WhatsApp Fraud Department,\n\nMy compromised account ({accountId}) was used to scam my contacts, resulting in financial losses. This requires immediate attention.\n\nDetails:\n1. Hack occurred on [date]\n2. Scam messages sent to [number] contacts\n3. Known financial impact: [amount/details]\n\nI've:\n1. Filed police report [number if available]\n2. Notified my bank\n3. Warned all contacts\n\nPlease:\n1. Freeze the account immediately\n2. Preserve all evidence\n3. Assist in investigation\n\nI'm available for any cooperation needed. This is extremely urgent.\n\nSincerely,\n{email}",
+                            responseTime: "Immediate"
+                        },
+                        {
+                            title: "SIM Swap Hack Report",
+                            description: "When hack involved SIM swapping",
+                            content: "Subject: SIM Swap Attack on My Account\n\nDear WhatsApp Security,\n\nMy account ({accountId}) was hacked via SIM swap attack on [date]. The attacker gained control of my phone number to intercept verification codes.\n\nEvidence:\n1. Unexpected SIM deactivation\n2. Carrier confirmation of unauthorized swap\n3. Fraudulent account access\n\nI've:\n1. Re-secured my mobile account\n2. Enabled additional protections\n3. Filed reports with carrier\n\nPlease help secure my WhatsApp account and implement additional safeguards against SIM swap attacks.\n\nRegards,\n{email}",
+                            responseTime: "24-48 hours"
+                        },
+                        {
+                            title: "Hacked Business Account",
+                            description: "For compromised business accounts",
+                            content: "URGENT: Business Account Compromise\n\nDear WhatsApp Business Security,\n\nOur business account ({accountId}) has been hacked, risking customer data and trust. This requires immediate resolution.\n\nCompromise details:\n1. Unauthorized access on [date/time]\n2. Suspicious messages sent to customers\n3. Possible data exposure\n\nWe've:\n1. Initiated internal security review\n2. Notified affected customers\n3. Engaged cybersecurity experts\n\nPlease:\n1. Freeze account immediately\n2. Provide access logs\n3. Assist in securing account\n\nThis is critically urgent for our business continuity and customer protection.\n\nSincerely,\n{email}",
+                            responseTime: "Immediate"
+                        },
+                        {
+                            title: "Recovering Hacked Account",
+                            description: "After regaining access to secure account",
+                            content: "Subject: Post-Hack Account Security Review\n\nDear WhatsApp Support,\n\nI've recently regained access to my hacked account ({accountId}) but remain concerned about its security. Please help me:\n1. Review recent account activity\n2. Identify how the breach occurred\n3. Implement additional protections\n\nSpecific concerns:\n1. Possible malware infection\n2. Suspicious linked devices\n3. Unrecognized message history\n\nI've taken these security steps:\n1. Changed all passwords\n2. Enabled two-step verification\n3. Scanned devices for malware\n\nPlease advise what else I should do to prevent future compromises.\n\nThank you,\n{email}",
+                            responseTime: "2-3 business days"
+                        }
+                    ],
+                    disabled: [
+                        {
+                            title: "Standard Disabled Account Appeal",
+                            description: "General disabled account template",
+                            content: "Dear WhatsApp Support,\n\nMy account ({accountId}) has been disabled without explanation. I believe this was done in error as I comply with all Terms of Service.\n\nAccount purpose:\n1. Primary use: [personal/business]\n2. Contact count: [number]\n3. Years active: [number]\n\nI request:\n1. Specific reason for disabling\n2. Opportunity to appeal\n3. Account restoration\n\nI'm willing to adjust my usage if I inadvertently violated policies. Please advise how to proceed.\n\nSincerely,\n{email}",
+                            responseTime: "3-5 business days"
+                        },
+                        {
+                            title: "Disabled Business Account Appeal",
+                            description: "For disabled business accounts",
+                            content: "URGENT: Disabled Business Account Appeal\n\nDear WhatsApp Business Team,\n\nOur verified business account ({accountId}) has been disabled, severely impacting our operations. We maintain strict policy compliance.\n\nBusiness impacts:\n1. [Number] customers unable to reach us\n2. Lost sales/revenue\n3. Damaged reputation\n\nWe request:\n1. Immediate review\n2. Specific violation details\n3. Opportunity to correct any issues\n\nWe're willing to modify our practices if needed. This is critically urgent for our business survival.\n\nSincerely,\n{email}",
+                            responseTime: "24-48 hours"
+                        },
+                        {
+                            title: "Disabled Account with Data Recovery",
+                            description: "When needing to recover data from disabled account",
+                            content: "Subject: Disabled Account Data Recovery Request\n\nDear WhatsApp,\n\nWhile I respect your decision to disable my account ({accountId}), I urgently need to recover personal data from it:\n1. Irreplaceable photos/videos\n2. Important chat histories\n3. Business records\n\nI request:\n1. Temporary access to export data\n2. Extended backup availability\n3. Guidance on data recovery\n\nI'm not appealing the disable (unless that's an option), just seeking to preserve important personal information. Please advise possible solutions.\n\nThank you,\n{email}",
+                            responseTime: "5-7 business days"
+                        },
+                        {
+                            title: "Disabled Account After Policy Change",
+                            description: "When disabled after terms update",
+                            content: "Subject: Disable Following Policy Update\n\nDear WhatsApp Policy Team,\n\nMy account ({accountId}) was disabled shortly after your recent Terms of Service update. I believe this may reflect misunderstanding of my legitimate usage under the new policies.\n\nMy usage:\n1. [Describe compliant activity]\n2. No violations of updated terms\n3. Willing to adapt if needed\n\nPlease:\n1. Review my case specifically\n2. Clarify which policy I allegedly violated\n3. Allow me to correct any issues\n\nI value WhatsApp and want to continue using it properly.\n\nRegards,\n{email}",
+                            responseTime: "3-7 business days"
+                        },
+                        {
+                            title: "Disabled Account Second Appeal",
+                            description: "Follow-up after initial rejection",
+                            content: "Subject: Second Appeal for Disabled Account\n\nDear WhatsApp Appeals Team,\n\nI'm respectfully appealing again the disabling of my account ({accountId}). My initial appeal was denied without specific reasons.\n\nNew information:\n1. Additional evidence of compliant use\n2. Willingness to accept usage restrictions\n3. Offers of verification\n\nI understand you must enforce policies, but believe my case deserves reconsideration because [explain compelling reason]. Please review my account activity again.\n\nSincerely,\n{email}",
+                            responseTime: "5-10 business days"
+                        }
+                    ],
+                    verification: [
+                        {
+                            title: "Standard Verification Issue",
+                            description: "General verification problem template",
+                            content: "Dear WhatsApp Support,\n\nI'm experiencing issues verifying my account ({accountId}). The verification process fails at [describe stage] with [describe problem].\n\nTroubleshooting attempted:\n1. Multiple code requests\n2. Different devices/networks\n3. App reinstallation\n\nMy situation:\n1. Phone number is active\n2. Can receive other SMS\n3. No carrier issues\n\nPlease advise alternative verification methods or troubleshoot this issue. I'm available for any verification steps needed.\n\nThank you,\n{email}",
+                            responseTime: "1-3 business days"
+                        },
+                        {
+                            title: "Business Verification Problem",
+                            description: "For business verification issues",
+                            content: "Subject: Business Account Verification Stuck\n\nDear WhatsApp Business Team,\n\nOur business verification for {accountId} is not completing. We submitted all required documents on [date] but haven't received approval or rejection.\n\nBusiness details:\n1. Name: [name]\n2. Type: [type]\n3. Documents submitted: [list]\n\nWe request:\n1. Status update on our verification\n2. Expected timeline\n3. Any missing requirements\n\nThis delay is impacting our business operations. Please prioritize review of our application.\n\nSincerely,\n{email}",
+                            responseTime: "3-5 business days"
+                        },
+                        {
+                            title: "Verification Code Not Working",
+                            description: "When codes fail to verify",
+                            content: "Subject: Verification Codes Not Accepted\n\nDear WhatsApp Technical Support,\n\nI receive verification codes for {accountId} but they're not accepted by the app. This occurs:\n1. After entering correct code\n2. On multiple devices\n3. Across different networks\n\nError message: [quote exact message]\n\nTechnical details:\n1. App version: [version]\n2. Device(s): [list]\n3. OS version(s): [versions]\n\nPlease resolve this technical issue preventing verification. I've tried all standard troubleshooting without success.\n\nRegards,\n{email}",
+                            responseTime: "2-4 business days"
+                        },
+                        {
+                            title: "International Number Verification",
+                            description: "When verifying non-local numbers",
+                            content: "Subject: Difficulty Verifying International Number\n\nDear Support,\n\nI'm trying to verify my international number ({accountId}) while in [current country]. The verification process fails because [describe issue].\n\nMy situation:\n1. Home country: [country]\n2. Current location: [country]\n3. Number type: [mobile/voip/etc.]\n\nI've tried:\n1. Country code variations\n2. Different networks\n3. VPN connections\n\nPlease advise how to successfully verify my number in this situation. I can provide proof of number ownership if needed.\n\nThank you,\n{email}",
+                            responseTime: "3-7 business days"
+                        },
+                        {
+                            title: "Verification After Number Porting",
+                            description: "When number was ported to new carrier",
+                            content: "Subject: Verification Issue After Number Porting\n\nDear WhatsApp,\n\nAfter porting my number ({accountId}) from [old carrier] to [new carrier], I can't verify it on WhatsApp. The SMS codes don't arrive despite successful porting.\n\nPorting details:\n1. Completed on [date]\n2. New carrier confirms number active\n3. Other SMS services work\n\nPlease help resolve this verification issue. I can provide carrier documentation proving number ownership if needed.\n\nSincerely,\n{email}",
+                            responseTime: "3-5 business days"
+                        }
+                    ],
+                    report_user: [
+                        {
+                            title: "Standard User Violation Report",
+                            description: "General template for reporting users",
+                            content: "Dear WhatsApp Safety Team,\n\nI'm reporting user {reportedAccountId} for violating WhatsApp's Terms of Service through [describe behavior: harassment, spam, scams, etc.].\n\nIncident details:\n1. Date/time: [details]\n2. Nature of violation: [description]\n3. Impact: [how it affected you]\n\nEvidence:\n1. Screenshots attached\n2. Message history\n3. Other documentation\n\nThis behavior harms the WhatsApp community. Please investigate and take appropriate action.\n\nThank you,\n{email}",
+                            responseTime: "3-5 business days"
+                        },
+                        {
+                            title: "Scam Account Report",
+                            description: "For reporting scam/fraud accounts",
+                            content: "URGENT: Fraudulent Account Report\n\nDear WhatsApp Fraud Prevention,\n\nI'm reporting {reportedAccountId} as a scam account engaging in [describe scam: financial fraud, impersonation, etc.].\n\nScam details:\n1. Method: [how it works]\n2. Evidence: [what proves it's a scam]\n3. Known victims: [if any]\n\nThis account is actively harming users. Please:\n1. Immediately suspend the account\n2. Preserve evidence\n3. Notify law enforcement if appropriate\n\nI'm available to provide additional information.\n\nSincerely,\n{email}",
+                            responseTime: "24-48 hours"
+                        },
+                        {
+                            title: "Harassment/Bullying Report",
+                            description: "For reporting abusive behavior",
+                            content: "Subject: Harassment/Bullying Report\n\nDear WhatsApp Safety Team,\n\nI'm reporting {reportedAccountId} for ongoing harassment/bullying. This has caused me significant distress.\n\nIncident timeline:\n1. [Date]: First incident\n2. [Date]: Escalation\n3. [Date]: Recent occurrence\n\nNature of harassment:\n1. [Describe messages/behavior]\n2. Impact on me\n3. My responses (if any)\n\nI've attached evidence and request:\n1. Immediate action against this user\n2. Restrictions on their account\n3. Protection for my account\n\nThis is extremely serious to me. Thank you for your prompt attention.\n\nRegards,\n{email}",
+                            responseTime: "1-3 business days"
+                        },
+                        {
+                            title: "Impersonation Report",
+                            description: "When someone is pretending to be someone else",
+                            content: "Subject: Impersonation Account Report\n\nDear WhatsApp,\n\nThe account {reportedAccountId} is impersonating [real person/organization/me]. This is causing confusion and potential harm.\n\nEvidence of impersonation:\n1. Fake profile using [real name/images]\n2. Misleading contacts\n3. Attempts to deceive\n\nThe real [person/entity] is:\n1. [Provide real contact info if available]\n2. [How to verify authenticity]\n\nPlease remove this impersonation account immediately to prevent further deception.\n\nSincerely,\n{email}",
+                            responseTime: "24-72 hours"
+                        },
+                        {
+                            title: "Child Exploitation Report",
+                            description: "For reporting illegal content (extremely sensitive)",
+                            content: "URGENT: Illegal Content Report\n\nDear WhatsApp Legal Team,\n\nI'm reporting {reportedAccountId} for distributing apparent child exploitation material. This was encountered [describe how].\n\nDO NOT OPEN ATTACHMENTS - I've reported only metadata:\n1. Date/time encountered\n2. Nature of content\n3. No actual content saved\n\nI understand this is extremely serious and have:\n1. Filed report with [local authorities]\n2. Preserved only necessary evidence\n3. Avoided sharing further\n\nPlease:\n1. Immediately preserve all data\n2. Notify appropriate authorities\n3. Take strongest possible action\n\nThis report is made in good faith to protect children.\n\n[Your information]",
+                            responseTime: "Immediate"
+                        }
+                    ],
+                    ban_user: [
+                        {
+                            title: "Request to Ban User (Spam)",
+                            description: "Request to ban a user for sending spam.",
+                            content: "Dear WhatsApp Support Team,\n\nI am requesting to ban the user with the number {reportedAccountId}. This user has been sending me unsolicited spam messages. I have attached screenshots of the messages as proof.\n\nThank you for your prompt attention to this matter.\n\nBest regards,\n{email}",
+                            responseTime: "1-2 business days"
+                        },
+                        {
+                            title: "Request to Ban User (Harassment)",
+                            description: "Request to ban a user for harassment.",
+                            content: "Dear WhatsApp Support Team,\n\nI am requesting to ban the user with the number {reportedAccountId}. This user has been harassing me with inappropriate messages. I have attached screenshots of the messages as proof. This is causing me significant distress.\n\nThank you for your prompt attention to this matter.\n\nBest regards,\n{email}",
+                            responseTime: "1-2 business days"
+                        },
+                        {
+                            title: "Request to Ban User (Scam)",
+                            description: "Request to ban a user for attempting to scam.",
+                            content: "Dear WhatsApp Support Team,\n\nI am requesting to ban the user with the number {reportedAccountId}. This user is attempting to scam people. I have attached screenshots of the messages as proof.\n\nThank you for your prompt attention to this matter.\n\nBest regards,\n{email}",
+                            responseTime: "1-2 business days"
+                        },
+                        {
+                            title: "Request to Ban User (Impersonation)",
+                            description: "Request to ban a user for impersonation.",
+                            content: "Dear WhatsApp Support Team,\n\nI am requesting to ban the user with the number {reportedAccountId}. This user is impersonating someone I know. I have attached screenshots of the messages as proof.\n\nThank you for your prompt attention to this matter.\n\nBest regards,\n{email}",
+                            responseTime: "1-2 business days"
+                        },
+                        {
+                            title: "Request to Ban User (Other)",
+                            description: "Request to ban a user for other reasons.",
+                            content: "Dear WhatsApp Support Team,\n\nI am requesting to ban the user with the number {reportedAccountId} for the following reason: [Please describe the reason here]. I have attached screenshots as proof.\n\nThank you for your prompt attention to this matter.\n\nBest regards,\n{email}",
+                            responseTime: "1-2 business days"
+                        }
+                    ],
+                    other: [
+                        {
+                            title: "General Account Issue",
+                            description: "For issues not fitting other categories",
+                            content: "Dear WhatsApp Support,\n\nI'm experiencing an issue with my account ({accountId}) that doesn't fit standard categories. The problem is: [clear description].\n\nThis began on [date] and occurs when [describe circumstances]. The impact is [explain how it affects you].\n\nTroubleshooting attempted:\n1. [Step 1]\n2. [Step 2]\n3. [Step 3]\n\nPlease advise how to resolve this unusual issue. I'm happy to provide additional details or testing if needed.\n\nThank you,\n{email}",
+                            responseTime: "3-7 business days"
+                        },
+                        {
+                            title: "Feature Request",
+                            description: "For suggesting new features",
+                            content: "Subject: Feature Request\n\nDear WhatsApp Product Team,\n\nAs a long-time user ({accountId}), I'd like to suggest a feature that would improve my experience: [describe feature].\n\nBenefits:\n1. [Benefit 1]\n2. [Benefit 2]\n3. [Benefit 3]\n\nSimilar features exist in [other apps] working well. Implementation could [describe simple approach].\n\nPlease consider this for future updates. I'd be happy to beta test or provide more details.\n\nBest regards,\n{email}",
+                            responseTime: "7-14 business days"
+                        },
+                        {
+                            title: "Bug Report",
+                            description: "For reporting technical issues",
+                            content: "Subject: Bug Report\n\nDear WhatsApp Developers,\n\nI've encountered a technical issue with version [number] on [device/OS].\n\nBug description:\n1. What happens\n2. When it occurs\n3. Expected behavior\n\nTechnical details:\n1. Device: [model]\n2. OS: [version]\n3. Steps to reproduce\n4. Screenshots if helpful\n\nThis affects my usage by [explain impact]. Please advise if there's a fix or workaround.\n\nThank you,\n{email}",
+                            responseTime: "5-10 business days"
+                        },
+                        {
+                            title: "Data Privacy Request",
+                            description: "For privacy-related inquiries",
+                            content: "Subject: Data Privacy Inquiry\n\nDear WhatsApp Privacy Team,\n\nRegarding my account ({accountId}), I have questions about:\n1. [Specific data concern]\n2. [Privacy setting question]\n3. [Data access request]\n\nI'm particularly concerned about [explain specific worry]. Please clarify:\n1. What data is collected\n2. How it's used\n3. My control options\n\nI value my privacy and want to ensure proper use of my information under [relevant laws].\n\nSincerely,\n{email}",
+                            responseTime: "7-14 business days"
+                        },
+                        {
+                            title: "Legal Request",
+                            description: "For formal legal inquiries",
+                            content: "Subject: Legal Inquiry\n\nDear WhatsApp Legal Department,\n\nI'm writing regarding my account ({accountId}) about a legal matter concerning [describe issue].\n\nThis involves:\n1. [Relevant laws/jurisdiction]\n2. [Specific concerns]\n3. [Required actions]\n\nPlease have your legal team contact me at [preferred contact] to discuss. For verification, I can provide [identification/docs].\n\nThis communication constitutes [formal notice/request/etc.] as required by [relevant law/policy].\n\nSincerely,\n[Your full name]\n[Your position if applicable]\n[Contact information]",
+                            responseTime: "10-15 business days"
+                        }
+                    ]
+                },
+                id: {
+                    unban: [
+                        {
+                            title: "Permohonan Unban Formal",
+                            description: "Untuk akun yang diblokir karena kesalahan",
+                            content: "Kepada Tim Dukungan WhatsApp,\n\nAkun WhatsApp saya dengan nomor {accountId} telah diblokir tanpa alasan yang jelas. Saya yakin ini adalah kesalahan karena saya selalu mematuhi Ketentuan Layanan.\n\nAkun ini sangat penting untuk:\n1. Komunikasi sehari-hari\n2. Keperluan pekerjaan\n3. Kontak darurat\n\nSaya mohon:\n1. Penjelasan alasan blokir\n2. Kesempatan untuk banding\n3. Pemulihan akun segera\n\nSaya bersedia memberikan verifikasi tambahan jika diperlukan. Terima kasih atas perhatiannya.\n\nHormat saya,\n{email}",
+                            responseTime: "1-3 hari kerja"
+                        },
+                        {
+                            title: "Permohonan Unban Bisnis",
+                            description: "Untuk akun bisnis yang diblokir",
+                            content: "PENTING: Permohonan Unban Akun Bisnis\n\nKepada Tim WhatsApp Bisnis,\n\nAkun bisnis kami ({accountId}) telah diblokir, mengganggu operasional kami. Kami selalu patuh pada kebijakan.\n\nDampak bisnis:\n1. Tidak bisa melayani pelanggan\n2. Kerugian finansial\n3. Kerusakan reputasi\n\nKami mohon:\n1. Tinjauan segera\n2. Penjelasan spesifik\n3. Pemulihan akun\n\nKami bersedia menyesuaikan penggunaan jika diperlukan. Ini sangat mendesak untuk kelangsungan bisnis kami.\n\nHormat kami,\n{email}",
+                            responseTime: "24-48 jam"
+                        },
+                        {
+                            title: "Permohonan Kedua",
+                            description: "Untuk tindak lanjut permohonan sebelumnya",
+                            content: "Subject: Tindak Lanjut Permohonan Unban\n\nKepada WhatsApp,\n\nSaya menindaklanjuti permohonan unban untuk akun {accountId}. Saya memahami proses membutuhkan waktu tetapi mohon update status permohonan saya.\n\nSebagai pengingat:\n1. Saya yakin blokir adalah kesalahan\n2. Akun ini sangat penting\n3. Saya bersedia verifikasi\n\nMohon beritahu jika ada informasi tambahan yang diperlukan. Terima kasih atas perhatiannya.\n\nHormat saya,\n{email}",
+                            responseTime: "1-2 hari kerja"
+                        },
+                        {
+                            title: "Permohonan dengan Bukti",
+                            description: "Ketika memiliki bukti pendukung",
+                            content: "Kepada Tim WhatsApp,\n\nSaya mengajukan banding blokir akun {accountId} dengan bukti bahwa saya tidak melanggar aturan.\n\nBukti yang saya lampirkan:\n1. Screenshot percakapan normal\n2. Riwayat penggunaan\n3. Dokumen pendukung\n\nSaya curiga akun saya dilaporkan secara tidak benar. Saya telah mengambil langkah pencegahan:\n1. Menyesuaikan frekuensi pesan\n2. Memverifikasi kontak\n3. Dll.\n\nMohon tinjau kasus saya. Terima kasih.\n\nSalam,\n{email}",
+                            responseTime: "2-3 hari kerja"
+                        },
+                        {
+                            title: "Permohonan Terakhir",
+                            description: "Untuk upaya terakhir dengan alasan kuat",
+                            content: "PENTING: Permohonan Unban Terakhir\n\nKepada Tim Banding WhatsApp,\n\nIni adalah permohonan terakhir saya untuk akun {accountId} yang diblokir. Kehilangan akun ini menyebabkan:\n1. [Jelaskan dampak parah]\n2. [Alasan kuat]\n3. [Kebutuhan mendesak]\n\nSaya mohon:\n1. Tinjauan akhir\n2. Penjelasan jika blokir tetap\n3. Akses sementara untuk data penting\n\nSaya bersedia melalui proses verifikasi apapun. Ini adalah harapan terakhir saya.\n\nHormat saya,\n{email}",
+                            responseTime: "24-48 jam"
+                        }
+                    ],
+                    blocked: [
+                        {
+                            title: "Permohonan Standard Unblock",
+                            description: "Permohonan umum untuk akun diblokir",
+                            content: "Kepada Tim WhatsApp,\n\nAkun saya ({accountId}) tampaknya diblokir karena tidak bisa mengirim/menerima pesan. Saya tidak menerima pemberitahuan apa pun.\n\nMohon:\n1. Konfirmasi status blokir\n2. Berikan alasan\n3. Jelaskan cara memulihkan\n\nSaya yakin ini kesalahan karena tidak melanggar aturan. Jika ada pelanggaran tidak sengaja, saya akan menyesuaikan.\n\nTerima kasih.\n\nSalam,\n{email}",
+                            responseTime: "1-2 hari kerja"
+                        },
+                        {
+                            title: "Permohonan Darurat",
+                            description: "Untuk keadaan darurat",
+                            content: "DARURAT: Permohonan Unblock Mendesak\n\nKepada WhatsApp,\n\nAkun saya ({accountId}) diblokir, menghalangi komunikasi penting tentang [jelaskan keadaan darurat].\n\nDampak:\n1. [Jelaskan konsekuensi]\n2. [Alternatif tidak tersedia]\n\nSaya jamin tidak melanggar aturan. Mohon pertimbangkan keadaan khusus ini dan percepat proses unblock.\n\nSaya siap verifikasi segera. Terima kasih.\n\nHormat saya,\n{email}",
+                            responseTime: "24 jam"
+                        },
+                        {
+                            title: "Blokir Setelah Ganti Nomor",
+                            description: "Ketika diblokir setelah ganti nomor",
+                            content: "Subject: Blokir Setelah Ganti Nomor\n\nKepada Support,\n\nSetelah mengganti nomor WhatsApp dari [nomor lama] ke [nomor baru], akun saya diblokir. Saya mengikuti proses migrasi resmi.\n\nDetail:\nTanggal ganti: [tanggal]\n\nSaya curiga ini kesalahan sistem. Mohon verifikasi dan bebaskan blokir. Saya lampirkan screenshot proses migrasi.\n\nTerima kasih.\n\nSalam,\n{email}",
+                            responseTime: "1-3 hari kerja"
+                        },
+                        {
+                            title: "Blokir Akun Bisnis",
+                            description: "Untuk akun bisnis yang diblokir",
+                            content: "Kepada Tim Bisnis WhatsApp,\n\nAkun bisnis kami ({accountId}) diblokir tiba-tiba, mengganggu layanan pelanggan. Kami patuh pada kebijakan.\n\nDetail bisnis:\nNama: [nama]\nJenis: [jenis]\n\nKemungkinan penyebab salah paham:\n1. Volume pesan tinggi tapi sah\n2. Percakapan dengan pelanggan\n\nKami bersedia menyesuaikan. Mohon bebaskan blokir dan berikan panduan pencegahan.\n\nHormat kami,\n{email}",
+                            responseTime: "2-3 hari kerja"
+                        },
+                        {
+                            title: "Blokir Setelah Ganti Perangkat",
+                            description: "Ketika diblokir setelah ganti HP",
+                            content: "Subject: Blokir Setelah Ganti Perangkat\n\nKepada WhatsApp,\n\nSetelah memindahkan akun ke perangkat baru ([model]), akun saya diblokir. Saya menggunakan proses transfer resmi.\n\nDetail:\nPerangkat lama: [model]\nPerangkat baru: [model]\n\nSaya curiga ini tindakan pencegahan. Mohon verifikasi identitas saya dan pulihkan akses. Saya bisa buktikan kepemilikan perangkat.\n\nTerima kasih.\n\nSalam,\n{email}",
+                            responseTime: "1-2 hari kerja"
+                        }
+                    ],
+                    login: [
+                        {
+                            title: "Masalah Login Standar",
+                            description: "Untuk masalah login umum",
+                            content: "Kepada Tim WhatsApp,\n\nSaya tidak bisa login ke akun ({accountId}). Masalah terjadi saat [deskripsi masalah: kode verifikasi tidak datang, dll.].\n\nSudah mencoba:\n1. Cek koneksi internet\n2. Minta kode baru\n3. Pastikan nomor benar\n4. Restart perangkat\n\nMohon bantuan cara mendapatkan akses kembali. Saya siap verifikasi identitas jika perlu.\n\nTerima kasih.\n\nSalam,\n{email}",
+                            responseTime: "1-2 hari kerja"
+                        },
+                        {
+                            title: "Tidak Menerima Kode Verifikasi",
+                            description: "Ketika SMS verifikasi tidak datang",
+                            content: "Subject: Tidak Menerima Kode Verifikasi\n\nKepada WhatsApp,\n\nSaya tidak menerima SMS kode verifikasi untuk nomor {accountId}. Sudah mencoba beberapa kali.\n\nDetail:\n- Nomor aktif dan bisa terima SMS lain\n- Sudah coba berbagai jaringan\n\nMohon alternatif verifikasi:\n1. Via telepon\n2. Metode lain\n3. Proses pemulihan\n\nSaya bisa buktikan kepemilikan nomor ini. Terima kasih.\n\nHormat saya,\n{email}",
+                            responseTime: "24-48 jam"
+                        },
+                        {
+                            title: "Login Setelah Kehilangan SIM",
+                            description: "Ketika tidak bisa login karena kehilangan SIM",
+                            content: "DARURAT: Tidak Bisa Login Karena Kehilangan SIM\n\nKepada Support,\n\nSaya kehilangan SIM terkait akun WhatsApp ({accountId}) dan tidak bisa menerima kode verifikasi. Akun ini berisi data penting.\n\nSituasi:\n- Proses pembuatan SIM baru (estimasi [waktu])\n- Butuh metode verifikasi alternatif\n\nSaya bisa menyediakan:\n1. Bukti identitas\n2. Detail akun sebelumnya\n3. Verifikasi lain\n\nMohon bantu cara tercepat mendapatkan akses. Ini sangat mendesak.\n\nTerima kasih.\n\nSalam,\n{email}",
+                            responseTime: "24 jam"
+                        },
+                        {
+                            title: "Login Terus Berulang",
+                            description: "Ketika terjebak dalam loop verifikasi",
+                            content: "Subject: Loop Verifikasi Login\n\nKepada Tim Teknis WhatsApp,\n\nSaat mencoba login ke {accountId}, setelah masuk kode verifikasi, proses kembali ke awal terus menerus.\n\nDetail teknis:\n- Versi aplikasi: [versi]\n- Perangkat: [daftar]\n- Pesan error: [jika ada]\n\nSudah mencoba:\n1. Install ulang aplikasi\n2. Perangkat berbeda\n3. Jaringan berbeda\n\nMohon bantu atasi masalah teknis ini.\n\nTerima kasih.\n\nSalam,\n{email}",
+                            responseTime: "2-3 hari kerja"
+                        },
+                        {
+                            title: "Masuk Verifikasi 2 Langkah",
+                            description: "Ketika lupa PIN verifikasi 2 langkah",
+                            content: "Subject: Pemulihan Verifikasi 2 Langkah\n\nKepada Tim Keamanan WhatsApp,\n\nSaya terkunci dari akun ({accountId}) karena masalah verifikasi 2 langkah. Saya [lupa PIN/email backup tidak aktif/tidak dapat opsi reset].\n\nDetail akun hanya saya yang tahu:\n1. Tanggal pembuatan: [perkiraan]\n2. Backup terakhir: [tanggal]\n3. Email terkait: [email]\n\nSaya paham pentingnya keamanan tapi butuh bantuan pemulihan. Saya bisa buktikan kepemilikan akun.\n\nMohon panduan proses pemulihan. Akun ini berisi komunikasi penting.\n\nTerima kasih.\n\nHormat saya,\n{email}",
+                            responseTime: "2-5 hari kerja"
+                        }
+                    ],
+                    spam: [
+                        {
+                            title: "Permohonan Penghapusan Flag Spam",
+                            description: "Ketika akun salah ditandai spam",
+                            content: "Kepada Tim WhatsApp,\n\nAkun saya ({accountId}) tampaknya salah ditandai sebagai spam. Saya hanya mengirim pesan pribadi/pekerjaan ke kontak yang dikenal.\n\nKemungkinan penyebab salah paham:\n1. Volume pesan tinggi untuk [alasan]\n2. Pesan serupa ke beberapa kontak [konteks]\n\nSaya sudah menyesuaikan:\n1. Frekuensi pesan\n2. Identifikasi lebih jelas\n3. Dll.\n\nMohon tinjau status akun saya dan hapus tanda spam jika sesuai. Saya berkomitmen menggunakan WhatsApp dengan benar.\n\nTerima kasih.\n\nSalam,\n{email}",
+                            responseTime: "3-5 hari kerja"
+                        },
+                        {
+                            title: "Laporan Spam oleh Kompetitor",
+                            description: "Ketika diduga dilaporkan kompetitor",
+                            content: "Subject: Laporan Spam Palsu oleh Kompetitor\n\nKepada Tim WhatsApp,\n\nSaya curiga akun bisnis saya ({accountId}) dilaporkan spam secara tidak benar oleh kompetitor [nama].\n\nBukti:\n1. Tanda spam muncul setelah [peristiwa]\n2. Pesan adalah permintaan pelanggan\n3. Kompetitor memiliki motif\n\nKami patuh pada kebijakan. Mohon selidiki laporan palsu ini dan hapus pembatasan tidak adil.\n\nHormat kami,\n{email}",
+                            responseTime: "3-7 hari kerja"
+                        },
+                        {
+                            title: "Spam dari Aktivitas Grup",
+                            description: "Ketika ditandai spam karena grup",
+                            content: "Subject: Tanda Spam dari Grup\n\nKepada WhatsApp,\n\nSetelah aktif di grup [nama grup], akun saya ({accountId}) ditandai spam. Pesan saya sesuai topik dan aturan grup.\n\nDetail:\nTujuan grup: [tujuan]\nPeran saya: [peran]\n\nJika aktivitas saya dianggap spam, saya akan menyesuaikan. Mohon tinjau dan hapus tanda spam.\n\nTerima kasih.\n\nSalam,\n{email}",
+                            responseTime: "2-4 hari kerja"
+                        },
+                        {
+                            title: "Permohonan Peninjauan Spam",
+                            description: "Permohonan umum penghapusan spam",
+                            content: "Subject: Permohonan Tinjauan Tanda Spam\n\nKepada Tim WhatsApp,\n\nMohon tinjau tanda spam pada akun saya ({accountId}) karena:\n1. Hanya mengirim ke kontak dikenal\n2. Pesan diminta\n3. Bukan konten massal/promosi\n\nUntuk pencegahan, saya akan:\n1. Kurangi frekuensi pesan\n2. Perjelas identitas\n3. Hindari kata kunci tertentu\n\nMohon hapus pembatasan spam. Siap memberikan informasi tambahan.\n\nHormat saya,\n{email}",
+                            responseTime: "3-5 hari kerja"
+                        },
+                        {
+                            title: "Spam dari Pemilik Nomor Sebelumnya",
+                            description: "Ketika pemilik sebelumnya menyebabkan spam",
+                            content: "Subject: Warisan Tanda Spam dari Pemilik Lama\n\nKepada WhatsApp,\n\nNomor {accountId} baru saya dapatkan pada [tanggal], tapi sepertinya mewarisi tanda spam dari pemilik sebelumnya.\n\nBukti kepemilikan baru:\n1. Tanggal aktivasi: [tanggal]\n2. Hanya penggunaan pribadi\n\nMohon hapus tanda spam warisan ini. Saya bisa menyediakan dokumen operator sebagai bukti.\n\nTerima kasih.\n\nSalam,\n{email}",
+                            responseTime: "5-7 hari kerja"
+                        }
+                    ],
+                    hacked: [
+                        {
+                            title: "Laporan Peretasan Standar",
+                            description: "Laporan umum akun diretas",
+                            content: "DARURAT: Laporan Akun Diretas\n\nKepada Tim Keamanan WhatsApp,\n\nAkun saya ({accountId}) diretas. Saya tidak bisa mengakses dan ada aktivitas mencurigakan.\n\nBukti peretasan:\n1. Perubahan password tanpa izin\n2. Pesan tidak saya kirim\n3. Pengaturan diubah\n\nSudah mengambil tindakan:\n1. Mencoba pemulihan\n2. Memberi tahu kontak\n3. Mengamankan email terkait\n\nMohon bantu saya dapatkan kembali kendali dan amankan akun. Saya siap verifikasi kepemilikan.\n\nTerima kasih.\n\nHormat saya,\n{email}",
+                            responseTime: "24 jam"
+                        },
+                        {
+                            title: "Peretasan dengan Kerugian Finansial",
+                            description: "Ketika peretasan menyebabkan kerugian uang",
+                            content: "DARURAT: Peretasan Mengakibatkan Kerugian\n\nKepada Tim Keamanan WhatsApp,\n\nAkun saya ({accountId}) diretas dan digunakan untuk menipu kontak saya, menyebabkan kerugian finansial.\n\nDetail:\n1. Peretasan terjadi [tanggal]\n2. Pesan penipuan dikirim ke [jumlah] kontak\n3. Kerugian diketahui: [detail]\n\nSudah:\n1. Laporkan polisi [nomor laporan jika ada]\n2. Hubungi bank\n3. Peringatkan semua kontak\n\nMohon:\n1. Bekukan akun segera\n2. Simpan bukti\n3. Bantu investigasi\n\nSaya siap bekerjasama. Ini sangat mendesak.\n\nHormat saya,\n{email}",
+                            responseTime: "Segera"
+                        },
+                        {
+                            title: "Laporan SIM Swap",
+                            description: "Ketika peretasan melibatkan penggantian SIM",
+                            content: "Subject: Laporan Serangan SIM Swap\n\nKepada WhatsApp,\n\nAkun saya ({accountId}) diretas melalui SIM swap pada [tanggal]. Penyerang mengambil alih nomor saya untuk mencegat kode verifikasi.\n\nBukti:\n1. SIM tiba-tiba tidak aktif\n2. Konfirmasi dari operator\n3. Akses tidak sah\n\nSudah:\n1. Mengamankan akun operator\n2. Mengaktifkan proteksi tambahan\n3. Melapor ke operator\n\nMohon bantu amankan akun WhatsApp saya dan tambahkan proteksi anti SIM swap.\n\nTerima kasih.\n\nSalam,\n{email}",
+                            responseTime: "24-48 jam"
+                        },
+                        {
+                            title: "Peretasan Akun Bisnis",
+                            description: "Ketika akun bisnis diretas",
+                            content: "DARURAT: Peretasan Akun Bisnis\n\nKepada Tim WhatsApp Bisnis,\n\nAkun bisnis kami ({accountId}) diretas, membahayakan data pelanggan dan kepercayaan.\n\nDetail peretasan:\n1. Akses tidak sah [tanggal/waktu]\n2. Pesan mencurigakan ke pelanggan\n3. Kemungkinan kebocoran data\n\nSudah:\n1. Mulai audit keamanan internal\n2. Beri tahu pelanggan terdampak\n3. Libatkan ahli keamanan\n\nMohon:\n1. Bekukan akun segera\n2. Berikan log akses\n3. Bantu mengamankan\n\nIni sangat kritis untuk bisnis kami.\n\nHormat kami,\n{email}",
+                            responseTime: "Segera"
+                        },
+                        {
+                            title: "Pasca Peretasan",
+                            description: "Setelah mendapatkan kembali akun",
+                            content: "Subject: Keamanan Pasca Peretasan\n\nKepada WhatsApp,\n\nSaya sudah mendapatkan kembali akses ke akun ({accountId}) yang diretas, tapi masih khawatir tentang keamanannya.\n\nKekhawatiran:\n1. Kemungkinan malware\n2. Perangkat terhubung mencurigakan\n3. Riwayat pesan tidak dikenal\n\nSudah mengambil tindakan:\n1. Ganti semua password\n2. Aktifkan verifikasi 2 langkah\n3. Scan perangkat\n\nMohon bantu:\n1. Tinjau aktivitas terkini\n2. Identifikasi cara peretasan\n3. Tambahkan proteksi\n\nTerima kasih.\n\nSalam,\n{email}",
+                            responseTime: "2-3 hari kerja"
+                        }
+                    ],
+                    disabled: [
+                        {
+                            title: "Permohonan Standar Akun Dinonaktifkan",
+                            description: "Permohonan umum untuk akun dinonaktifkan",
+                            content: "Kepada Tim WhatsApp,\n\nAkun saya ({accountId}) dinonaktifkan tanpa penjelasan. Saya yakin ini kesalahan karena mematuhi Ketentuan Layanan.\n\nDetail akun:\n1. Penggunaan utama: [pribadi/bisnis]\n2. Jumlah kontak: [angka]\n3. Tahun aktif: [angka]\n\nSaya mohon:\n1. Alasan spesifik\n2. Kesempatan banding\n3. Pemulihan akun\n\nSaya bersedia menyesuaikan penggunaan jika ada pelanggaran tidak sengaja. Mohon beritahu cara melanjutkan.\n\nHormat saya,\n{email}",
+                            responseTime: "3-5 hari kerja"
+                        },
+                        {
+                            title: "Permohonan Akun Bisnis Dinonaktifkan",
+                            description: "Untuk akun bisnis yang dinonaktifkan",
+                            content: "PENTING: Permohonan Akun Bisnis Dinonaktifkan\n\nKepada Tim WhatsApp Bisnis,\n\nAkun bisnis kami ({accountId}) dinonaktifkan, sangat mengganggu operasional. Kami selalu patuh pada kebijakan.\n\nDampak bisnis:\n1. [Jumlah] pelanggan tidak terlayani\n2. Kehilangan penjualan\n3. Kerusakan reputasi\n\nKami mohon:\n1. Tinjauan segera\n2. Detail pelanggaran\n3. Kesempatan memperbaiki\n\nKami bersedia menyesuaikan praktik jika diperlukan. Ini sangat mendesak.\n\nHormat kami,\n{email}",
+                            responseTime: "24-48 jam"
+                        },
+                        {
+                            title: "Pemulihan Data dari Akun Dinonaktifkan",
+                            description: "Ketika perlu mengambil data dari akun dinonaktifkan",
+                            content: "Subject: Permohonan Pemulihan Data\n\nKepada WhatsApp,\n\nSaya menghormati keputusan menonaktifkan akun {accountId}, tapi sangat membutuhkan data pribadi darinya:\n1. Foto/Video berharga\n2. Riwayat chat penting\n3. Catatan bisnis\n\nSaya mohon:\n1. Akses sementara untuk ekspor data\n2. Perpanjangan ketersediaan backup\n3. Panduan pemulihan data\n\nSaya tidak meminta pembukaan akun (kecuali mungkin), hanya ingin menyelamatkan informasi penting. Mohon beritahu solusi yang mungkin.\n\nTerima kasih.\n\nHormat saya,\n{email}",
+                            responseTime: "5-7 hari kerja"
+                        },
+                        {
+                            title: "Akun Dinonaktifkan Setelah Perubahan Kebijakan",
+                            description: "Ketika dinonaktifkan setelah update ketentuan",
+                            content: "Subject: Nonaktif Setelah Update Kebijakan\n\nKepada Tim Kebijakan WhatsApp,\n\nAkun saya ({accountId}) dinonaktifkan tak lama setelah update Ketentuan Layanan. Saya yakin penggunaan saya sah under kebijakan baru.\n\nPenggunaan saya:\n1. [Deskripsi aktivitas patuh]\n2. Tidak melanggar ketentuan baru\n3. Bersedia beradaptasi jika perlu\n\nMohon:\n1. Tinjau kasus saya khusus\n2. Jelaskan pelanggaran spesifik\n3. Beri kesempatan perbaikan\n\nSaya menghargai WhatsApp dan ingin terus menggunakannya dengan benar.\n\nSalam,\n{email}",
+                            responseTime: "3-7 hari kerja"
+                        },
+                        {
+                            title: "Permohonan Kedua Akun Dinonaktifkan",
+                            description: "Tindak lanjut setelah penolakan pertama",
+                            content: "Subject: Permohonan Kedua untuk Akun Dinonaktifkan\n\nKepada Tim Banding WhatsApp,\n\nDengan hormat saya mengajukan banding kedua untuk akun {accountId} yang dinonaktifkan. Banding pertama ditolak tanpa penjelasan rinci.\n\nInformasi baru:\n1. Bukti tambahan penggunaan patuh\n2. Kesediaan menerima pembatasan\n3. Penawaran verifikasi\n\nSaya paham perlu menegakkan kebijakan, tapi yakin kasus saya layak pertimbangan ulang karena [alasan kuat]. Mohon tinjau kembali aktivitas akun saya.\n\nHormat saya,\n{email}",
+                            responseTime: "5-10 hari kerja"
+                        }
+                    ],
+                    verification: [
+                        {
+                            title: "Masalah Verifikasi Standar",
+                            description: "Untuk masalah verifikasi umum",
+                            content: "Kepada Tim WhatsApp,\n\nSaya mengalami masalah memverifikasi akun ({accountId}). Proses gagal di [deskripsi tahap] dengan [deskripsi masalah].\n\nSudah mencoba:\n1. Beberapa permintaan kode\n2. Perangkat/jaringan berbeda\n3. Install ulang aplikasi\n\nSituasi saya:\n1. Nomor aktif\n2. Bisa terima SMS lain\n3. Tidak ada masalah operator\n\nMohon saran metode verifikasi alternatif atau solusi masalah ini. Saya siap untuk langkah verifikasi apapun.\n\nTerima kasih.\n\nSalam,\n{email}",
+                            responseTime: "1-3 hari kerja"
+                        },
+                        {
+                            title: "Masalah Verifikasi Bisnis",
+                            description: "Untuk masalah verifikasi akun bisnis",
+                            content: "Subject: Masalah Verifikasi Akun Bisnis\n\nKepada Tim WhatsApp Bisnis,\n\nVerifikasi bisnis untuk {accountId} tidak selesai. Kami sudah mengirim semua dokumen pada [tanggal] tapi belum ada tanggapan.\n\nDetail bisnis:\n1. Nama: [nama]\n2. Jenis: [jenis]\n3. Dokumen dikirim: [daftar]\n\nKami mohon:\n1. Update status\n2. Perkiraan waktu\n3. Persyaratan yang kurang\n\nPenundaan ini mengganggu operasional bisnis. Mohon prioritaskan tinjauan kami.\n\nHormat kami,\n{email}",
+                            responseTime: "3-5 hari kerja"
+                        },
+                        {
+                            title: "Kode Verifikasi Tidak Berfungsi",
+                            description: "Ketika kode tidak bisa diverifikasi",
+                            content: "Subject: Kode Verifikasi Tidak Diterima\n\nKepada Tim Teknis WhatsApp,\n\nSaya menerima kode verifikasi untuk {accountId} tapi tidak diterima aplikasi. Terjadi:\n1. Setelah masuk kode benar\n2. Di beberapa perangkat\n3. Di berbagai jaringan\n\nPesan error: [pesan persis]\n\nDetail teknis:\n1. Versi aplikasi: [versi]\n2. Perangkat: [daftar]\n\nMohon perbaiki masalah teknis ini. Sudah mencoba semua solusi standar tanpa hasil.\n\nTerima kasih.\n\nSalam,\n{email}",
+                            responseTime: "2-4 hari kerja"
+                        },
+                        {
+                            title: "Verifikasi Nomor Internasional",
+                            description: "Ketika memverifikasi nomor luar negeri",
+                            content: "Subject: Kesulitan Verifikasi Nomor Internasional\n\nKepada Support,\n\nSaya mencoba memverifikasi nomor internasional {accountId} dari [negara saat ini], tapi proses gagal karena [deskripsi masalah].\n\nSituasi saya:\n1. Negara asal: [negara]\n2. Lokasi sekarang: [negara]\n3. Jenis nomor: [mobile/voip/dll.]\n\nSudah mencoba:\n1. Variasi kode negara\n2. Jaringan berbeda\n3. Koneksi VPN\n\nMohon saran cara sukses memverifikasi nomor dalam situasi ini. Saya bisa buktikan kepemilikan nomor jika perlu.\n\nTerima kasih.\n\nSalam,\n{email}",
+                            responseTime: "3-7 hari kerja"
+                        },
+                        {
+                            title: "Verifikasi Setelah Porting Nomor",
+                            description: "Ketika nomor dipindahkan ke operator lain",
+                            content: "Subject: Masalah Verifikasi Setelah Porting Nomor\n\nKepada WhatsApp,\n\nSetelah memindahkan nomor {accountId} dari [operator lama] ke [operator baru], saya tidak bisa verifikasi di WhatsApp. SMS kode tidak datang meski porting sukses.\n\nDetail porting:\n1. Selesai pada [tanggal]\n2. Operator baru konfirmasi nomor aktif\n3. Layanan SMS lain berfungsi\n\nMohon bantu atasi masalah verifikasi ini. Saya bisa sediakan dokumen operator sebagai bukti kepemilikan.\n\nHormat saya,\n{email}",
+                            responseTime: "3-5 hari kerja"
+                        }
+                    ],
+                    report_user: [
+                        {
+                            title: "Laporan Pelanggaran Pengguna Standar",
+                            description: "Template umum untuk melaporkan pengguna",
+                            content: "Kepada Tim Keamanan WhatsApp,\n\nSaya melaporkan pengguna {reportedAccountId} karena melanggar Ketentuan Layanan WhatsApp melalui [deskripsi perilaku: pelecehan, spam, penipuan, dll.].\n\nDetail insiden:\n1. Tanggal/waktu: [detail]\n2. Sifat pelanggaran: [deskripsi]\n3. Dampak: [bagaimana mempengaruhi Anda]\n\nBukti:\n1. Screenshot terlampir\n2. Riwayat pesan\n3. Dokumen lain\n\nPerilaku ini merugikan komunitas WhatsApp. Mohon selidiki dan ambil tindakan sesuai.\n\nTerima kasih.\n\nHormat saya,\n{email}",
+                            responseTime: "3-5 hari kerja"
+                        },
+                        {
+                            title: "Laporan Akun Penipuan",
+                            description: "Untuk melaporkan akun penipuan/scam",
+                            content: "PENTING: Laporan Akun Penipuan\n\nKepada Tim Anti-Penipuan WhatsApp,\n\nSaya melaporkan {reportedAccountId} sebagai akun penipuan yang melakukan [deskripsi scam: penipuan finansial, penipuan identitas, dll.].\n\nDetail penipuan:\n1. Metode: [bagaimana bekerja]\n2. Bukti: [apa yang membuktikan scam]\n3. Korban diketahui: [jika ada]\n\nAkun ini aktif membahayakan pengguna. Mohon:\n1. Segera tangguhkan akun\n2. Simpan bukti\n3. Laporkan ke pihak berwajib jika perlu\n\nSaya siap memberikan informasi tambahan.\n\nHormat saya,\n{email}",
+                            responseTime: "24-48 jam"
+                        },
+                        {
+                            title: "Laporan Pelecehan/Perundungan",
+                            description: "Untuk melaporkan perilaku abusive",
+                            content: "Subject: Laporan Pelecehan/Perundungan\n\nKepada Tim Keamanan WhatsApp,\n\nSaya melaporkan {reportedAccountId} untuk pelecehan/perundungan berkelanjutan. Ini menyebabkan saya tekanan signifikan.\n\nLinimasa insiden:\n1. [Tanggal]: Insiden pertama\n2. [Tanggal]: Eskalasi\n3. [Tanggal]: Terjadi lagi\n\nSifat pelecehan:\n1. [Deskripsi pesan/perilaku]\n2. Dampak pada saya\n3. Tanggapan saya (jika ada)\n\nSaya lampirkan bukti dan mohon:\n1. Tindakan segera terhadap pengguna ini\n2. Pembatasan pada akun mereka\n3. Perlindungan untuk akun saya\n\nIni sangat serius bagi saya. Terima kasih perhatiannya.\n\nHormat saya,\n{email}",
+                            responseTime: "1-3 hari kerja"
+                        },
+                        {
+                            title: "Laporan Peniruan Identitas",
+                            description: "Ketika seseorang berpura-pura menjadi orang lain",
+                            content: "Subject: Laporan Akun Peniruan\n\nKepada WhatsApp,\n\nAkun {reportedAccountId} meniru [orang/organisasi/saya]. Ini menyebabkan kebingungan dan potensi bahaya.\n\nBukti peniruan:\n1. Profil palsu menggunakan [nama/gambar asli]\n2. Menyesatkan kontak\n3. Upaya penipuan\n\nYang asli adalah:\n1. [Info kontak asli jika ada]\n2. [Cara verifikasi keaslian]\n\nMohon hapus akun peniruan ini segera untuk mencegah penipuan lebih lanjut.\n\nHormat saya,\n{email}",
+                            responseTime: "24-72 jam"
+                        },
+                        {
+                            title: "Laporan Eksploitasi Anak (Sangat Sensitif)",
+                            description: "Untuk melaporkan konten ilegal",
+                            content: "DARURAT: Laporan Konten Ilegal\n\nKepada Tim Legal WhatsApp,\n\nSaya melaporkan {reportedAccountId} karena mendistribusikan materi eksploitasi anak. Ditemukan [jelaskan bagaimana].\n\nJANGAN BUKA LAMPIRAN - Saya hanya melaporkan metadata:\n1. Tanggal/waktu ditemukan\n2. Sifat konten\n3. Tidak menyimpan konten aktual\n\nSaya paham ini sangat serius dan sudah:\n1. Laporkan ke [otoritas lokal]\n2. Hanya menyimpan bukti perlu\n3. Menghindari penyebaran\n\nMohon:\n1. Segera amankan semua data\n2. Beri tahu pihak berwajib\n3. Ambil tindakan terkuat\n\nLaporan ini dibuat itikad baik untuk melindungi anak.\n\n[Informasi Anda]",
+                            responseTime: "Segera"
+                        }
+                    ],
+                    other: [
+                        {
+                            title: "Masalah Akun Umum",
+                            description: "Untuk masalah tidak masuk kategori lain",
+                            content: "Kepada Tim WhatsApp,\n\nSaya mengalami masalah dengan akun ({accountId}) yang tidak masuk kategori standar. Masalahnya: [deskripsi jelas].\n\nMulai [tanggal] terjadi saat [deskripsi keadaan]. Dampaknya [jelaskan bagaimana mempengaruhi Anda].\n\nSudah mencoba:\n1. [Langkah 1]\n2. [Langkah 2]\n3. [Langkah 3]\n\nMohon saran cara mengatasi. Saya siap memberikan detail tambahan atau pengujian jika perlu.\n\nTerima kasih.\n\nSalam,\n{email}",
+                            responseTime: "3-7 hari kerja"
+                        },
+                        {
+                            title: "Permintaan Fitur",
+                            description: "Untuk menyarankan fitur baru",
+                            content: "Subject: Permintaan Fitur\n\nKepada Tim Produk WhatsApp,\n\nSebagai pengguna lama ({accountId}), saya ingin menyarankan fitur yang akan meningkatkan pengalaman: [deskripsi fitur].\n\nManfaat:\n1. [Manfaat 1]\n2. [Manfaat 2]\n3. [Manfaat 3]\n\nFitur serupa ada di [aplikasi lain] bekerja baik. Implementasi bisa [deskripsi pendekatan sederhana].\n\nMohon pertimbangkan untuk update mendatang. Saya bersedia beta test atau memberikan detail lebih lanjut.\n\nTerima kasih.\n\nHormat saya,\n{email}",
+                            responseTime: "7-14 hari kerja"
+                        },
+                        {
+                            title: "Laporan Bug",
+                            description: "Untuk melaporkan masalah teknis",
+                            content: "Subject: Laporan Bug\n\nKepada Pengembang WhatsApp,\n\nSaya menemukan masalah teknis di versi [nomor] pada [perangkat/OS].\n\nDeskripsi bug:\n1. Apa yang terjadi\n2. Kapan terjadi\n3. Perilaku yang diharapkan\n\nDetail teknis:\n1. Perangkat: [model]\n2. OS: [versi]\n3. Langkah reproduksi\n4. Screenshot jika membantu\n\nIni mempengaruhi penggunaan saya dengan [jelaskan dampak]. Mohon beritahu jika ada perbaikan atau solusi.\n\nTerima kasih.\n\nSalam,\n{email}",
+                            responseTime: "5-10 hari kerja"
+                        },
+                        {
+                            title: "Permintaan Privasi Data",
+                            description: "Untuk pertanyaan terkait privasi",
+                            content: "Subject: Pertanyaan Privasi Data\n\nKepada Tim Privasi WhatsApp,\n\nMengenai akun saya ({accountId}), saya memiliki pertanyaan tentang:\n1. [Kekhawatiran data spesifik]\n2. [Pertanyaan pengaturan privasi]\n3. [Permintaan akses data]\n\nSaya khususnya khawatir tentang [jelaskan kekhawatiran spesifik]. Mohon klarifikasi:\n1. Data apa yang dikumpulkan\n2. Bagaimana digunakan\n3. Opsi kontrol saya\n\nSaya menghargai privasi dan ingin memastikan penggunaan informasi saya sesuai [hukum terkait].\n\nHormat saya,\n{email}",
+                            responseTime: "7-14 hari kerja"
+                        },
+                        {
+                            title: "Permintaan Hukum",
+                            description: "Untuk permintaan hukum formal",
+                            content: "Subject: Permintaan Hukum\n\nKepada Departemen Hukum WhatsApp,\n\nSaya menulis mengenai akun saya ({accountId}) tentang masalah hukum terkait [jelaskan isu].\n\nIni melibatkan:\n1. [Hukum/yurisdiksi relevan]\n2. [Kekhawatiran spesifik]\n3. [Tindakan yang diperlukan]\n\nMohon tim hukum Anda menghubungi saya di [kontak preferensi] untuk diskusi. Untuk verifikasi, saya bisa menyediakan [identifikasi/dokumen].\n\nKomunikasi ini merupakan [pemberitahuan/permintaan formal] sesuai [hukum/kebijakan terkait].\n\nHormat saya,\n[Nama lengkap]\n[Posisi jika berlaku]\n[Informasi kontak]",
+                            responseTime: "10-15 hari kerja"
+                        }
+                    ],
+                    ban_user: [
+                        {
+                            title: "Permintaan Banned Pengguna (Spam)",
+                            description: "Meminta untuk mem-banned pengguna karena mengirim spam.",
+                            content: "Tim Dukungan WhatsApp yang terhormat,\n\nSaya meminta untuk mem-banned pengguna dengan nomor {reportedAccountId}. Pengguna ini telah mengirimi saya pesan spam yang tidak diminta. Saya telah melampirkan tangkapan layar pesan sebagai bukti.\n\nTerima kasih atas perhatian Anda yang cepat terhadap masalah ini.\n\nHormat saya,\n{email}",
+                            responseTime: "1-2 hari kerja"
+                        },
+                        {
+                            title: "Permintaan Banned Pengguna (Pelecehan)",
+                            description: "Meminta untuk mem-banned pengguna karena pelecehan.",
+                            content: "Tim Dukungan WhatsApp yang terhormat,\n\nSaya meminta untuk mem-banned pengguna dengan nomor {reportedAccountId}. Pengguna ini telah melecehkan saya dengan pesan-pesan yang tidak pantas. Saya telah melampirkan tangkapan layar pesan sebagai bukti. Ini menyebabkan saya sangat tertekan.\n\nTerima kasih atas perhatian Anda yang cepat terhadap masalah ini.\n\nHormat saya,\n{email}",
+                            responseTime: "1-2 hari kerja"
+                        },
+                        {
+                            title: "Permintaan Banned Pengguna (Penipuan)",
+                            description: "Meminta untuk mem-banned pengguna karena mencoba menipu.",
+                            content: "Tim Dukungan WhatsApp yang terhormat,\n\nSaya meminta untuk mem-banned pengguna dengan nomor {reportedAccountId}. Pengguna ini mencoba menipu orang. Saya telah melampirkan tangkapan layar pesan sebagai bukti.\n\nTerima kasih atas perhatian Anda yang cepat terhadap masalah ini.\n\nHormat saya,\n{email}",
+                            responseTime: "1-2 hari kerja"
+                        },
+                        {
+                            title: "Permintaan Banned Pengguna (Peniruan Identitas)",
+                            description: "Meminta untuk mem-banned pengguna karena peniruan identitas.",
+                            content: "Tim Dukungan WhatsApp yang terhormat,\n\nSaya meminta untuk mem-banned pengguna dengan nomor {reportedAccountId}. Pengguna ini meniru seseorang yang saya kenal. Saya telah melampirkan tangkapan layar pesan sebagai bukti.\n\nTerima kasih atas perhatian Anda yang cepat terhadap masalah ini.\n\nHormat saya,\n{email}",
+                            responseTime: "1-2 hari kerja"
+                        },
+                        {
+                            title: "Permintaan Banned Pengguna (Lainnya)",
+                            description: "Meminta untuk mem-banned pengguna karena alasan lain.",
+                            content: "Tim Dukungan WhatsApp yang terhormat,\n\nSaya meminta untuk mem-banned pengguna dengan nomor {reportedAccountId} karena alasan berikut: [Silakan jelaskan alasannya di sini]. Saya telah melampirkan tangkapan layar sebagai bukti.\n\nTerima kasih atas perhatian Anda yang cepat terhadap masalah ini.\n\nHormat saya,\n{email}",
+                            responseTime: "1-2 hari kerja"
+                        }
+                    ]
+                }
+            },
+            instagram: {
+                en: {
+                    unban: [
+                        {
+                            title: "Disabled Account Appeal (Formal)",
+                            description: "For deactivated Instagram accounts with formal tone",
+                            content: "Dear Instagram Support Team,\n\nMy Instagram account @{accountId} has been disabled unexpectedly. I have carefully reviewed the Community Guidelines and am confident I haven't violated any policies.\n\nThis account is vital for my [personal brand/business/creative work] with [number] followers. The disable is causing significant impact:\n1. Loss of audience engagement\n2. Disruption to my business operations\n3. Damage to my online presence\n\nI kindly request:\n1. Specific reason for the disable\n2. Opportunity to appeal\n3. Expedited review process\n\nI'm prepared to provide any verification needed. This is extremely urgent for my livelihood.\n\nThank you for your prompt attention.\n\nBest regards,\n{email}",
+                            responseTime: "3-5 business days"
+                        },
+                        {
+                            title: "Business Account Disable Appeal",
+                            description: "For disabled business accounts emphasizing urgency",
+                            content: "URGENT: Business Account Disabled\n\nDear Instagram Business Team,\n\nOur verified business account @{accountId} serving [number] customers has been disabled without warning. This is causing severe business disruption:\n\nKey impacts:\n- Inability to communicate with customers\n- Loss of sales and revenue\n- Damage to brand reputation\n\nWe guarantee compliance with all Instagram policies. Please:\n1. Provide specific violation details\n2. Allow us to correct any issues\n3. Prioritize review of our case\n\nAttached are our business documents. We appreciate your urgent attention to this critical matter.\n\nSincerely,\n{email}",
+                            responseTime: "24-48 hours"
+                        },
+                        {
+                            title: "Second Appeal (Polite Follow-up)",
+                            description: "For following up on previous appeals",
+                            content: "Subject: Follow-up on Account Disable Appeal\n\nDear Instagram Appeals Team,\n\nI'm following up on my previous request regarding my disabled account @{accountId}. I understand you receive many appeals but would appreciate an update.\n\nTo reiterate:\n- I believe this disable was in error\n- I comply with all Community Guidelines\n- This account is crucial for my [purpose]\n\nIf additional information would help, please let me know. I'm happy to comply with any verification processes.\n\nThank you for your time and assistance.\n\nBest regards,\n{email}",
+                            responseTime: "2-3 business days"
+                        },
+                        {
+                            title: "Appeal with Evidence",
+                            description: "When you have evidence to support your case",
+                            content: "Dear Instagram Trust & Safety,\n\nI'm appealing the disable of @{accountId} with evidence showing compliance with guidelines.\n\nEvidence summary:\n1. Screenshots of compliant posts\n2. Engagement analytics\n3. Documentation\n\nI suspect my account may have been reported maliciously or mistaken for policy violations. I've taken corrective steps:\n1. Reviewed all content\n2. Removed anything questionable\n3. etc.\n\nPlease review my case and evidence. I'm available to provide any additional information.\n\nThank you,\n{email}",
+                            responseTime: "3-5 business days"
+                        },
+                        {
+                            title: "Final Appeal (Urgent Request)",
+                            description: "For last attempt with strong justification",
+                            content: "URGENT FINAL APPEAL: Wrongful Account Disable\n\nDear Instagram Appeals Team,\n\nThis is my final appeal regarding my disabled account @{accountId}. The loss of this account is causing severe hardship because [explain impacts].\n\nKey points:\n1. I've never violated Instagram's terms\n2. I've submitted [number] previous appeals\n3. This account represents [years] of work\n4. It's my primary [income/social connection/etc.]\n\nI respectfully request:\n1. Detailed explanation if disable stands\n2. One final review of my account\n3. Temporary access to retrieve critical data if needed\n\nI'm willing to undergo any verification. This appeal represents my last hope.\n\nSincerely,\n{email}",
+                            responseTime: "24-48 hours"
+                        }
+                    ],
+                    report_user: [
+                        {
+                            title: "Standard User Violation Report",
+                            description: "General template for reporting users",
+                            content: "Dear Instagram Safety Team,\n\nI'm reporting user @{reportedAccountId} for violating Instagram's Community Guidelines through [describe behavior: harassment, spam, scams, etc.].\n\nIncident details:\n1. Date/time: [details]\n2. Nature of violation: [description]\n3. Impact: [how it affected you]\n\nEvidence:\n1. Screenshots attached\n2. Message history\n3. Other documentation\n\nThis behavior harms the Instagram community. Please investigate and take appropriate action.\n\nThank you,\n{email}",
+                            responseTime: "3-5 business days"
+                        },
+                        {
+                            title: "Impersonation Account Report",
+                            description: "For reporting fake accounts pretending to be someone",
+                            content: "URGENT: Impersonation Account Report\n\nDear Instagram,\n\nThe account @{reportedAccountId} is impersonating [real person/organization/me]. This is causing confusion and potential harm.\n\nEvidence of impersonation:\n1. Fake profile using [real name/images]\n2. Misleading followers\n3. Attempts to deceive\n\nThe real [person/entity] is:\n1. [Provide real contact info if available]\n2. [How to verify authenticity]\n\nPlease remove this impersonation account immediately to prevent further deception.\n\nSincerely,\n{email}",
+                            responseTime: "24-48 hours"
+                        },
+                        {
+                            title: "Harassment/Bullying Report",
+                            description: "For reporting abusive behavior",
+                            content: "Subject: Harassment/Bullying Report\n\nDear Instagram Safety Team,\n\nI'm reporting @{reportedAccountId} for ongoing harassment/bullying. This has caused me significant distress.\n\nIncident timeline:\n1. [Date]: First incident\n2. [Date]: Escalation\n3. [Date]: Recent occurrence\n\nNature of harassment:\n1. [Describe messages/comments]\n2. Impact on me\n3. My responses (if any)\n\nI've attached evidence and request:\n1. Immediate action against this user\n2. Restrictions on their account\n3. Protection for my account\n\nThis is extremely serious to me. Thank you for your prompt attention.\n\nRegards,\n{email}",
+                            responseTime: "1-3 business days"
+                        },
+                        {
+                            title: "Scam Account Report",
+                            description: "For reporting scam/fraud accounts",
+                            content: "URGENT: Fraudulent Account Report\n\nDear Instagram Fraud Prevention,\n\nI'm reporting @{reportedAccountId} as a scam account engaging in [describe scam: financial fraud, impersonation, etc.].\n\nScam details:\n1. Method: [how it works]\n2. Evidence: [what proves it's a scam]\n3. Known victims: [if any]\n\nThis account is actively harming users. Please:\n1. Immediately suspend the account\n2. Preserve evidence\n3. Notify law enforcement if appropriate\n\nI'm available to provide additional information.\n\nSincerely,\n{email}",
+                            responseTime: "24-48 hours"
+                        },
+                        {
+                            title: "Child Exploitation Report (Extremely Sensitive)",
+                            description: "For reporting illegal content",
+                            content: "URGENT: Illegal Content Report\n\nDear Instagram Legal Team,\n\nI'm reporting @{reportedAccountId} for distributing apparent child exploitation material. This was encountered [describe how].\n\nDO NOT OPEN ATTACHMENTS - I've reported only metadata:\n1. Date/time encountered\n2. Nature of content\n3. No actual content saved\n\nI understand this is extremely serious and have:\n1. Filed report with [local authorities]\n2. Preserved only necessary evidence\n3. Avoided sharing further\n\nPlease:\n1. Immediately preserve all data\n2. Notify appropriate authorities\n3. Take strongest possible action\n\nThis report is made in good faith to protect children.\n\n[Your information]",
+                            responseTime: "Immediate"
+                        }
+                    ]
+                }
+            },
+            facebook: {
+                en: {
+                    unban: [
+                        {
+                            title: "Disabled Account Appeal (Formal)",
+                            description: "For deactivated Facebook accounts with formal tone",
+                            content: "Dear Facebook Support Team,\n\nMy Facebook account ({accountId}) has been disabled unexpectedly. I have carefully reviewed the Community Standards and am confident I haven't violated any policies.\n\nThis account is vital for my [personal connections/business/community work] with [number] connections. The disable is causing significant impact:\n1. Loss of important communications\n2. Disruption to my business/activities\n3. Damage to my online presence\n\nI kindly request:\n1. Specific reason for the disable\n2. Opportunity to appeal\n3. Expedited review process\n\nI'm prepared to provide any verification needed. This is extremely urgent for my [livelihood/personal life].\n\nThank you for your prompt attention.\n\nBest regards,\n{email}",
+                            responseTime: "3-7 business days"
+                        },
+                        {
+                            title: "Business Account Disable Appeal",
+                            description: "For disabled business pages emphasizing urgency",
+                            content: "URGENT: Business Account Disabled\n\nDear Facebook Business Team,\n\nOur business account ({accountId}) serving [number] customers has been disabled without warning. This is causing severe business disruption:\n\nKey impacts:\n- Inability to communicate with customers\n- Loss of sales and revenue\n- Damage to brand reputation\n\nWe guarantee compliance with all Facebook policies. Please:\n1. Provide specific violation details\n2. Allow us to correct any issues\n3. Prioritize review of our case\n\nAttached are our business documents. We appreciate your urgent attention to this critical matter.\n\nSincerely,\n{email}",
+                            responseTime: "24-48 hours"
+                        },
+                        {
+                            title: "Second Appeal (Polite Follow-up)",
+                            description: "For following up on previous appeals",
+                            content: "Subject: Follow-up on Account Disable Appeal\n\nDear Facebook Appeals Team,\n\nI'm following up on my previous request regarding my disabled account ({accountId}). I understand you receive many appeals but would appreciate an update.\n\nTo reiterate:\n- I believe this disable was in error\n- I comply with all Community Standards\n- This account is crucial for my [purpose]\n\nIf additional information would help, please let me know. I'm happy to comply with any verification processes.\n\nThank you for your time and assistance.\n\nBest regards,\n{email}",
+                            responseTime: "3-5 business days"
+                        },
+                        {
+                            title: "Appeal with Evidence",
+                            description: "When you have evidence to support your case",
+                            content: "Dear Facebook Trust & Safety,\n\nI'm appealing the disable of {accountId} with evidence showing compliance with standards.\n\nEvidence summary:\n1. Screenshots of compliant posts\n2. Engagement analytics\n3. Documentation\n\nI suspect my account may have been reported maliciously or mistaken for policy violations. I've taken corrective steps:\n1. Reviewed all content\n2. Removed anything questionable\n3. etc.\n\nPlease review my case and evidence. I'm available to provide any additional information.\n\nThank you,\n{email}",
+                            responseTime: "3-7 business days"
+                        },
+                        {
+                            title: "Final Appeal (Urgent Request)",
+                            description: "For last attempt with strong justification",
+                            content: "URGENT FINAL APPEAL: Wrongful Account Disable\n\nDear Facebook Appeals Team,\n\nThis is my final appeal regarding my disabled account ({accountId}). The loss of this account is causing severe hardship because [explain impacts].\n\nKey points:\n1. I've never violated Facebook's terms\n2. I've submitted [number] previous appeals\n3. This account represents [years] of connections\n4. It's my primary [business tool/social connection/etc.]\n\nI respectfully request:\n1. Detailed explanation if disable stands\n2. One final review of my account\n3. Temporary access to retrieve critical data if needed\n\nI'm willing to undergo any verification. This appeal represents my last hope.\n\nSincerely,\n{email}",
+                            responseTime: "24-48 hours"
+                        }
+                    ],
+                    report_user: [
+                        {
+                            title: "Standard User Violation Report",
+                            description: "General template for reporting users",
+                            content: "Dear Facebook Safety Team,\n\nI'm reporting user {reportedAccountId} for violating Facebook's Community Standards through [describe behavior: harassment, spam, scams, etc.].\n\nIncident details:\n1. Date/time: [details]\n2. Nature of violation: [description]\n3. Impact: [how it affected you]\n\nEvidence:\n1. Screenshots attached\n2. Message history\n3. Other documentation\n\nThis behavior harms the Facebook community. Please investigate and take appropriate action.\n\nThank you,\n{email}",
+                            responseTime: "3-5 business days"
+                        },
+                        {
+                            title: "Impersonation Account Report",
+                            description: "For reporting fake accounts pretending to be someone",
+                            content: "URGENT: Impersonation Account Report\n\nDear Facebook,\n\nThe account {reportedAccountId} is impersonating [real person/organization/me]. This is causing confusion and potential harm.\n\nEvidence of impersonation:\n1. Fake profile using [real name/images]\n2. Misleading friends/followers\n3. Attempts to deceive\n\nThe real [person/entity] is:\n1. [Provide real contact info if available]\n2. [How to verify authenticity]\n\nPlease remove this impersonation account immediately to prevent further deception.\n\nSincerely,\n{email}",
+                            responseTime: "24-48 hours"
+                        },
+                        {
+                            title: "Harassment/Bullying Report",
+                            description: "For reporting abusive behavior",
+                            content: "Subject: Harassment/Bullying Report\n\nDear Facebook Safety Team,\n\nI'm reporting {reportedAccountId} for ongoing harassment/bullying. This has caused me significant distress.\n\nIncident timeline:\n1. [Date]: First incident\n2. [Date]: Escalation\n3. [Date]: Recent occurrence\n\nNature of harassment:\n1. [Describe messages/posts]\n2. Impact on me\n3. My responses (if any)\n\nI've attached evidence and request:\n1. Immediate action against this user\n2. Restrictions on their account\n3. Protection for my account\n\nThis is extremely serious to me. Thank you for your prompt attention.\n\nRegards,\n{email}",
+                            responseTime: "1-3 business days"
+                        },
+                        {
+                            title: "Scam Account Report",
+                            description: "For reporting scam/fraud accounts",
+                            content: "URGENT: Fraudulent Account Report\n\nDear Facebook Fraud Prevention,\n\nI'm reporting {reportedAccountId} as a scam account engaging in [describe scam: financial fraud, impersonation, etc.].\n\nScam details:\n1. Method: [how it works]\n2. Evidence: [what proves it's a scam]\n3. Known victims: [if any]\n\nThis account is actively harming users. Please:\n1. Immediately suspend the account\n2. Preserve evidence\n3. Notify law enforcement if appropriate\n\nI'm available to provide additional information.\n\nSincerely,\n{email}",
+                            responseTime: "24-48 hours"
+                        },
+                        {
+                            title: "Child Exploitation Report (Extremely Sensitive)",
+                            description: "For reporting illegal content",
+                            content: "URGENT: Illegal Content Report\n\nDear Facebook Legal Team,\n\nI'm reporting {reportedAccountId} for distributing apparent child exploitation material. This was encountered [describe how].\n\nDO NOT OPEN ATTACHMENTS - I've reported only metadata:\n1. Date/time encountered\n2. Nature of content\n3. No actual content saved\n\nI understand this is extremely serious and have:\n1. Filed report with [local authorities]\n2. Preserved only necessary evidence\n3. Avoided sharing further\n\nPlease:\n1. Immediately preserve all data\n2. Notify appropriate authorities\n3. Take strongest possible action\n\nThis report is made in good faith to protect children.\n\n[Your information]",
+                            responseTime: "Immediate"
+                        }
+                    ]
+                }
+            },
+            telegram: {
+                en: {
+                    unban: [
+                        {
+                            title: "Spam Block Appeal",
+                            description: "For when your account is limited due to spam reports",
+                            content: "Dear Telegram Support,\n\nMy account ({accountId}) has been limited, and I believe it was wrongly flagged for spam. I do not send unsolicited messages. Could you please review my account activity and remove the limitation?\n\nThank you,\n{email}",
+                            responseTime: "1-3 days"
+                        },
+                        {
+                            title: "Appeal for Deleted Account",
+                            description: "To inquire about a deleted account",
+                            content: "Dear Telegram Support,\n\nMy account ({accountId}) appears to have been deleted. I did not do this myself. Can you please investigate why my account was deleted and if it can be restored?\n\nThank you,\n{email}",
+                            responseTime: "Varies"
+                        },
+                        {
+                            title: "Login Issues/Blocked Number",
+                            description: "For when you can't log in or your number is blocked",
+                            content: "Dear Telegram Support,\n\nI am unable to log into my Telegram account with the number {accountId}. I am not receiving a login code. Please help me regain access to my account.\n\nSincerely,\n{email}",
+                            responseTime: "2-5 days"
+                        },
+                        {
+                            title: "Formal Complaint about Limitation",
+                            description: "A more formal appeal for account limitations",
+                            content: "Subject: Formal Complaint Regarding Account Limitation\n\nDear Telegram Support,\n\nI am writing to formally complain about the limitation placed on my account, {accountId}. I am confident that I have not violated Telegram's Terms of Service. This limitation is affecting my ability to communicate for professional and personal matters. I request an immediate review and removal of this restriction.\n\nRegards,\n{email}",
+                            responseTime: "3-7 days"
+                        },
+                        {
+                            title: "Mistaken Identity Ban Appeal",
+                            description: "If you believe you were banned by mistake",
+                            content: "Dear Telegram Support,\n\nI believe my account ({accountId}) has been limited or banned by mistake. I have not engaged in any activity that violates your policies. Could this be an error? I would appreciate it if you could look into this matter.\n\nThank you,\n{email}",
+                            responseTime: "2-4 days"
+                        }
+                    ]
+                },
+                id: {
+                    unban: [
+                        {
+                            title: "Permohonan Banding Blokir Spam",
+                            description: "Ketika akun Anda dibatasi karena laporan spam",
+                            content: "Dukungan Telegram yang terhormat,\n\nAkun saya ({accountId}) telah dibatasi, dan saya yakin akun tersebut salah ditandai sebagai spam. Saya tidak mengirim pesan yang tidak diminta. Bisakah Anda meninjau aktivitas akun saya dan menghapus batasan tersebut?\n\nTerima kasih,\n{email}",
+                            responseTime: "1-3 hari"
+                        },
+                        {
+                            title: "Permohonan Banding untuk Akun yang Dihapus",
+                            description: "Untuk menanyakan tentang akun yang dihapus",
+                            content: "Dukungan Telegram yang terhormat,\n\nAkun saya ({accountId}) tampaknya telah dihapus. Saya tidak melakukannya sendiri. Bisakah Anda menyelidiki mengapa akun saya dihapus dan apakah bisa dipulihkan?\n\nTerima kasih,\n{email}",
+                            responseTime: "Bervariasi"
+                        },
+                        {
+                            title: "Masalah Login/Nomor Diblokir",
+                            description: "Ketika Anda tidak bisa login atau nomor Anda diblokir",
+                            content: "Dukungan Telegram yang terhormat,\n\nSaya tidak dapat masuk ke akun Telegram saya dengan nomor {accountId}. Saya tidak menerima kode login. Tolong bantu saya mendapatkan kembali akses ke akun saya.\n\nHormat saya,\n{email}",
+                            responseTime: "2-5 hari"
+                        },
+                        {
+                            title: "Keluhan Formal tentang Pembatasan",
+                            description: "Permohonan banding yang lebih formal untuk pembatasan akun",
+                            content: "Subjek: Keluhan Formal Mengenai Pembatasan Akun\n\nDukungan Telegram yang terhormat,\n\nSaya menulis untuk secara resmi mengeluh tentang pembatasan yang ditempatkan pada akun saya, {accountId}. Saya yakin bahwa saya tidak melanggar Ketentuan Layanan Telegram. Pembatasan ini memengaruhi kemampuan saya untuk berkomunikasi untuk urusan profesional dan pribadi. Saya meminta peninjauan segera dan penghapusan pembatasan ini.\n\nHormat saya,\n{email}",
+                            responseTime: "3-7 hari"
+                        },
+                        {
+                            title: "Permohonan Banding Pemblokiran karena Kesalahan Identitas",
+                            description: "Jika Anda yakin Anda diblokir karena kesalahan",
+                            content: "Dukungan Telegram yang terhormat,\n\nSaya yakin akun saya ({accountId}) telah dibatasi atau diblokir karena kesalahan. Saya tidak terlibat dalam aktivitas apa pun yang melanggar kebijakan Anda. Mungkinkah ini kesalahan? Saya akan sangat menghargai jika Anda dapat memeriksa masalah ini.\n\nTerima kasih,\n{email}",
+                            responseTime: "2-4 hari"
+                        }
+                    ]
+                }
+            }
+        };
+
+        // Language translations for UI elements
+        const translations = {
+            en: {
+                taglineText: "Multi-platform account support center",
+                infoTitle: "How Can We Help?",
+                infoDescription: "Our team specializes in helping users recover access to their accounts across various platforms. Select your platform and issue type to get started.",
+                quickTitle: "Quick Solutions",
+                quickSolutions: [
+                    "Account recovery",
+                    "Unban requests",
+                    "Login issues",
+                    "Spam reports",
+                    "Security concerns"
+                ],
+                formTitle: "Report an Issue",
+                platformLabel: "Platform",
+                selectPlatform: "Select a platform",
+                accountIdLabel: "Account ID/Number",
+                issueTypeLabel: "Issue Type",
+                selectIssue: "Select an issue type",
+                issueDetailsLabel: "Issue Details",
+                emailLabel: "Your Active Email",
+                uploadText: "Click to upload screenshots or proof (optional)",
+                templateTitle: "Select Report Template",
+                templateDesc: "Choose a pre-written template for your issue:",
+                submitText: "Submit Report",
+                footerText: "© 2023 AccountHelp Center. All rights reserved.",
+                successMessage: "Your report has been submitted successfully! We'll contact you soon.",
+                errorMessage: "There was an error submitting your report. Please try again.",
+                rateLimitMessage: "You've reached the daily submission limit (3 reports per day). Please try again tomorrow.",
+                loadingText: "Sending...",
+                rateLimitInfo: "Daily submission limit: 3 reports per device"
+            },
+            id: {
+                taglineText: "Pusat bantuan akun multi-platform",
+                infoTitle: "Bagaimana Kami Bisa Membantu?",
+                infoDescription: "Tim kami khusus membantu pengguna mendapatkan kembali akses ke akun mereka di berbagai platform. Pilih platform dan jenis masalah untuk memulai.",
+                quickTitle: "Solusi Cepat",
+                quickSolutions: [
+                    "Pemulihan akun",
+                    "Permohonan unban",
+                    "Masalah login",
+                    "Laporan spam",
+                    "Masalah keamanan"
+                ],
+                formTitle: "Laporkan Masalah",
+                platformLabel: "Platform",
+                selectPlatform: "Pilih platform",
+                accountIdLabel: "ID/Nomor Akun",
+                issueTypeLabel: "Jenis Masalah",
+                selectIssue: "Pilih jenis masalah",
+                issueDetailsLabel: "Detail Laporan",
+                emailLabel: "Email Aktif Anda",
+                uploadText: "Klik untuk mengunggah screenshot atau bukti (opsional)",
+                templateTitle: "Pilih Template Laporan",
+                templateDesc: "Pilih template yang sudah dibuat untuk masalah Anda:",
+                submitText: "Kirim Laporan",
+                footerText: "© 2023 Pusat Bantuan Akun. Semua hak dilindungi.",
+                successMessage: "Laporan Anda berhasil dikirim! Kami akan segera menghubungi Anda.",
+                errorMessage: "Terjadi kesalahan saat mengirim laporan. Silakan coba lagi.",
+                rateLimitMessage: "Anda telah mencapai batas pengiriman harian (3 laporan per hari). Silakan coba lagi besok.",
+                loadingText: "Mengirim...",
+                rateLimitInfo: "Batas pengiriman harian: 3 laporan per perangkat",
+                premiumTitle: "Pengguna Premium",
+                banNumberLabel: "Masukkan Nomor WhatsApp untuk Diblokir",
+                banReasonLabel: "Alasan Pemblokiran",
+                banBtnText: "Blokir Pengguna"
+            },
+            es: {
+                taglineText: "Centro de soporte para cuentas multi-plataforma",
+                infoTitle: "¿Cómo podemos ayudarte?",
+                infoDescription: "Nuestro equipo está especializado en ayudar a los usuarios a recuperar el acceso a sus cuentas en varias plataformas. Selecciona tu plataforma y tipo de problema para comenzar.",
+                quickTitle: "Soluciones rápidas",
+                quickSolutions: [
+                    "Recuperación de cuenta",
+                    "Solicitudes de desbloqueo",
+                    "Problemas de inicio de sesión",
+                    "Reportes de spam",
+                    "Problemas de seguridad"
+                ],
+                formTitle: "Reportar un problema",
+                platformLabel: "Plataforma",
+                selectPlatform: "Selecciona una plataforma",
+                accountIdLabel: "ID/Número de cuenta",
+                issueTypeLabel: "Tipo de problema",
+                selectIssue: "Selecciona un tipo de problema",
+                issueDetailsLabel: "Detalles del problema",
+                emailLabel: "Tu correo electrónico activo",
+                uploadText: "Haz clic para subir capturas de pantalla o pruebas (opcional)",
+                templateTitle: "Seleccionar plantilla de reporte",
+                templateDesc: "Elige una plantilla preescrita para tu problema:",
+                submitText: "Enviar reporte",
+                footerText: "© 2023 Centro de Ayuda para Cuentas. Todos los derechos reservados.",
+                successMessage: "¡Tu reporte ha sido enviado con éxito! Nos pondremos en contacto contigo pronto.",
+                errorMessage: "Hubo un error al enviar tu reporte. Por favor inténtalo de nuevo.",
+                rateLimitMessage: "Has alcanzado el límite diario de envíos (3 reportes por día). Por favor inténtalo de nuevo mañana.",
+                loadingText: "Enviando...",
+                rateLimitInfo: "Límite diario de envíos: 3 reportes por dispositivo"
+            },
+            fr: {
+                taglineText: "Centre d'assistance multi-plateformes pour comptes",
+                infoTitle: "Comment pouvons-nous vous aider?",
+                infoDescription: "Notre équipe est spécialisée dans l'aide aux utilisateurs pour récupérer l'accès à leurs comptes sur diverses plateformes. Sélectionnez votre plateforme et le type de problème pour commencer.",
+                quickTitle: "Solutions rapides",
+                quickSolutions: [
+                    "Récupération de compte",
+                    "Demandes de déblocage",
+                    "Problèmes de connexion",
+                    "Signalements de spam",
+                    "Problemes de sécurité"
+                ],
+                formTitle: "Signaler un problème",
+                platformLabel: "Plateforme",
+                selectPlatform: "Sélectionnez une plateforme",
+                accountIdLabel: "ID/Numéro de compte",
+                issueTypeLabel: "Type de problème",
+                selectIssue: "Sélectionnez un type de problème",
+                issueDetailsLabel: "Détails du problème",
+                emailLabel: "Votre email actif",
+                uploadText: "Cliquez pour télécharger des captures d'écran ou preuves (optionnel)",
+                templateTitle: "Sélectionner un modèle de rapport",
+                templateDesc: "Choisissez un modèle pré-écrit pour votre problème:",
+                submitText: "Envoyer le rapport",
+                footerText: "© 2023 Centre d'Aide aux Comptes. Tous droits réservés.",
+                successMessage: "Votre rapport a été envoyé avec succès! Nous vous contacterons bientôt.",
+                errorMessage: "Une erreur s'est produite lors de l'envoi de votre rapport. Veuillez réessayer.",
+                rateLimitMessage: "Vous avez atteint la limite d'envoi quotidienne (3 rapports par jour). Veuillez réessayer demain.",
+                loadingText: "Envoi en cours...",
+                rateLimitInfo: "Limite d'envoi quotidienne: 3 rapports par appareil"
+            },
+            pt: {
+                taglineText: "Centro de suporte para contas multi-plataforma",
+                infoTitle: "Como podemos ajudar?",
+                infoDescription: "Nossa equipe é especializada em ajudar usuários a recuperar o acesso às suas contas em várias plataformas. Selecione sua plataforma e tipo de problema para começar.",
+                quickTitle: "Soluções rápidas",
+                quickSolutions: [
+                    "Recuperação de conta",
+                    "Solicitações de desbanimento",
+                    "Problemas de login",
+                    "Relatórios de spam",
+                    "Problemas de segurança"
+                ],
+                formTitle: "Relatar um problema",
+                platformLabel: "Plataforma",
+                selectPlatform: "Selecione uma plataforma",
+                accountIdLabel: "ID/Número da conta",
+                issueTypeLabel: "Tipo de problema",
+                selectIssue: "Selecione um tipo de problema",
+                issueDetailsLabel: "Detalhes do problema",
+                emailLabel: "Seu email ativo",
+                uploadText: "Clique para enviar screenshots ou provas (opcional)",
+                templateTitle: "Selecionar modelo de relatório",
+                templateDesc: "Escolha um modelo pré-escrito para o seu problema:",
+                submitText: "Enviar relatório",
+                footerText: "© 2023 Centro de Ajuda para Contas. Todos os direitos reservados.",
+                successMessage: "Seu relatório foi enviado com sucesso! Entraremos em contato em breve.",
+                errorMessage: "Ocorreu um erro ao enviar seu relatório. Por favor, tente novamente.",
+                rateLimitMessage: "Você atingiu o limite diário de envios (3 relatórios por dia). Por favor, tente novamente amanhã.",
+                loadingText: "Enviando...",
+                rateLimitInfo: "Limite diário de envios: 3 relatórios por dispositivo"
+            }
+        };
+
+        // DOM elements
+        const languageSelect = document.getElementById('languageSelect');
+        const form = document.getElementById('reportForm');
+        const platformSelect = document.getElementById('platform');
+        const issueTypeSelect = document.getElementById('issueType');
+        const issueDetails = document.getElementById('issueDetails');
+        const templateSection = document.getElementById('templateSection');
+        const templateOptions = document.getElementById('templateOptions');
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const fileName = document.getElementById('fileName');
+        const submitBtn = document.getElementById('submitBtn');
+        const submitText = document.getElementById('submitText');
+        const successAlert = document.getElementById('successAlert');
+        const errorAlert = document.getElementById('errorAlert');
+        const rateLimitAlert = document.getElementById('rateLimitAlert');
+        const rateLimitInfo = document.getElementById('rateLimitInfo');
+
+        // Current language
+        let currentLanguage = 'en';
+        let selectedTemplate = null;
+        let deviceId = null;
+        let submissionCount = 0;
+        const MAX_SUBMISSIONS_PER_DAY = 3;
+
+        // Generate a unique device ID (simplified version)
+        function generateDeviceId() {
+            if (!deviceId) {
+                deviceId = localStorage.getItem('deviceId');
+                if (!deviceId) {
+                    deviceId = 'device_' + Math.random().toString(36).substr(2, 9);
+                    localStorage.setItem('deviceId', deviceId);
+                }
+            }
+            return deviceId;
+        }
+
+        // Check submission count for current device
+        async function checkSubmissionLimit() {
+            const deviceId = generateDeviceId();
+            const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+            
+            try {
+                const docRef = db.collection('submissions').doc(deviceId);
+                const doc = await docRef.get();
+                
+                if (doc.exists) {
+                    const data = doc.data();
+                    if (data.date === today) {
+                        submissionCount = data.count || 0;
+                        if (submissionCount >= MAX_SUBMISSIONS_PER_DAY) {
+                            rateLimitAlert.style.display = 'block';
+                            submitBtn.disabled = true;
+                        } else {
+                            rateLimitAlert.style.display = 'none';
+                            submitBtn.disabled = false;
+                        }
+                    } else {
+                        // Reset count for new day
+                        submissionCount = 0;
+                        await docRef.set({
+                            count: 0,
+                            date: today
+                        });
+                        rateLimitAlert.style.display = 'none';
+                        submitBtn.disabled = false;
+                    }
+                } else {
+                    // First submission for this device
+                    submissionCount = 0;
+                    await docRef.set({
+                        count: 0,
+                        date: today
+                    });
+                    rateLimitAlert.style.display = 'none';
+                    submitBtn.disabled = false;
+                }
+            } catch (error) {
+                console.error("Error checking submission limit:", error);
+                // Fallback - allow submission if there's an error
+                submitBtn.disabled = false;
+            }
+        }
+
+        // Record a new submission
+        async function recordSubmission() {
+            const deviceId = generateDeviceId();
+            const today = new Date().toISOString().split('T')[0];
+            
+            try {
+                const docRef = db.collection('submissions').doc(deviceId);
+                await docRef.set({
+                    count: submissionCount + 1,
+                    date: today
+                }, { merge: true });
+                
+                submissionCount++;
+                if (submissionCount >= MAX_SUBMISSIONS_PER_DAY) {
+                    rateLimitAlert.style.display = 'block';
+                    submitBtn.disabled = true;
+                }
+            } catch (error) {
+                console.error("Error recording submission:", error);
+            }
+        }
+
+        // Filter sensitive information from text
+        function filterSensitiveInfo(text) {
+            // Filter phone numbers (more comprehensive)
+            text = text.replace(/(?:\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/g, '[PHONE NUMBER REDACTED]');
+
+            // Filter email addresses
+            text = text.replace(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g, '[EMAIL REDACTED]');
+
+            // Filter credit card numbers
+            text = text.replace(/\b(?:\d[ -]*?){13,16}\b/g, '[CREDIT CARD REDACTED]');
+
+            // Filter usernames (if they look like @username)
+            text = text.replace(/@([a-zA-Z0-9_]+)/g, '[@USERNAME REDACTED]');
+
+            // Filter common password-like strings (example: "password: mypass123")
+            text = text.replace(/(password|sandi|kata sandi)\s*:\s*\S+/gi, '[PASSWORD REDACTED]');
+
+            return text;
+        }
+
+        // Set language
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            const translation = translations[lang];
+            
+            // Update all translatable elements
+            for (const [key, value] of Object.entries(translation)) {
+                if (key === 'quickSolutions' || key === 'rateLimitInfo') continue;
+                
+                const element = document.getElementById(key);
+                if (element) {
+                    element.textContent = value;
+                }
+            }
+            
+            // Update quick solutions list
+            const quickSolutionsList = document.getElementById('quickSolutions');
+            quickSolutionsList.innerHTML = '';
+            translation.quickSolutions.forEach(solution => {
+                const li = document.createElement('li');
+                li.textContent = solution;
+                quickSolutionsList.appendChild(li);
+            });
+            
+            // Update dropdown placeholders
+            document.getElementById('selectPlatform').textContent = translation.selectPlatform;
+            document.getElementById('selectIssue').textContent = translation.selectIssue;
+            
+            // Add new platforms to the dropdown
+            const platformSelect = document.getElementById('platform');
+            const existingPlatforms = Array.from(platformSelect.options).map(opt => opt.value);
+            const allPlatforms = Object.keys(platformEmails);
+
+            allPlatforms.forEach(platform => {
+                if (!existingPlatforms.includes(platform)) {
+                    const option = document.createElement('option');
+                    option.value = platform;
+                    option.textContent = platform.charAt(0).toUpperCase() + platform.slice(1);
+                    platformSelect.appendChild(option);
+                }
+            });
+
+            // Update rate limit info
+            rateLimitInfo.textContent = translation.rateLimitInfo;
+            rateLimitAlert.textContent = translation.rateLimitMessage;
+            successAlert.textContent = translation.successMessage;
+            errorAlert.textContent = translation.errorMessage;
+
+            // Update premium section text
+            document.getElementById('premiumTitle').textContent = translation.premiumTitle;
+            document.querySelector('label[for="banNumber"]').textContent = translation.banNumberLabel;
+            document.querySelector('label[for="banReason"]').textContent = translation.banReasonLabel;
+            document.getElementById('banBtn').textContent = translation.banBtnText;
+            
+            // Update templates when platform changes
+            updateTemplates();
+            
+            // Check submission limit
+            checkSubmissionLimit();
+        }
+
+        // Update templates based on selected platform, issue type, and language
+        function updateTemplates() {
+            templateOptions.innerHTML = '';
+            selectedTemplate = null;
+            issueDetails.value = '';
+            document.getElementById('issueDetailsGroup').style.display = 'block';
+            
+            const platform = platformSelect.value;
+            const issueType = issueTypeSelect.value;
+            const language = currentLanguage;
+            
+            const templatesForPlatform = platformTemplates[platform];
+            if (templatesForPlatform && templatesForPlatform[language]) {
+                const templates = templatesForPlatform[language][issueType];
+                
+                if (templates && templates.length > 0) {
+                    templateSection.style.display = 'block';
+                    templates.forEach(template => {
+                        const templateDiv = document.createElement('div');
+                        templateDiv.className = 'template-option';
+                        templateDiv.innerHTML = `
+                            <h4>${template.title}</h4>
+                            <p>${template.description}</p>
+                            <small>Expected response: ${template.responseTime}</small>
+                        `;
+                        
+                        templateDiv.addEventListener('click', () => {
+                            document.querySelectorAll('.template-option').forEach(opt => opt.classList.remove('selected-template'));
+                            templateDiv.classList.add('selected-template');
+                            selectedTemplate = template;
+                            
+                            const accountId = document.getElementById('accountId').value || '{accountId}';
+                            const reportedAccountId = document.getElementById('reportedAccountId')?.value || '{reportedAccountId}';
+                            const email = document.getElementById('email').value || '{email}';
+                            
+                            let filledContent = template.content
+                                .replace(/{accountId}/g, accountId)
+                                .replace(/{reportedAccountId}/g, reportedAccountId)
+                                .replace(/{email}/g, email);
+                                
+                            issueDetails.value = filledContent;
+                            document.getElementById('issueDetailsGroup').style.display = 'none';
+                        });
+                        
+                        templateOptions.appendChild(templateDiv);
+                    });
+                } else {
+                    templateSection.style.display = 'none';
+                    templateOptions.innerHTML = '<p>No template available for this selection.</p>';
+                }
+            } else {
+                templateSection.style.display = 'none';
+            }
+        }
+
+        // Handle file upload
+        uploadArea.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                fileName.textContent = fileInput.files[0].name;
+            } else {
+                fileName.textContent = '';
+            }
+        });
+
+        // Platform change event
+        platformSelect.addEventListener('change', () => {
+            updateTemplates();
+            const banUserOption = document.querySelector('#issueType option[value="ban_user"]');
+            if (platformSelect.value === 'whatsapp') {
+                banUserOption.style.display = 'block';
+            } else {
+                banUserOption.style.display = 'none';
+            }
+        });
+
+        // Issue type change event
+        issueTypeSelect.addEventListener('change', (e) => {
+            updateTemplates();
+            const accountIdGroup = document.getElementById('accountId').parentElement;
+            let reportedUserGroup = document.getElementById('reportedUserGroup');
+
+            if (e.target.value === 'report_user') {
+                // Hide user's own account ID field and show reported user's ID field
+                accountIdGroup.style.display = 'none';
+                document.getElementById('accountId').required = false;
+
+                if (!reportedUserGroup) {
+                    reportedUserGroup = document.createElement('div');
+                    reportedUserGroup.className = 'form-group';
+                    reportedUserGroup.id = 'reportedUserGroup';
+                    reportedUserGroup.innerHTML = `
+                        <label for="reportedAccountId" id="reportedAccountIdLabel">Reported User's ID/Number</label>
+                        <input type="text" id="reportedAccountId" required placeholder="e.g., offending_user or +628987654321">
+                    `;
+                    // Insert after the issue type dropdown
+                    issueTypeSelect.parentElement.insertAdjacentElement('afterend', reportedUserGroup);
+                }
+                reportedUserGroup.style.display = 'block';
+                document.getElementById('reportedAccountId').required = true;
+
+            } else {
+                // Show user's own account ID field and hide reported user's ID field
+                accountIdGroup.style.display = 'block';
+                document.getElementById('accountId').required = true;
+
+                if (reportedUserGroup) {
+                    reportedUserGroup.style.display = 'none';
+                    document.getElementById('reportedAccountId').required = false;
+                }
+            }
+        });
+
+        // Account ID or email change event (to update template placeholders)
+        document.getElementById('accountId').addEventListener('input', () => {
+            if (selectedTemplate) {
+                const accountId = document.getElementById('accountId').value || '{accountId}';
+                const email = document.getElementById('email').value || '{email}';
+                
+                let filledContent = selectedTemplate.content
+                    .replace(/{accountId}/g, accountId)
+                    .replace(/{email}/g, email);
+                    
+                issueDetails.value = filledContent;
+            }
+        });
+
+        document.getElementById('email').addEventListener('input', () => {
+            if (selectedTemplate) {
+                const accountId = document.getElementById('accountId').value || '{accountId}';
+                const email = document.getElementById('email').value || '{email}';
+                
+                let filledContent = selectedTemplate.content
+                    .replace(/{accountId}/g, accountId)
+                    .replace(/{email}/g, email);
+                    
+                issueDetails.value = filledContent;
+            }
+        });
+
+        // Language change event
+        languageSelect.addEventListener('change', (e) => {
+            setLanguage(e.target.value);
+        });
+
+        // Form submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Validate form
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            // Check submission limit
+            if (submissionCount >= MAX_SUBMISSIONS_PER_DAY) {
+                rateLimitAlert.style.display = 'block';
+                return;
+            }
+            
+            // Prepare data
+            const formData = {
+                platform: platformSelect.value,
+                accountId: document.getElementById('accountId').value,
+                issueType: issueTypeSelect.value,
+                issueDetails: filterSensitiveInfo(issueDetails.value), // Filter sensitive info
+                email: document.getElementById('email').value,
+                language: currentLanguage,
+                templateUsed: selectedTemplate ? selectedTemplate.title : 'Custom',
+                deviceId: generateDeviceId(),
+                timestamp: new Date().toISOString()
+            };
+
+            if (formData.issueType === 'report_user') {
+                formData.reportedAccountId = document.getElementById('reportedAccountId').value;
+            }
+            
+            // Show loading
+            submitBtn.disabled = true;
+            submitText.innerHTML = `<span class="loading"></span>${translations[currentLanguage].loadingText}`;
+            
+            try {
+                // First save to Firestore for rate limiting and records
+                await db.collection('reports').add(formData);
+                
+                // Then send email using EmailJS
+                let emailSubject = `${formData.issueType} Request for ${formData.platform} Account (${formData.language})`;
+                let emailMessage = `
+                        Platform: ${formData.platform}
+                        Account ID: [REDACTED]
+                        Issue Type: ${formData.issueType}
+                        Language: ${formData.language}
+                        Template Used: ${formData.templateUsed}
+                        
+                        Details:
+                        ${formData.issueDetails}
+                        
+                        User Email: [REDACTED]
+                    `;
+
+                if (formData.issueType === 'report_user') {
+                    emailSubject = `User Report on ${formData.platform} (${formData.language})`;
+                    emailMessage = `
+                        Platform: ${formData.platform}
+                        Reporter's Account ID: [REDACTED]
+                        Reported User's Account ID: ${formData.reportedAccountId}
+                        Issue Type: ${formData.issueType}
+                        Language: ${formData.language}
+
+                        Details:
+                        ${formData.issueDetails}
+
+                        Reporter's Email: [REDACTED]
+                    `;
+                }
+
+                await emailjs.send('service_neq331o', 'template_bmjyull', {
+                    to_email: platformEmails[formData.platform],
+                    from_email: formData.email,
+                    subject: emailSubject,
+                    message: emailMessage,
+                    reply_to: formData.email
+                });
+                
+                // Record the submission
+                await recordSubmission();
+                
+                // Show success
+                successAlert.textContent = translations[currentLanguage].successMessage;
+                successAlert.style.display = 'block';
+                errorAlert.style.display = 'none';
+                rateLimitAlert.style.display = 'none';
+                form.reset();
+                fileName.textContent = '';
+                templateSection.style.display = 'none';
+                selectedTemplate = null;
+            } catch (error) {
+                console.error('Error submitting report:', error);
+                errorAlert.textContent = translations[currentLanguage].errorMessage;
+                errorAlert.style.display = 'block';
+                successAlert.style.display = 'none';
+                rateLimitAlert.style.display = 'none';
+            } finally {
+                // Reset button
+                submitBtn.disabled = false;
+                submitText.textContent = translations[currentLanguage].submitText;
+                
+                // Hide alerts after 5 seconds
+                setTimeout(() => {
+                    successAlert.style.display = 'none';
+                    errorAlert.style.display = 'none';
+                }, 5000);
+            }
+        });
+
+        // Initialize
+        generateDeviceId();
+        setLanguage(currentLanguage);
+        checkSubmissionLimit();
+
+        const premiumBtn = document.getElementById('premiumBtn');
+        const premiumSection = document.getElementById('premiumSection');
+        const mainContent = document.querySelector('.main-content');
+
+        premiumBtn.addEventListener('click', async () => {
+            const deviceId = generateDeviceId();
+            const today = new Date().toISOString().split('T')[0];
+
+            try {
+                const bannedDocRef = db.collection('bannedUsers').doc(deviceId);
+                const bannedDoc = await bannedDocRef.get();
+
+                if (bannedDoc.exists) {
+                    alert('You have been banned from this website.');
+                    return;
+                }
+
+                const docRef = db.collection('premiumAccess').doc(deviceId);
+                const doc = await docRef.get();
+
+                if (doc.exists) {
+                    const data = doc.data();
+                    if (data.lastAccess === today) {
+                        alert('You have already accessed the premium section today.');
+                        return;
+                    }
+                    if (data.browser !== navigator.userAgent) {
+                        db.collection('bannedUsers').doc(deviceId).set({
+                            banned: true,
+                            reason: 'Accessed from a different browser'
+                        });
+                        alert('You have been banned from this website.');
+                        return;
+                    }
+                }
+
+                await docRef.set({
+                    lastAccess: today,
+                    browser: navigator.userAgent
+                }, { merge: true });
+
+                mainContent.style.display = 'none';
+                premiumSection.style.display = 'block';
+            } catch (error) {
+                console.error("Error checking premium access:", error);
+                alert('An error occurred. Please try again later.');
+            }
+        });
+
+        const banBtn = document.getElementById('banBtn');
+        banBtn.addEventListener('click', async () => {
+            const banNumber = document.getElementById('banNumber').value;
+            const banReason = document.getElementById('banReason').value;
+
+            if (!banNumber || !banReason) {
+                alert('Please enter a number and a reason for banning.');
+                return;
+            }
+
+            const emailSubject = `Request to Ban User: ${banNumber}`;
+            const emailMessage = `
+                Dear WhatsApp Support Team,
+
+                I am requesting to ban the user with the number ${banNumber}.
+                Reason: ${banReason}
+
+                Thank you for your prompt attention to this matter.
+
+                Best regards,
+                A concerned user
+            `;
+
+            try {
+                await emailjs.send('service_neq331o', 'template_bmjyull', {
+                    to_email: 'support@whatsapp.com',
+                    from_email: 'noreply@example.com',
+                    subject: emailSubject,
+                    message: emailMessage,
+                    reply_to: 'noreply@example.com'
+                });
+                alert('Ban request sent successfully.');
+            } catch (error) {
+                console.error('Error sending ban request:', error);
+                alert('An error occurred while sending the ban request. Please try again later.');
+            }
+        });
+    </script>
+</body>
+</html>
